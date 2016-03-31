@@ -29,4 +29,5 @@ gradlew
 *.bat
 
 
-/build.gradle
+/*.gradle
+/*.jardesc
