@@ -1,0 +1,6 @@
+﻿###-- Japanese --###
+
+container.liaalter=リアの祭壇
+
+cradleofnoesis.command.magicstatus.usage=使用法: magicstatus <accept>  <プレイヤー> <量>
+cradleofnoesis.command.magicstatus.accept=MP %2$s を %1$s に付与しました

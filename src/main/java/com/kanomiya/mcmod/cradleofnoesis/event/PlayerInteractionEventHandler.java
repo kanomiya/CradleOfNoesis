@@ -8,9 +8,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * @author Kanomiya
  *
  */
-public class EventHandlerPlayerInteraction {
+public class PlayerInteractionEventHandler {
 
-	public static final EventHandlerPlayerInteraction INSTANCE = new EventHandlerPlayerInteraction();
+	public static final PlayerInteractionEventHandler INSTANCE = new PlayerInteractionEventHandler();
 
 	@SubscribeEvent
 	public void onPlayerInteractEvent(PlayerInteractEvent event)

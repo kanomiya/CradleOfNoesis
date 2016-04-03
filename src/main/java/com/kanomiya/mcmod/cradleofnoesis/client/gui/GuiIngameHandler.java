@@ -8,16 +8,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
-import com.kanomiya.mcmod.energyway.api.EnergyWayAPI;
-import com.kanomiya.mcmod.energyway.api.energy.Energy;
-import com.kanomiya.mcmod.energyway.api.props.EntityPropertiesEnergy;
+import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
+import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
 
 // GuiIngameForge
 
@@ -43,37 +41,26 @@ public class GuiIngameHandler extends Gui {
 		int width = event.resolution.getScaledWidth();
 		int height = event.resolution.getScaledHeight();
 
-		IExtendedEntityProperties props = minecraft.thePlayer.getExtendedProperties(EnergyWayAPI.ID_DATA);
+		if (minecraft.playerController.shouldDrawHUD() && minecraft.thePlayer.hasCapability(CradleOfNoesisAPI.capMagicStatus, null))
+		{
+			MagicStatus magicStatus = minecraft.thePlayer.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
 
+			if (0 <= magicStatus.getMp() && 0 < magicStatus.getMpCapacity())
+			{
+				renderMagicPoint(magicStatus, width, height);
 
-		if (props instanceof EntityPropertiesEnergy) {
-			if (minecraft.playerController.shouldDrawHUD()) {
-				EntityPropertiesEnergy propsE = (EntityPropertiesEnergy) props;
+				GuiIngameForge.left_height += 12;
+				GuiIngameForge.right_height += 12;
 
-				if (propsE.hasEnergy(CradleOfNoesis.energyTypeMagic))
-				{
-					Energy energyMagic = propsE.getEnergy(CradleOfNoesis.energyTypeMagic);
-
-					if (0 <= energyMagic.getAmount() && 0 < energyMagic.getCapacity()) {
-						renderMagicPoint(energyMagic, width, height);
-
-						GuiIngameForge.left_height += 12;
-						GuiIngameForge.right_height += 12;
-
-						bind(Gui.icons);
-					}
-
-				}
-
+				bind(Gui.icons);
 			}
-
 		}
 
 
 	}
 
 	@SideOnly(Side.CLIENT)
-	protected void renderMagicPoint(Energy energy, int width, int height) {
+	protected void renderMagicPoint(MagicStatus magicStatus, int width, int height) {
 		minecraft.mcProfiler.startSection(CradleOfNoesis.MODID + ".energyMagic");
 
 		GlStateManager.enableBlend();
@@ -82,12 +69,12 @@ public class GuiIngameHandler extends Gui {
 		int left = width / 2 -91;
 		int top = height -localHeight;
 
-		int amount = energy.getAmount();
-		int capacity = energy.getCapacity();
+		int mp = magicStatus.getMp();
+		int mpCap = magicStatus.getMpCapacity();
 
 		drawTexturedModalRect(left, top, 0, 0, 182, 5);
 
-		int w = amount*182 /capacity +1;
+		int w = mp*182 /mpCap +1;
 		drawTexturedModalRect(left, top, 0, 5, w, 5);
 
 		/*
@@ -97,7 +84,7 @@ public class GuiIngameHandler extends Gui {
 		}
 		*/
 
-		String text = amount + "/" + capacity;
+		String text = mp + "/" + mpCap;
 
 		/*
 		ItemStack heldStack = minecraft.thePlayer.getHeldItem();

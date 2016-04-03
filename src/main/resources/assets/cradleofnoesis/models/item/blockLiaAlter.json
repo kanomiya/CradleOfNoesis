@@ -1,0 +1,18 @@
+{
+	"parent": "cradleofnoesis:block/blockLiaAlter",
+	"display": {
+		"ground": {
+			"translation": [ 0, 3, 0 ]
+		},
+		"thirdperson": {
+			"translation": [ 0, 3, 0 ]
+		},
+		"firstperson": {
+			"rotation": [ 0, 325, 0 ],
+			"translation": [ 0, 4.5, 0 ]
+		},
+		"gui": {
+			"translation": [ 0, 0, 0 ]
+		}
+	}
+}

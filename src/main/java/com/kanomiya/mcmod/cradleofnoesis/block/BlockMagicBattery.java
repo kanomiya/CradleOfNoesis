@@ -11,11 +11,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
-import com.kanomiya.mcmod.cradleofnoesis.energy.IHasHandyEnergy;
+import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
+import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityMagicBattery;
-import com.kanomiya.mcmod.energyway.api.EnergyWayAPI;
-import com.kanomiya.mcmod.energyway.api.energy.Energy;
-import com.kanomiya.mcmod.energyway.api.props.EntityPropertiesEnergy;
 
 /**
  * @author Kanomiya
@@ -36,32 +34,26 @@ public class BlockMagicBattery extends BlockContainer {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		TileEntity tile = worldIn.getTileEntity(pos);
-		EntityPropertiesEnergy props = EnergyWayAPI.getProperties(playerIn);
 
-		if (tile instanceof IHasHandyEnergy && props != null)
+		if (tile != null)
 		{
-			IHasHandyEnergy iHasHandyEnergy = (IHasHandyEnergy) tile;
+			MagicStatus msTile = tile.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
+			MagicStatus msPlayer = playerIn.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
 
-			if (iHasHandyEnergy.hasEnergy(CradleOfNoesis.energyTypeMagic))
+			if (! worldIn.isRemote)
 			{
-				if (! worldIn.isRemote)
+				msTile.acceptMp(msPlayer, 10);
+
+				if (msTile.isMpFull())
 				{
-					iHasHandyEnergy.doHandyCharge(CradleOfNoesis.energyTypeMagic, props);
-
-					Energy energy = iHasHandyEnergy.getEnergy(CradleOfNoesis.energyTypeMagic);
-
-					if (100 <= energy.getAmount())
-					{
-						worldIn.createExplosion(playerIn, pos.getX(), pos.getY(), pos.getZ(), 3.0f, true);
-						Energy.VOID.accept(iHasHandyEnergy, CradleOfNoesis.energyTypeMagic, 100);
-					}
-
-					playerIn.addChatMessage(new ChatComponentText(energy.getAmount() + "/" + energy.getCapacity()));
+					worldIn.createExplosion(playerIn, pos.getX(), pos.getY(), pos.getZ(), 3.0f, true);
+					msTile.releaseAllMp();
 				}
 
-				return true;
+				playerIn.addChatMessage(new ChatComponentText(msTile.getMp() + "/" + msTile.getMpCapacity()));
 			}
 
+			return true;
 		}
 
 
