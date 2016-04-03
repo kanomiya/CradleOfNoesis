@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -236,7 +239,9 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 	* For Entity // TileEntity (implements ITickableWithMagicStatus)
 	*
 	* @see UpdateEventHandler#onLivingUpdate(LivingEvent.LivingUpdateEvent)
-	* @see ITickableWithMagicStatus#update()
+	* @see ITickableWithMagicStatus.Item#onUpdate(ItemStack, World, Entity, int, boolean)
+	* @see ITickableWithMagicStatus.Item#onEntityItemUpdate(EntityItem)
+	* @see ITickableWithMagicStatus.TileEntity#update()
 	*
 	* @inheritDoc
 	*/
@@ -252,11 +257,14 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 			if (owner instanceof EntityLivingBase)
 			{
 				PacketHandler.INSTANCE.sendToAll(new MessageMagicStatusEntity((EntityLivingBase) owner, this));
+				updated = false;
 			}
 
-			// if (owner instanceof TileEntity); TileEntity#onDataPacket(NetworkManager, S35PacketUpdateTileEntity)
-
-			updated = false;
+			/*
+			 * TileEntity#onDataPacket(NetworkManager, S35PacketUpdateTileEntity)
+			 * @see ITickableWithMagicStatus.Item#onUpdate(ItemStack, World, Entity, int, boolean)
+			 * @see ITickableWithMagicStatus.Item#onEntityItemUpdate(EntityItem)
+			 */
 		}
 
 	}
