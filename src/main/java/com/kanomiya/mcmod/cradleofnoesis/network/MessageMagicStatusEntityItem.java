@@ -3,6 +3,8 @@ package com.kanomiya.mcmod.cradleofnoesis.network;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -17,21 +19,27 @@ import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
  * @author Kanomiya
  *
  */
-public class MessageMagicStatusEntity implements IMessage {
+public class MessageMagicStatusEntityItem implements IMessage {
 
-	public static class Handler implements IMessageHandler<MessageMagicStatusEntity, IMessage>
+	public static class Handler implements IMessageHandler<MessageMagicStatusEntityItem, IMessage>
 	{
 		/**
 		* @inheritDoc
 		*/
 		@Override
-		public IMessage onMessage(MessageMagicStatusEntity message, MessageContext ctx)
+		public IMessage onMessage(MessageMagicStatusEntityItem message, MessageContext ctx)
 		{
 			Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(message.entityId);
 
-			if (entity instanceof Entity && entity.hasCapability(CradleOfNoesisAPI.capMagicStatus, null))
+			if (entity instanceof EntityItem)
 			{
-				entity.getCapability(CradleOfNoesisAPI.capMagicStatus, null).deserializeNBT(message.nbt);
+				EntityItem entityItem = (EntityItem) entity;
+				ItemStack stack = entityItem.getEntityItem();
+
+				if (stack != null && stack.hasCapability(CradleOfNoesisAPI.capMagicStatus, null))
+				{
+					stack.getCapability(CradleOfNoesisAPI.capMagicStatus, null).deserializeNBT(message.nbt);
+				}
 			}
 
 			return null;
@@ -42,12 +50,12 @@ public class MessageMagicStatusEntity implements IMessage {
 	protected int entityId;
 	protected NBTTagCompound nbt;
 
-	public MessageMagicStatusEntity()
+	public MessageMagicStatusEntityItem()
 	{
 
 	}
 
-	public MessageMagicStatusEntity(Entity entity, MagicStatus<? extends ICapabilityProvider> magicStatus)
+	public MessageMagicStatusEntityItem(EntityItem entity, MagicStatus<? extends ICapabilityProvider> magicStatus)
 	{
 		entityId = entity.getEntityId();
 		nbt = magicStatus.serializeNBT();

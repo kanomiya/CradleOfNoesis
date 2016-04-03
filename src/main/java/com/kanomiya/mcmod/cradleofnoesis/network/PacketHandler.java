@@ -16,6 +16,8 @@ public class PacketHandler {
 	{
 		int id = -1;
 		INSTANCE.registerMessage(MessageMagicStatusEntity.Handler.class, MessageMagicStatusEntity.class, ++id, Side.CLIENT);
+		INSTANCE.registerMessage(MessageMagicStatusEntityItem.Handler.class, MessageMagicStatusEntityItem.class, ++id, Side.CLIENT);
+		INSTANCE.registerMessage(MessageMagicStatusHeldItem.Handler.class, MessageMagicStatusHeldItem.class, ++id, Side.CLIENT);
 
 	}
 

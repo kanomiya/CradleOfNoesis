@@ -9,12 +9,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.magic.ITickableWithMagicStatus;
 
 /**
  * @author Kanomiya
  *
  */
-public class ItemIntelligentStone extends Item {
+public class ItemIntelligentStone extends Item implements ITickableWithMagicStatus.Item {
 
 	public ItemIntelligentStone()
 	{
@@ -29,7 +30,6 @@ public class ItemIntelligentStone extends Item {
 	{
 		return super.getUnlocalizedName(stack) + EnumIntelligentStoneColor.fromMeta(stack.getItemDamage()).toColorName();
 	}
-
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -72,5 +72,9 @@ public class ItemIntelligentStone extends Item {
 		}
 
 	}
+
+
+
+
 
 }

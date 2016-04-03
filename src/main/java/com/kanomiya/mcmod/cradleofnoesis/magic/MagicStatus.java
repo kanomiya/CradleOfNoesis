@@ -23,7 +23,6 @@ import com.kanomiya.mcmod.cradleofnoesis.event.UpdateEventHandler;
 import com.kanomiya.mcmod.cradleofnoesis.magic.effect.IMagicEffect;
 import com.kanomiya.mcmod.cradleofnoesis.network.MessageMagicStatusEntity;
 import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
-import com.kanomiya.mcmod.cradleofnoesis.tileentity.ITickableWithMagicStatus;
 
 /**
  * @author Kanomiya
