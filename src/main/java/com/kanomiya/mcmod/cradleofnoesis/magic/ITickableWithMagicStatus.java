@@ -24,17 +24,15 @@ public abstract class ITickableWithMagicStatus {
 	/**
 	 *
 	 * <p>
-	 * You need Only to implement this for auto-updating MagicStatus.
+	 * You MUST call default methods to update MagicStatus.
 	 *
 	 * <p>
-	 * If the Item class extends {@link net.minecraft.item.Item#onUpdate(ItemStack, World, Entity, int, boolean)},
-	 * you MUST code the Item class to call {@link ITickableWithMagicStatus.Item#onUpdate(ItemStack, World, Entity, int, boolean)}.<br>
+	 * {@link net.minecraft.item.Item#onUpdate(ItemStack, World, Entity, int, boolean)}: {@link ITickableWithMagicStatus.Item#onUpdate(ItemStack, World, Entity, int, boolean)}.<br>
 	 *
 	 * The code to call: ITickableWithMagicStatus.Item.super.onUpdate
 	 *
 	 * <p>
-	 * If the Item class extends {@link net.minecraft.item.Item#onEntityItemUpdate(EntityItem)},
-	 * you MUST code the Item class to call {@link ITickableWithMagicStatus.Item#onEntityItemUpdate(EntityItem)}.<br>
+	 * {@link net.minecraft.item.Item#onEntityItemUpdate(EntityItem)}: {@link ITickableWithMagicStatus.Item#onEntityItemUpdate(EntityItem)}.<br>
 	 *
 	 * The code to call: ITickableWithMagicStatus.Item.super.onEntityItemUpdate
 	 *

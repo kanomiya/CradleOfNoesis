@@ -3,8 +3,11 @@ package com.kanomiya.mcmod.cradleofnoesis.item;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -23,6 +26,21 @@ public class ItemIntelligentStone extends Item implements ITickableWithMagicStat
 		setUnlocalizedName("itemIntelligentStone");
 
 		setCreativeTab(CradleOfNoesis.tab);
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
+	{
+		ITickableWithMagicStatus.Item.super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+
+	}
+
+	@Override
+	public boolean onEntityItemUpdate(EntityItem entityItem)
+	{
+		ITickableWithMagicStatus.Item.super.onEntityItemUpdate(entityItem);
+
+		return false;
 	}
 
 	@Override
