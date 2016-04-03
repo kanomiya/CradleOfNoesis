@@ -23,12 +23,20 @@ public abstract class ITickableWithMagicStatus {
 
 	/**
 	 *
-	 * You need Only to implement this for auto-updating MagicStatus.<br>
+	 * <p>
+	 * You need Only to implement this for auto-updating MagicStatus.
 	 *
+	 * <p>
 	 * If the Item class extends {@link net.minecraft.item.Item#onUpdate(ItemStack, World, Entity, int, boolean)},
-	 * you MUST code the Item class to call {@link ITickableWithMagicStatus.Item#onUpdate(ItemStack, World, Entity, int, boolean)}<br>
+	 * you MUST code the Item class to call {@link ITickableWithMagicStatus.Item#onUpdate(ItemStack, World, Entity, int, boolean)}.<br>
 	 *
-	 * Example: ITickableWithMagicStatus.Item.super.onUpdate
+	 * The code to call: ITickableWithMagicStatus.Item.super.onUpdate
+	 *
+	 * <p>
+	 * If the Item class extends {@link net.minecraft.item.Item#onEntityItemUpdate(EntityItem)},
+	 * you MUST code the Item class to call {@link ITickableWithMagicStatus.Item#onEntityItemUpdate(EntityItem)}.<br>
+	 *
+	 * The code to call: ITickableWithMagicStatus.Item.super.onEntityItemUpdate
 	 *
 	 * @author Kanomiya
 	 *
@@ -87,12 +95,14 @@ public abstract class ITickableWithMagicStatus {
 
 	/**
 	 *
-	 * You need Only to implement this for auto-updating MagicStatus.<br>
+	 * <p>
+	 * You need Only to implement this for auto-updating MagicStatus.
 	 *
+	 * <p>
 	 * If the TileEntity class extends {@link net.minecraft.util.ITickable#update()},
-	 * you MUST code the TileEntity class to call {@link ITickableWithMagicStatus.TileEntity#update()}<br>
+	 * you MUST code the TileEntity class to call {@link ITickableWithMagicStatus.TileEntity#update()}.<br>
 	 *
-	 * Example: ITickableWithMagicStatus.TileEntity.super.onUpdate
+	 * The code to call: ITickableWithMagicStatus.TileEntity.super.onUpdate
 	 *
 	 * @author Kanomiya
 	 *
