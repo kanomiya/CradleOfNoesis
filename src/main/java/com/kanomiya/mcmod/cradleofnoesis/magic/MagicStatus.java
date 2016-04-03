@@ -236,7 +236,7 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 
 	/**
 	*
-	* For Entity // TileEntity (implements ITickableWithMagicStatus)
+	* For Entity / TileEntity (implements {@link ITickableWithMagicStatus.TileEntity}) / Item (implements {@link ITickableWithMagicStatus.Item})
 	*
 	* @see UpdateEventHandler#onLivingUpdate(LivingEvent.LivingUpdateEvent)
 	* @see ITickableWithMagicStatus.Item#onUpdate(ItemStack, World, Entity, int, boolean)

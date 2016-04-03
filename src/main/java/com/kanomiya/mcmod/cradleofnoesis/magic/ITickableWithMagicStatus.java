@@ -21,6 +21,18 @@ import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
  */
 public abstract class ITickableWithMagicStatus {
 
+	/**
+	 *
+	 * You need Only to implement this for auto-updating MagicStatus.<br>
+	 *
+	 * If the Item class extends {@link net.minecraft.item.Item#onUpdate(ItemStack, World, Entity, int, boolean)},
+	 * you MUST code the Item class to call {@link ITickableWithMagicStatus.Item#onUpdate(ItemStack, World, Entity, int, boolean)}<br>
+	 *
+	 * Example: ITickableWithMagicStatus.Item.super.onUpdate
+	 *
+	 * @author Kanomiya
+	 *
+	 */
 	public static interface Item
 	{
 		default MagicStatus getMagicStatus(ItemStack stack)
@@ -73,6 +85,18 @@ public abstract class ITickableWithMagicStatus {
 		}
 	}
 
+	/**
+	 *
+	 * You need Only to implement this for auto-updating MagicStatus.<br>
+	 *
+	 * If the TileEntity class extends {@link net.minecraft.util.ITickable#update()},
+	 * you MUST code the TileEntity class to call {@link ITickableWithMagicStatus.TileEntity#update()}<br>
+	 *
+	 * Example: ITickableWithMagicStatus.TileEntity.super.onUpdate
+	 *
+	 * @author Kanomiya
+	 *
+	 */
 	public static interface TileEntity extends ITickable
 	{
 		MagicStatus getMagicStatus();
