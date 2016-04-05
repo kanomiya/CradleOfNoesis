@@ -7,17 +7,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.google.common.collect.Lists;
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.magic.ITickableWithMagicStatus;
-import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
 
 /**
  * @author Kanomiya
  *
  */
 public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITickableWithMagicStatus.TileEntity {
-
-	protected MagicStatus magicStatus;
 
 	private int furnaceBurnTime;
 	private int currentItemBurnTime;
@@ -29,14 +25,6 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 	public TileEntityLiaAlter()
 	{
 		consumingStacks = Lists.newArrayList();
-
-		magicStatus = getCapability(CradleOfNoesisAPI.capMagicStatus, null);
-	}
-
-	@Override
-	public MagicStatus getMagicStatus()
-	{
-		return magicStatus;
 	}
 
 	/**

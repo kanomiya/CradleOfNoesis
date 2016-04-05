@@ -9,9 +9,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import scala.actors.threadpool.Arrays;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
@@ -28,32 +28,34 @@ public class CommandMagicStatus extends CommandBase {
 	}
 
 	@Override public String getCommandUsage(ICommandSender sender) {
-		return "energyway.command.energyway.usage";
+		return "cradleofnoesis.command.magicstatus.usage";
 	}
 
-	@Override public List addTabCompletionOptions(ICommandSender sender, String[] option, BlockPos pos) {
+	@Override
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
+	{
 		List<String> list = new ArrayList<String>();
 
-		if (option.length == 1) {
+		if (args.length == 1) {
 			list.add("accept");
 		}
 
 
-		if (option.length == 2) {
-			if (option[0].equals("accept")) {
-				list.addAll(Arrays.asList(MinecraftServer.getServer().getAllUsernames()));
+		if (args.length == 2) {
+			if (args[0].equals("accept")) {
+				list.addAll(Arrays.asList(server.getAllUsernames()));
 			}
 		}
 
 		return list;
 	}
 
-	@Override public void processCommand(ICommandSender sender, String[] args) throws CommandException
+	@Override public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
 	{
 		int argLength = args.length;
 		if (0 < argLength)
 		{
-			Entity entity = getPlayer(sender, args[1]);
+			Entity entity = getPlayer(server, sender, args[1]);
 			MagicStatus<Entity> magicStatus = entity.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
 
 			if (magicStatus != null) {
@@ -63,9 +65,9 @@ public class CommandMagicStatus extends CommandBase {
 
 					magicStatus.acceptMp(amount);
 
-					sender.addChatMessage(new ChatComponentTranslation("cradleofnoesis.command.magicstatus.accept",
+					sender.addChatMessage(new TextComponentTranslation("cradleofnoesis.command.magicstatus.accept",
 							sender.getDisplayName(),
-							new ChatComponentText("" +amount)));
+							new TextComponentString("" +amount)));
 					return ;
 				}
 
@@ -74,9 +76,9 @@ public class CommandMagicStatus extends CommandBase {
 
 					magicStatus.acceptMp(amount);
 
-					sender.addChatMessage(new ChatComponentTranslation("cradleofnoesis.command.magicstatus.accept",
+					sender.addChatMessage(new TextComponentTranslation("cradleofnoesis.command.magicstatus.accept",
 							sender.getDisplayName(),
-							new ChatComponentText("" +amount)));
+							new TextComponentString("" +amount)));
 					return ;
 				}
 

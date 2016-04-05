@@ -1,12 +1,10 @@
 package com.kanomiya.mcmod.cradleofnoesis.magic;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.network.MessageMagicStatusEntityItem;
 import com.kanomiya.mcmod.cradleofnoesis.network.MessageMagicStatusHeldItem;
 import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
@@ -39,15 +37,9 @@ public abstract class ITickableWithMagicStatus {
 	 * @author Kanomiya
 	 *
 	 */
-	public static interface Item
+	public static interface Item extends IHasMagicStatus<ItemStack>
 	{
-		default MagicStatus getMagicStatus(ItemStack stack)
-		{
-			if (! stack.hasCapability(CradleOfNoesisAPI.capMagicStatus, null)) return null;
-			return stack.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
-		}
-
-		default void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
+		default void onUpdate(ItemStack stack, World worldIn, net.minecraft.entity.Entity entityIn, int itemSlot, boolean isSelected)
 		{
 			MagicStatus magicStatus = getMagicStatus(stack);
 
@@ -89,6 +81,35 @@ public abstract class ITickableWithMagicStatus {
 
 			return false;
 		}
+
+	}
+
+	/**
+	 *
+	 * <p>
+	 * You MUST call default methods to update MagicStatus.
+	 *
+	 * <p>
+	 * {@link net.minecraft.entity.Entity#onUpdate()}: {@link ITickableWithMagicStatus.Entity#onUpdate()}.<br>
+	 *
+	 * The code to call: ITickableWithMagicStatus.Entity.super.onUpdate
+	 *
+	 * @author Kanomiya
+	 *
+	 */
+	public static interface Entity extends IHasMagicStatus<net.minecraft.entity.Entity>
+	{
+		default void onUpdate()
+		{
+			if (this instanceof net.minecraft.entity.Entity)
+			{
+				MagicStatus magicStatus = getMagicStatus((net.minecraft.entity.Entity) this);
+				if (magicStatus == null) return;
+
+				magicStatus.update();
+			}
+		}
+
 	}
 
 	/**
@@ -105,17 +126,18 @@ public abstract class ITickableWithMagicStatus {
 	 * @author Kanomiya
 	 *
 	 */
-	public static interface TileEntity extends ITickable
+	public static interface TileEntity extends IHasMagicStatus<net.minecraft.tileentity.TileEntity>, ITickable
 	{
-		MagicStatus getMagicStatus();
-
 		@Override
 		default void update()
 		{
-			MagicStatus magicStatus = getMagicStatus();
-			if (magicStatus == null) return;
+			if (this instanceof net.minecraft.tileentity.TileEntity)
+			{
+				MagicStatus magicStatus = getMagicStatus((net.minecraft.tileentity.TileEntity) this);
+				if (magicStatus == null) return;
 
-			magicStatus.update();
+				magicStatus.update();
+			}
 		}
 
 	}

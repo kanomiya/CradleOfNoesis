@@ -3,7 +3,7 @@ package com.kanomiya.mcmod.cradleofnoesis.gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,9 +27,9 @@ public class GuiLiaAlter extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int param1, int param2) {
 
-		fontRendererObj.drawString(StatCollector.translateToLocal("container.liaalter"), 8, 8, 4210752);
+		fontRendererObj.drawString(I18n.translateToLocal("container.liaalter"), 8, 8, 4210752);
 		//draws "Inventory" or your regional equivalent
-		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+		fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
 	}
 
 	@Override

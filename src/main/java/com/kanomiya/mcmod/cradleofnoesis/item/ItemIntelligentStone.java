@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,7 +23,7 @@ public class ItemIntelligentStone extends Item implements ITickableWithMagicStat
 
 	public ItemIntelligentStone()
 	{
-		setRegistryName(CradleOfNoesis.MODID, "itemIntelligentStone");
+		setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "itemIntelligentStone"));
 		setUnlocalizedName("itemIntelligentStone");
 
 		setCreativeTab(CradleOfNoesis.tab);

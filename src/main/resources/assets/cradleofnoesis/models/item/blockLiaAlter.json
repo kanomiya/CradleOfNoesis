@@ -2,17 +2,24 @@
 	"parent": "cradleofnoesis:block/blockLiaAlter",
 	"display": {
 		"ground": {
-			"translation": [ 0, 3, 0 ]
+			"rotation": [ 0, 45, 0 ],
+			"translation": [ 0, 3, 0 ],
+			"scale":[ 0.24, 0.24, 0.24 ]
 		},
-		"thirdperson": {
-			"translation": [ 0, 3, 0 ]
+		"thirdperson_righthand": {
+			"rotation": [ 75, 45, 0 ],
+			"translation": [ 0, 3, 3 ],
+			"scale": [ 0.375, 0.375, 0.375 ]
 		},
-		"firstperson": {
-			"rotation": [ 0, 325, 0 ],
-			"translation": [ 0, 4.5, 0 ]
+		"firstperson_righthand": {
+			"rotation": [ 0, 135, 0 ],
+			"translation": [ 0, 3.5, 0 ],
+			"scale": [ 0.375, 0.375, 0.375 ]
 		},
 		"gui": {
-			"translation": [ 0, 0, 0 ]
+			"rotation": [ 30, 220, 0 ],
+			"translation": [ 0, 0, 0 ],
+			"scale": [ 0.68, 0.68, 0.68 ]
 		}
 	}
 }

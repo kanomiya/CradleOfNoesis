@@ -36,10 +36,10 @@ public class GuiIngameHandler extends Gui {
 	@SubscribeEvent @SideOnly(Side.CLIENT)
 	public void onRenderGameOverlayEvent(RenderGameOverlayEvent.Pre event) {
 
-		if (event.type != RenderGameOverlayEvent.ElementType.HELMET) return;
+		if (event.getType() != RenderGameOverlayEvent.ElementType.HELMET) return;
 
-		int width = event.resolution.getScaledWidth();
-		int height = event.resolution.getScaledHeight();
+		int width = event.getResolution().getScaledWidth();
+		int height = event.getResolution().getScaledHeight();
 
 		if (minecraft.playerController.shouldDrawHUD() && minecraft.thePlayer.hasCapability(CradleOfNoesisAPI.capMagicStatus, null))
 		{

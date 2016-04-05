@@ -19,7 +19,7 @@ public class UpdateEventHandler {
 	@SubscribeEvent
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event)
 	{
-		Entity entity = event.entity;
+		Entity entity = event.getEntity();
 
 		if (! entity.hasCapability(CradleOfNoesisAPI.capMagicStatus, null)) return ;
 

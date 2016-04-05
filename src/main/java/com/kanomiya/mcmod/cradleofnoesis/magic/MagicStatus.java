@@ -24,6 +24,7 @@ import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.event.UpdateEventHandler;
 import com.kanomiya.mcmod.cradleofnoesis.magic.effect.IMagicEffect;
+import com.kanomiya.mcmod.cradleofnoesis.magic.matter.MagicMatter;
 import com.kanomiya.mcmod.cradleofnoesis.network.MessageMagicStatusEntity;
 import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
 
@@ -39,18 +40,18 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 		return new MagicStatus<O>();
 	}
 
-	public static <O extends ICapabilityProvider> MagicStatus<O> create(int mp, int mpCapacity, O owner)
+	public static <O extends ICapabilityProvider> MagicStatus<O> create(int mp, int mpCapacity, O owner, MagicMatter magicMatter)
 	{
-		MagicStatus<O> magicStatus = new MagicStatus<O>(owner);
+		MagicStatus<O> magicStatus = new MagicStatus<O>(owner, magicMatter);
 		magicStatus.mpCapacity = mpCapacity;
 		magicStatus.mp = mp;
 
 		return magicStatus;
 	}
 
-	public static <O extends ICapabilityProvider> MagicStatus<O> create(int mpCapacity, boolean fullMp, O owner)
+	public static <O extends ICapabilityProvider> MagicStatus<O> create(int mpCapacity, boolean fullMp, O owner, MagicMatter magicMatter)
 	{
-		MagicStatus<O> magicStatus = new MagicStatus<O>(owner);
+		MagicStatus<O> magicStatus = new MagicStatus<O>(owner, magicMatter);
 		magicStatus.mpCapacity = mpCapacity;
 		if (fullMp) magicStatus.fullMp();
 
@@ -62,6 +63,8 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 	protected boolean updated;
 	protected O owner;
 	protected Map<ResourceLocation, IMagicEffect> magicEffects;
+	protected MagicMatter magicMatter;
+
 	protected List<ITickable> updateListeners;
 
 	protected MagicStatus()
@@ -69,11 +72,12 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 		updateListeners = Lists.newArrayList();
 	}
 
-	protected MagicStatus(O owner)
+	protected MagicStatus(O owner, MagicMatter magicMatter)
 	{
 		this();
 
 		this.owner = owner;
+		this.magicMatter = magicMatter;
 	}
 
 
@@ -180,6 +184,16 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 		return getMpCapacity() <= getMp();
 	}
 
+
+	public boolean hasMatter()
+	{
+		return getMatter() != null;
+	}
+
+	public MagicMatter getMatter()
+	{
+		return magicMatter;
+	}
 
 	public boolean hasOwner()
 	{
@@ -295,6 +309,11 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 			nbt.setTag("effects", nbtEffects);
 		}
 
+		if (hasMatter())
+		{
+			nbt.setTag("matter", magicMatter.serializeNBT());
+		}
+
 		return nbt;
 	}
 
@@ -318,7 +337,11 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 				magicEffects.get(key).deserializeNBT(nbtEffects.getCompoundTag(key.toString()));
 			}
 
-			nbt.setTag("effects", nbtEffects);
+		}
+
+		if (hasMatter())
+		{
+			magicMatter.deserializeNBT(nbt.getCompoundTag("matter"));
 		}
 
 	}

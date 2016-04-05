@@ -7,11 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 /**
  * インベントリ付きTileEntity用の抽象クラス
@@ -76,8 +76,8 @@ public abstract class ITileEntityWithInventory extends TileEntity implements IIn
 	public void setCustomName(String name) { customName = name; }
 
 	@Override
-	public IChatComponent getDisplayName() {
-		return hasCustomName() ? new ChatComponentText(customName) : new ChatComponentTranslation(getName(), new Object[0]);
+	public ITextComponent getDisplayName() {
+		return hasCustomName() ? new TextComponentString(customName) : new TextComponentTranslation(getName(), new Object[0]);
 	}
 
 	@Override
@@ -193,11 +193,11 @@ public abstract class ITileEntityWithInventory extends TileEntity implements IIn
 	@Override public Packet getDescriptionPacket() {
 		NBTTagCompound nbtTagCompound = new NBTTagCompound();
 		writeToNBT(nbtTagCompound);
-		return new S35PacketUpdateTileEntity(pos, 1, nbtTagCompound);
+		return new SPacketUpdateTileEntity(pos, 1, nbtTagCompound);
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
 	}
 }

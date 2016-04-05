@@ -4,13 +4,19 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
@@ -23,20 +29,19 @@ import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
  */
 public class BlockLiaAlter extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.0d, 0.0d, 0.0d, 1.0d, 0.5d, 1.0d);
 
 	public BlockLiaAlter()
 	{
 		super(Material.rock);
 
-		setRegistryName(CradleOfNoesis.MODID, "blockLiaAlter");
+		setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "blockLiaAlter"));
 		setUnlocalizedName("blockLiaAlter");
 		setCreativeTab(CradleOfNoesis.tab);
-		setBlockBounds(0.0f, 0.0f, 0f, 1.0f, 0.5f, 1.0f);
-
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		TileEntity tile = worldIn.getTileEntity(pos);
 
@@ -54,9 +59,9 @@ public class BlockLiaAlter extends BlockContainer {
 	}
 
 	@Override
-	public int getRenderType()
+	public EnumBlockRenderType getRenderType(IBlockState state)
 	{
-		return 3;
+		return EnumBlockRenderType.MODEL;
 	}
 
 	/**
@@ -86,18 +91,24 @@ public class BlockLiaAlter extends BlockContainer {
 	}
 
 
-	@Override protected BlockState createBlockState()
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		return new BlockState(this, new IProperty[] { FACING });
+		return BLOCK_AABB;
 	}
 
-	@Override public boolean isOpaqueCube() { return false; }
+	@Override protected BlockStateContainer createBlockState()
+	{
+		return new BlockStateContainer(this, new IProperty[] { FACING });
+	}
 
-	@Override public boolean isFullCube() { return false; }
+	@Override public boolean isOpaqueCube(IBlockState state) { return false; }
 
-	@Override public boolean isFullBlock() { return false; }
+	@Override public boolean isFullCube(IBlockState state) { return false; }
 
-	@Override public boolean getUseNeighborBrightness() { return true; }
+	@Override public boolean isFullBlock(IBlockState state) { return false; }
+
+	@Override public boolean getUseNeighborBrightness(IBlockState state) { return true; }
 
 
 

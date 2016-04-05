@@ -2,6 +2,7 @@ package com.kanomiya.mcmod.cradleofnoesis.client.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 
 // Date: 2016/04/01 20:09:31
 // Template version 1.1
@@ -24,6 +25,13 @@ public class ModelEnderPearl extends ModelBase
 		enderPearl.addBox(0F, 0F, 0F, 2, 2, 2);
 		enderPearl.setRotationPoint(0F, 0F, 0F);
 		enderPearl.setTextureSize(16, 16);
+	}
+
+	@Override
+	public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale)
+	{
+		setRotationAngles(p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale, entityIn);
+		doRender(scale);
 	}
 
 	public void doRender(float f) {
