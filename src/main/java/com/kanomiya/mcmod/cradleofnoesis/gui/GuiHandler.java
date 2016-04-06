@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis.CONGuis;
+import com.kanomiya.mcmod.cradleofnoesis.CONGuis;
 import com.kanomiya.mcmod.cradleofnoesis.inventory.ContainerTileEntityLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 

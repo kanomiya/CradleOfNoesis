@@ -1,5 +1,7 @@
 package com.kanomiya.mcmod.cradleofnoesis.entity;
 
+import java.util.Random;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
@@ -11,8 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.CONItems;
+import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.magic.ITickableWithMagicStatus;
+import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
 
 /**
  * @author Kanomiya
@@ -107,13 +111,27 @@ public class EntityMagicMatter extends Entity implements ITickableWithMagicStatu
 		{
 			if (worldObj.getGameRules().getBoolean("doEntityDrops"))
 			{
-				ItemStack drop = new ItemStack(CradleOfNoesis.CONItems.itemMagicMatter, 1, 0);
-				entityDropItem(drop, 1.0f);
-				setDead();
+				MagicStatus<EntityMagicMatter> magicStatus = getMagicStatus(this);
 
-				return true;
+				if (magicStatus != null)
+				{
+					Random rand = new Random();
+
+					if (rand.nextFloat() <= magicStatus.getMatter().getDropChance())
+					{
+						ItemStack drop = new ItemStack(CONItems.itemMagicMatter, 1, 0);
+						if (drop.hasCapability(CradleOfNoesisAPI.capMagicStatus, null))
+						{
+							drop.getCapability(CradleOfNoesisAPI.capMagicStatus, null).deserializeNBT(magicStatus.serializeNBT());
+						}
+
+						entityDropItem(drop, 1.0f);
+					}
+				}
 			}
 
+			setDead();
+			return true;
 		}
 
 		return false;
@@ -140,7 +158,7 @@ public class EntityMagicMatter extends Entity implements ITickableWithMagicStatu
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox()
 	{
-		return getEntityBoundingBox();
+		return getEntityBoundingBox().expand(-0.1d, 0, -0.1d);
 	}
 
 

@@ -50,7 +50,7 @@ public abstract class ITickableWithMagicStatus {
 				if (magicStatus.isUpdated())
 				{
 					PacketHandler.INSTANCE.sendToAll(new MessageMagicStatusHeldItem(entityIn, itemSlot, magicStatus));
-					magicStatus.updated = false;
+					magicStatus.removeUpdatedFlag();
 				}
 
 			}
@@ -72,7 +72,7 @@ public abstract class ITickableWithMagicStatus {
 					if (magicStatus.isUpdated())
 					{
 						PacketHandler.INSTANCE.sendToAll(new MessageMagicStatusEntityItem(entityItem, magicStatus));
-						magicStatus.updated = false;
+						magicStatus.removeUpdatedFlag();
 					}
 
 				}

@@ -10,7 +10,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -20,16 +19,19 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.kanomiya.mcmod.cradleofnoesis.CONMagicMatterTypes;
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntityMagicMatter;
 import com.kanomiya.mcmod.cradleofnoesis.magic.ITickableWithMagicStatus;
 import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
-import com.kanomiya.mcmod.cradleofnoesis.magic.matter.MagicMatter;
 
+// XXX Forgeちゃん！ ItemStackEqualでCapabilitiesの同一チェックしてよぉ...
 /**
  * @author Kanomiya
  *
@@ -42,6 +44,7 @@ public class ItemMagicMatter extends Item implements ITickableWithMagicStatus.It
 		setUnlocalizedName("itemMagicMatter");
 
 		setCreativeTab(CradleOfNoesis.tab);
+		setHasSubtypes(true);
 	}
 
 	@Override
@@ -63,14 +66,39 @@ public class ItemMagicMatter extends Item implements ITickableWithMagicStatus.It
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
 	{
-		subItems.add(new ItemStack(itemIn, 1, 0));
+		ItemStack stack = null;
+		MagicStatus<ItemStack> magicStatus = null;
 
-		NBTTagCompound nbt = new NBTTagCompound();
-		MagicMatter magicMatter = new MagicMatter();
+		stack = new ItemStack(itemIn, 1, 0);
+		magicStatus = stack.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
+		if (magicStatus.hasMatter()) magicStatus.getMatter().setMatterType(CONMagicMatterTypes.UNKNOWN);
+		subItems.add(stack);
 
-		nbt.setTag(CradleOfNoesis.MODID + ":defaultMagicMatter", magicMatter.serializeNBT());
+		stack = new ItemStack(itemIn, 1, 0);
+		magicStatus = stack.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
+		if (magicStatus.hasMatter()) magicStatus.getMatter().setMatterType(CONMagicMatterTypes.YULE);
+		subItems.add(stack);
 
-		subItems.add(new ItemStack(itemIn, 1, 0, nbt));
+		stack = new ItemStack(itemIn, 1, 0);
+		magicStatus = stack.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
+		if (magicStatus.hasMatter()) magicStatus.getMatter().setMatterType(CONMagicMatterTypes.TSAFA);
+		subItems.add(stack);
+
+
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack stack)
+	{
+		String baseName = getUnlocalizedNameInefficiently(stack) + ".name";
+
+		MagicStatus magicStatus = getMagicStatus(stack);
+		if (magicStatus != null && magicStatus.hasMatter())
+		{
+			return I18n.translateToLocalFormatted(baseName, magicStatus.getMatter().getDisplayName());
+		}
+
+		return I18n.translateToLocalFormatted(baseName);
 	}
 
 	@Override
@@ -82,10 +110,13 @@ public class ItemMagicMatter extends Item implements ITickableWithMagicStatus.It
 		{
 			tooltip.add("MP: " + magicStatus.getMp() + "/" + magicStatus.getMpCapacity());
 
+			/*
 			if (magicStatus.hasMatter())
 			{
-				tooltip.add("Matter: " + magicStatus.getMatter().getClass().getSimpleName());
+				MagicMatter matter = magicStatus.getMatter();
+				tooltip.add(I18n.translateToLocal("cradleofnoesis.matter") + ": " + matter.getDisplayName());
 			}
+			*/
 
 		}
 	}

@@ -47,7 +47,7 @@ public class ItemIntelligentStone extends Item implements ITickableWithMagicStat
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
 	{
-		return super.getUnlocalizedName(stack) + EnumIntelligentStoneColor.fromMeta(stack.getItemDamage()).toColorName();
+		return super.getUnlocalizedName(stack) + "_" + EnumIntelligentStoneColor.fromMeta(stack.getMetadata()).toColorName();
 	}
 
 	@Override

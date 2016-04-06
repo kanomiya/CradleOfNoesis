@@ -1,6 +1,24 @@
 ﻿###-- Japanese --###
 
+itemGroup.cradleofnoesis=知性のゆりかご
+
 container.liaalter=リアの祭壇
+
+tile.blockMagicBattery.name=魔力蓄積器
+tile.blockLiaAlter.name=リアの祭壇
+
+item.itemIntelligentStone_black.name=黒の知性石
+item.itemIntelligentStone_white.name=白の知性石
+item.itemIntelligentStone_red.name=赤の知性石
+
+item.itemMagicMatter.name=純魔質 <%1$s>
 
 cradleofnoesis.command.magicstatus.usage=使用法: magicstatus <accept>  <プレイヤー> <量>
 cradleofnoesis.command.magicstatus.accept=MP %2$s を %1$s に付与しました
+
+cradleofnoesis.matter=組成
+cradleofnoesis.matter.unknown=不明
+cradleofnoesis.matter.yule=ユール鉱
+cradleofnoesis.matter.tsafa=ツァファ鉱
+
+

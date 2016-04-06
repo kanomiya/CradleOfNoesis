@@ -19,8 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import com.kanomiya.mcmod.cradleofnoesis.CONGuis;
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis.CONGuis;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 
 /**

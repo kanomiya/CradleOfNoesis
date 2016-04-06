@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
@@ -98,11 +99,6 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 	public int getMpCapacity()
 	{
 		return mpCapacity;
-	}
-
-	public boolean isUpdated()
-	{
-		return updated;
 	}
 
 	/**
@@ -205,6 +201,14 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 		return owner;
 	}
 
+	/**
+	 * @param owner
+	 */
+	public void setOwner(O owner)
+	{
+		this.owner = owner;
+	}
+
 	public boolean hasNoEffect()
 	{
 		return magicEffects == null || magicEffects.isEmpty();
@@ -271,7 +275,7 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 			if (owner instanceof EntityLivingBase)
 			{
 				PacketHandler.INSTANCE.sendToAll(new MessageMagicStatusEntity((EntityLivingBase) owner, this));
-				updated = false;
+				removeUpdatedFlag();
 			}
 
 			/*
@@ -283,6 +287,16 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 
 	}
 
+	public boolean isUpdated()
+	{
+		return updated || (hasMatter() && getMatter().isUpdated());
+	}
+
+	public void removeUpdatedFlag()
+	{
+		updated = false;
+		if (hasMatter()) getMatter().removeUpdatedFlag();
+	}
 
 	/**
 	* @inheritDoc
@@ -342,12 +356,40 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 		if (hasMatter())
 		{
 			magicMatter.deserializeNBT(nbt.getCompoundTag("matter"));
+		} else if (nbt.hasKey("matter", NBT.TAG_COMPOUND))
+		{
+			magicMatter = new MagicMatter();
+			magicMatter.deserializeNBT(nbt.getCompoundTag("matter"));
 		}
 
 	}
 
+
+
+	/**
+	* @inheritDoc
+	*/
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing)
+	{
+		return (capability == CradleOfNoesisAPI.capMagicStatus);
+	}
+
+	/**
+	* @inheritDoc
+	*/
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing)
+	{
+		if (capability != CradleOfNoesisAPI.capMagicStatus) return null;
+		return (T) this;
+	}
+
+
+
 	public static class Storage implements Capability.IStorage<MagicStatus>
 	{
+
 		/**
 		* @inheritDoc
 		*/
@@ -373,26 +415,6 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 
 
 
-	/**
-	* @inheritDoc
-	*/
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing)
-	{
-		return (capability == CradleOfNoesisAPI.capMagicStatus);
-	}
-
-
-
-	/**
-	* @inheritDoc
-	*/
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing)
-	{
-		if (capability != CradleOfNoesisAPI.capMagicStatus) return null;
-		return (T) this;
-	}
 
 
 

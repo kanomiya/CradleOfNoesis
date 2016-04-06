@@ -5,6 +5,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -23,8 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.apache.logging.log4j.Logger;
 
-import com.kanomiya.mcmod.cradleofnoesis.block.BlockLiaAlter;
-import com.kanomiya.mcmod.cradleofnoesis.block.BlockMagicBattery;
 import com.kanomiya.mcmod.cradleofnoesis.client.gui.GuiIngameHandler;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderMagicMatter;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.TESRLiaAlter;
@@ -34,9 +33,8 @@ import com.kanomiya.mcmod.cradleofnoesis.event.AttachCapabilitiesEventHandler;
 import com.kanomiya.mcmod.cradleofnoesis.event.PlayerInteractionEventHandler;
 import com.kanomiya.mcmod.cradleofnoesis.event.UpdateEventHandler;
 import com.kanomiya.mcmod.cradleofnoesis.gui.GuiHandler;
-import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
-import com.kanomiya.mcmod.cradleofnoesis.item.ItemMagicMatter;
 import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
+import com.kanomiya.mcmod.cradleofnoesis.magic.matter.type.MagicMatterTypeRegistry;
 import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityMagicBattery;
@@ -61,23 +59,6 @@ public class CradleOfNoesis {
 
 	public static Logger logger;
 
-
-	public static class CONGuis
-	{
-		public static int GUIID_LIAALTER = 0;
-	}
-
-	public static class CONBlocks
-	{
-		public static BlockMagicBattery blockMagicBattery = new BlockMagicBattery();
-		public static BlockLiaAlter blockLiaAlter = new BlockLiaAlter();
-	}
-
-	public static class CONItems
-	{
-		public static ItemIntelligentStone itemIntelligentStone = new ItemIntelligentStone();
-		public static ItemMagicMatter itemMagicMatter = new ItemMagicMatter();
-	}
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
@@ -123,6 +104,10 @@ public class CradleOfNoesis {
 		}
 
 		CapabilityManager.INSTANCE.register(MagicStatus.class, new MagicStatus.Storage(), MagicStatus::createDefault);
+
+		MagicMatterTypeRegistry.INSTANCE.register(new ResourceLocation(CradleOfNoesis.MODID, "unknown"), CONMagicMatterTypes.UNKNOWN);
+		MagicMatterTypeRegistry.INSTANCE.register(new ResourceLocation(CradleOfNoesis.MODID, "yule"), CONMagicMatterTypes.YULE);
+		MagicMatterTypeRegistry.INSTANCE.register(new ResourceLocation(CradleOfNoesis.MODID, "tsafa"), CONMagicMatterTypes.TSAFA);
 
 		// MinecraftForge.EVENT_BUS.register(this);
 	}
