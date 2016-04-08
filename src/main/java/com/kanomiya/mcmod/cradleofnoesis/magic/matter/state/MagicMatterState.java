@@ -10,11 +10,24 @@ import net.minecraftforge.common.util.INBTSerializable;
 public class MagicMatterState implements INBTSerializable<NBTTagCompound> {
 
 	protected boolean updated;
+	protected MagicMatterForm form;
 
 	public MagicMatterState()
 	{
-
+		form = MagicMatterForm.BLOCK;
 	}
+
+	public MagicMatterForm getForm()
+	{
+		return form;
+	}
+
+	public void setForm(MagicMatterForm form)
+	{
+		this.form = form;
+		updated = true;
+	}
+
 
 	public boolean isUpdated()
 	{
@@ -34,6 +47,7 @@ public class MagicMatterState implements INBTSerializable<NBTTagCompound> {
 	public NBTTagCompound serializeNBT()
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setString("form", form.name());
 		return nbt;
 	}
 
@@ -43,6 +57,8 @@ public class MagicMatterState implements INBTSerializable<NBTTagCompound> {
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt)
 	{
+		form = MagicMatterForm.valueOf(nbt.getString("form"));
+		if (form == null) form = MagicMatterForm.BLOCK;
 
 	}
 

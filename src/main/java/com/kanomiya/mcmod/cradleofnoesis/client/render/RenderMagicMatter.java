@@ -13,13 +13,17 @@ import com.kanomiya.mcmod.cradleofnoesis.entity.EntityMagicMatter;
 @SideOnly(Side.CLIENT)
 public class RenderMagicMatter extends Render<EntityMagicMatter> {
 	private static final ResourceLocation pearlResource = new ResourceLocation(CradleOfNoesis.MODID + ":textures/blocks/objEnderPearl.png");
+	private static final ResourceLocation stackedMaterialResource = new ResourceLocation(CradleOfNoesis.MODID + ":textures/entity/objStackedMaterial.png");
 
 	protected ModelEnderPearl modelPearl;
+	protected ModelStackedMaterial modelStackedMaterial;
 
-	public RenderMagicMatter(RenderManager manager) {
+	public RenderMagicMatter(RenderManager manager)
+	{
 		super(manager);
 
 		modelPearl = new ModelEnderPearl();
+		modelStackedMaterial = new ModelStackedMaterial();
 	}
 
 	@Override
@@ -28,10 +32,22 @@ public class RenderMagicMatter extends Render<EntityMagicMatter> {
 		bindEntityTexture(entity);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x -0.5d, y, z -0.5d);
+		GlStateManager.translate(x, y, z);
 
-		GlStateManager.scale(0.5d, 0.5d, 0.5d);
-		modelPearl.doRender(1f);
+		switch (entity.getForm())
+		{
+		case BLOCK:
+			bindTexture(pearlResource);
+			GlStateManager.translate(-0.5d, 0, -0.5d);
+			GlStateManager.scale(0.5d, 0.5d, 0.5d);
+			modelPearl.doRender(1f);
+			break;
+		case STACKED:
+			bindTexture(stackedMaterialResource);
+			GlStateManager.scale(0.1d, 0.1d, 0.1d);
+			modelStackedMaterial.render(entity, 0,0,0,0,0, 1f); // TODO INVISIBLE ??
+			break;
+		}
 
 		GlStateManager.popMatrix();
 

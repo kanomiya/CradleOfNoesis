@@ -33,6 +33,33 @@ public class MessageMagicStatusEntity implements IMessage {
 			{
 				entity.getCapability(CradleOfNoesisAPI.capMagicStatus, null).deserializeNBT(message.nbt);
 			}
+			/* else
+			{
+				new Thread("MagicStatusEntity-Delayed-Updater")
+				{
+					@Override
+					public void run()
+					{
+						int maxRetry = 7;
+						int retryCount = 0;
+
+						while (retryCount < maxRetry)
+						{
+							if (entity instanceof Entity && entity.hasCapability(CradleOfNoesisAPI.capMagicStatus, null))
+							{
+								entity.getCapability(CradleOfNoesisAPI.capMagicStatus, null).deserializeNBT(message.nbt);
+								break;
+							} else ++ retryCount;
+
+							try
+							{
+								Thread.sleep(500);
+							} catch (InterruptedException e) { break; }
+						}
+
+					}
+				}.start();;
+			}*/
 
 			return null;
 		}

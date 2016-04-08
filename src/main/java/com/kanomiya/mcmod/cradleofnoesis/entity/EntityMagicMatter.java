@@ -7,22 +7,31 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants.NBT;
 
+import com.google.common.base.Optional;
 import com.kanomiya.mcmod.cradleofnoesis.CONItems;
+import com.kanomiya.mcmod.cradleofnoesis.CONMagicMatterTypes;
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
-import com.kanomiya.mcmod.cradleofnoesis.magic.ITickableWithMagicStatus;
 import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
+import com.kanomiya.mcmod.cradleofnoesis.magic.matter.state.MagicMatterForm;
+import com.kanomiya.mcmod.cradleofnoesis.magic.matter.type.IMagicMatterType;
 
 /**
  * @author Kanomiya
  *
  */
-public class EntityMagicMatter extends Entity implements ITickableWithMagicStatus.Entity {
+public class EntityMagicMatter extends Entity
+{
+	private static final DataParameter<Optional<ItemStack>> MATTER_STACK = EntityDataManager.<Optional<ItemStack>>createKey(EntityMagicMatter.class, DataSerializers.OPTIONAL_ITEM_STACK);
 
 	/**
 	 * @param worldIn
@@ -30,6 +39,7 @@ public class EntityMagicMatter extends Entity implements ITickableWithMagicStatu
 	public EntityMagicMatter(World worldIn) {
 		super(worldIn);
 
+		setPosition(0, 0, 0);
 		setSize(1f, 1f);
 		preventEntitySpawning = true;
 
@@ -53,15 +63,12 @@ public class EntityMagicMatter extends Entity implements ITickableWithMagicStatu
 	@Override
 	protected void entityInit()
 	{
-
+		dataWatcher.register(MATTER_STACK, Optional.of(new ItemStack(CONItems.itemMagicMatter, 1, 0)));
 	}
 
 	@Override
 	public void onUpdate()
 	{
-		// super.onUpdate();
-		ITickableWithMagicStatus.Entity.super.onUpdate();
-
 		super.onUpdate();
 
 		prevPosX = posX;
@@ -111,7 +118,7 @@ public class EntityMagicMatter extends Entity implements ITickableWithMagicStatu
 		{
 			if (worldObj.getGameRules().getBoolean("doEntityDrops"))
 			{
-				MagicStatus<EntityMagicMatter> magicStatus = getMagicStatus(this);
+				MagicStatus magicStatus = getStackMagicStatus();
 
 				if (magicStatus != null)
 				{
@@ -127,6 +134,7 @@ public class EntityMagicMatter extends Entity implements ITickableWithMagicStatu
 
 						entityDropItem(drop, 1.0f);
 					}
+
 				}
 			}
 
@@ -162,13 +170,49 @@ public class EntityMagicMatter extends Entity implements ITickableWithMagicStatu
 	}
 
 
+	public boolean hasMatterStack()
+	{
+		return dataWatcher.get(MATTER_STACK).isPresent();
+	}
+
+	public ItemStack getMatterStack()
+	{
+		return dataWatcher.get(MATTER_STACK).get();
+	}
+
+	public void setMatterStack(ItemStack stack)
+	{
+		dataWatcher.set(MATTER_STACK, Optional.of(stack));
+	}
+
+	public MagicStatus<ItemStack> getStackMagicStatus()
+	{
+		return hasMatterStack() && getMatterStack().hasCapability(CradleOfNoesisAPI.capMagicStatus, null) ? getMatterStack().getCapability(CradleOfNoesisAPI.capMagicStatus, null) : null;
+	}
+
+	public IMagicMatterType getType()
+	{
+		MagicStatus magicStatus = getStackMagicStatus();
+		if (magicStatus == null || ! magicStatus.hasMatter()) return CONMagicMatterTypes.UNKNOWN;
+		return magicStatus.getMatter().getMatterType();
+	}
+
+	public MagicMatterForm getForm()
+	{
+		MagicStatus magicStatus = getStackMagicStatus();
+		if (magicStatus == null || ! magicStatus.hasMatter()) return MagicMatterForm.BLOCK;
+		return magicStatus.getMatter().getMatterState().getForm();
+	}
+
+	// EntityBoat
+
 	/**
 	* @inheritDoc
 	*/
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt)
 	{
-
+		if (nbt.hasKey("matterStack", NBT.TAG_COMPOUND)) setMatterStack(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("matterStack")));
 	}
 
 	/**
@@ -177,7 +221,7 @@ public class EntityMagicMatter extends Entity implements ITickableWithMagicStatu
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt)
 	{
-
+		if (hasMatterStack()) nbt.setTag("matterStack", getMatterStack().serializeNBT());
 	}
 
 }

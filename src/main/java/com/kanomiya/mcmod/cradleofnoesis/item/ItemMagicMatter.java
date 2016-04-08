@@ -2,12 +2,10 @@ package com.kanomiya.mcmod.cradleofnoesis.item;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -30,6 +28,7 @@ import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntityMagicMatter;
 import com.kanomiya.mcmod.cradleofnoesis.magic.ITickableWithMagicStatus;
 import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
+import com.kanomiya.mcmod.cradleofnoesis.magic.matter.state.MagicMatterForm;
 
 // XXX Forgeちゃん！ ItemStackEqualでCapabilitiesの同一チェックしてよぉ...
 /**
@@ -71,17 +70,38 @@ public class ItemMagicMatter extends Item implements ITickableWithMagicStatus.It
 
 		stack = new ItemStack(itemIn, 1, 0);
 		magicStatus = stack.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
-		if (magicStatus.hasMatter()) magicStatus.getMatter().setMatterType(CONMagicMatterTypes.UNKNOWN);
+		if (magicStatus.hasMatter())
+		{
+			magicStatus.getMatter().setMatterType(CONMagicMatterTypes.YULE);
+			magicStatus.getMatter().getMatterState().setForm(MagicMatterForm.BLOCK);
+		}
 		subItems.add(stack);
 
 		stack = new ItemStack(itemIn, 1, 0);
 		magicStatus = stack.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
-		if (magicStatus.hasMatter()) magicStatus.getMatter().setMatterType(CONMagicMatterTypes.YULE);
+		if (magicStatus.hasMatter())
+		{
+			magicStatus.getMatter().setMatterType(CONMagicMatterTypes.YULE);
+			magicStatus.getMatter().getMatterState().setForm(MagicMatterForm.STACKED);
+		}
 		subItems.add(stack);
 
 		stack = new ItemStack(itemIn, 1, 0);
 		magicStatus = stack.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
-		if (magicStatus.hasMatter()) magicStatus.getMatter().setMatterType(CONMagicMatterTypes.TSAFA);
+		if (magicStatus.hasMatter())
+		{
+			magicStatus.getMatter().setMatterType(CONMagicMatterTypes.TSAFA);
+			magicStatus.getMatter().getMatterState().setForm(MagicMatterForm.BLOCK);
+		}
+		subItems.add(stack);
+
+		stack = new ItemStack(itemIn, 1, 0);
+		magicStatus = stack.getCapability(CradleOfNoesisAPI.capMagicStatus, null);
+		if (magicStatus.hasMatter())
+		{
+			magicStatus.getMatter().setMatterType(CONMagicMatterTypes.TSAFA);
+			magicStatus.getMatter().getMatterState().setForm(MagicMatterForm.STACKED);
+		}
 		subItems.add(stack);
 
 
@@ -109,6 +129,7 @@ public class ItemMagicMatter extends Item implements ITickableWithMagicStatus.It
 		if (magicStatus != null)
 		{
 			tooltip.add("MP: " + magicStatus.getMp() + "/" + magicStatus.getMpCapacity());
+			if (magicStatus.hasMatter()) tooltip.add("Form: " + magicStatus.getMatter().getMatterState().getForm().getDisplayName());
 
 			/*
 			if (magicStatus.hasMatter())
@@ -176,18 +197,8 @@ public class ItemMagicMatter extends Item implements ITickableWithMagicStatus.It
 			}
 			else
 			{
-				Block block = worldIn.getBlockState(raytraceresult.getBlockPos()).getBlock();
-				boolean flag1 = block == Blocks.water || block == Blocks.flowing_water;
-
-				EntityMagicMatter entity = new EntityMagicMatter(worldIn, raytraceresult.hitVec.xCoord, flag1 ? raytraceresult.hitVec.yCoord - 0.12D : raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
+				EntityMagicMatter entity = new EntityMagicMatter(worldIn, raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
 				entity.rotationYaw = playerIn.rotationYaw;
-
-				MagicStatus<ItemStack> magicStatusItem = getMagicStatus(itemStackIn);
-				MagicStatus<Entity> magicStatusEntity = entity.getMagicStatus(entity);
-				if (magicStatusItem != null && magicStatusEntity != null)
-				{
-					magicStatusEntity.deserializeNBT(magicStatusItem.serializeNBT());
-				}
 
 				if (!worldIn.getCubes(entity, entity.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
 				{
@@ -197,6 +208,10 @@ public class ItemMagicMatter extends Item implements ITickableWithMagicStatus.It
 				{
 					if (!worldIn.isRemote)
 					{
+						ItemStack itemStack = itemStackIn.copy();
+						itemStack.stackSize = 1;
+
+						entity.setMatterStack(itemStack);
 						worldIn.spawnEntityInWorld(entity);
 					}
 

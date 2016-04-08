@@ -9,7 +9,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
-import com.kanomiya.mcmod.cradleofnoesis.entity.EntityMagicMatter;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemMagicMatter;
 import com.kanomiya.mcmod.cradleofnoesis.magic.ITickableWithMagicStatus;
 import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
@@ -35,13 +34,6 @@ public class AttachCapabilitiesEventHandler {
 		{
 			MagicStatus<EntityPlayer> magicStatus = MagicStatus.create(100, true, (EntityPlayer) target, null);
 			magicStatus.addEffect(MEAutoHeal.RESOURCE_LOCATION, new MEAutoHeal(magicStatus));
-
-			event.addCapability(CradleOfNoesisAPI.RL_MAGICSTATUS, magicStatus);
-		}
-
-		if (target instanceof EntityMagicMatter)
-		{
-			MagicStatus<EntityMagicMatter> magicStatus = MagicStatus.create(100, true, (EntityMagicMatter) target, new MagicMatter());
 
 			event.addCapability(CradleOfNoesisAPI.RL_MAGICSTATUS, magicStatus);
 		}

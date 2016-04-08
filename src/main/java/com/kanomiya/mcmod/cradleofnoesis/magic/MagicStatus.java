@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesisAPI;
-import com.kanomiya.mcmod.cradleofnoesis.event.UpdateEventHandler;
+import com.kanomiya.mcmod.cradleofnoesis.event.PlayerUpdateEventHandler;
 import com.kanomiya.mcmod.cradleofnoesis.magic.effect.IMagicEffect;
 import com.kanomiya.mcmod.cradleofnoesis.magic.matter.MagicMatter;
 import com.kanomiya.mcmod.cradleofnoesis.network.MessageMagicStatusEntity;
@@ -191,6 +191,14 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 		return magicMatter;
 	}
 
+	/**
+	 * @param magicMatter
+	 */
+	public void setMatter(MagicMatter magicMatter)
+	{
+		this.magicMatter = magicMatter;
+	}
+
 	public boolean hasOwner()
 	{
 		return getOwner() != null;
@@ -256,7 +264,7 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 	*
 	* For Entity / TileEntity (implements {@link ITickableWithMagicStatus.TileEntity}) / Item (implements {@link ITickableWithMagicStatus.Item})
 	*
-	* @see UpdateEventHandler#onLivingUpdate(LivingEvent.LivingUpdateEvent)
+	* @see PlayerUpdateEventHandler#onLivingUpdate(LivingEvent.LivingUpdateEvent)
 	* @see ITickableWithMagicStatus.Item#onUpdate(ItemStack, World, Entity, int, boolean)
 	* @see ITickableWithMagicStatus.Item#onEntityItemUpdate(EntityItem)
 	* @see ITickableWithMagicStatus.TileEntity#update()
@@ -272,9 +280,9 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 
 		if (isUpdated())
 		{
-			if (owner instanceof EntityLivingBase)
+			if (owner instanceof Entity && ! ((Entity) owner).worldObj.isRemote)
 			{
-				PacketHandler.INSTANCE.sendToAll(new MessageMagicStatusEntity((EntityLivingBase) owner, this));
+				PacketHandler.INSTANCE.sendToAll(new MessageMagicStatusEntity((Entity) owner, this));
 				removeUpdatedFlag();
 			}
 
@@ -297,6 +305,12 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 		updated = false;
 		if (hasMatter()) getMatter().removeUpdatedFlag();
 	}
+
+	public void markUpdated()
+	{
+		updated = true;
+	}
+
 
 	/**
 	* @inheritDoc
@@ -412,6 +426,10 @@ public class MagicStatus<O extends ICapabilityProvider> implements ICapabilityPr
 		}
 
 	}
+
+
+
+
 
 
 

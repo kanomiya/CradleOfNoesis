@@ -31,7 +31,7 @@ import com.kanomiya.mcmod.cradleofnoesis.command.CommandMagicStatus;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntityMagicMatter;
 import com.kanomiya.mcmod.cradleofnoesis.event.AttachCapabilitiesEventHandler;
 import com.kanomiya.mcmod.cradleofnoesis.event.PlayerInteractionEventHandler;
-import com.kanomiya.mcmod.cradleofnoesis.event.UpdateEventHandler;
+import com.kanomiya.mcmod.cradleofnoesis.event.PlayerUpdateEventHandler;
 import com.kanomiya.mcmod.cradleofnoesis.gui.GuiHandler;
 import com.kanomiya.mcmod.cradleofnoesis.magic.MagicStatus;
 import com.kanomiya.mcmod.cradleofnoesis.magic.matter.type.MagicMatterTypeRegistry;
@@ -79,7 +79,7 @@ public class CradleOfNoesis {
 
 		MinecraftForge.EVENT_BUS.register(AttachCapabilitiesEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(PlayerInteractionEventHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(UpdateEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(PlayerUpdateEventHandler.INSTANCE);
 
 		if (event.getSide().isClient())
 		{
