@@ -13,13 +13,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
-import com.kanomiya.mcmod.cradleofnoesis.magic.ITickableWithMagicStatus;
 
 /**
  * @author Kanomiya
  *
  */
-public class ItemIntelligentStone extends Item implements ITickableWithMagicStatus.Item {
+public class ItemIntelligentStone extends Item {
 
 	public ItemIntelligentStone()
 	{
@@ -32,14 +31,12 @@ public class ItemIntelligentStone extends Item implements ITickableWithMagicStat
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
 	{
-		ITickableWithMagicStatus.Item.super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 
 	}
 
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem)
 	{
-		ITickableWithMagicStatus.Item.super.onEntityItemUpdate(entityItem);
 
 		return false;
 	}

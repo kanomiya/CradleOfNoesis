@@ -5,15 +5,15 @@ import java.util.List;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 
 import com.google.common.collect.Lists;
-import com.kanomiya.mcmod.cradleofnoesis.magic.ITickableWithMagicStatus;
 
 /**
  * @author Kanomiya
  *
  */
-public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITickableWithMagicStatus.TileEntity {
+public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITickable {
 
 	private int furnaceBurnTime;
 	private int currentItemBurnTime;
@@ -33,7 +33,6 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 	@Override
 	public void update()
 	{
-		ITickableWithMagicStatus.TileEntity.super.update();
 
 	}
 
