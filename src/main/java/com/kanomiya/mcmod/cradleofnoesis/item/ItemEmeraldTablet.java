@@ -3,14 +3,9 @@ package com.kanomiya.mcmod.cradleofnoesis.item;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,23 +16,15 @@ import com.kanomiya.mcmod.cradleofnoesis.util.EnderEnergyUtils;
  * @author Kanomiya
  *
  */
-public class ItemIntelligentStone extends Item
+public class ItemEmeraldTablet extends Item
 {
-	public ItemIntelligentStone()
+	public ItemEmeraldTablet()
 	{
-		setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "itemIntelligentStone"));
-		setUnlocalizedName("itemIntelligentStone");
+		setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "itemEmeraldTablet"));
+		setUnlocalizedName("itemEmeraldTablet");
 
 		setCreativeTab(CradleOfNoesis.tab);
 		setHasSubtypes(true);
-	}
-
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
-	{
-
-
-		return new ActionResult(EnumActionResult.PASS, itemStackIn);
 	}
 
 	@Override
@@ -51,7 +38,6 @@ public class ItemIntelligentStone extends Item
 	{
 		return 1.0d -(double)EnderEnergyUtils.getEnderEnergyAmount(stack) /(double)EnderEnergyUtils.getEnderEnergyCapacity(stack);
 	}
-
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
@@ -74,9 +60,11 @@ public class ItemIntelligentStone extends Item
 
 	public static enum EnumType
 	{
-		BLACK,
-		WHITE,
-		RED,
+		LIA_FALIA,
+		LIA_STILIA,
+		LIA_REGILIA,
+		ARLEY,
+		ARMES,
 		;
 
 	}

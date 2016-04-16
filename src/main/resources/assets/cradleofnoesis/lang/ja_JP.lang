@@ -7,9 +7,24 @@ container.liaalter=リアの祭壇
 tile.blockMagicBattery.name=魔力蓄積器
 tile.blockLiaAlter.name=リアの祭壇
 
+tile.blockYuleOre.name=ユール鉱石
+tile.blockTsafaOre.name=ツァファ鉱石
+
+
 item.itemIntelligentStone_black.name=黒の知性石
 item.itemIntelligentStone_white.name=白の知性石
 item.itemIntelligentStone_red.name=赤の知性石
+
+item.itemEmeraldTablet_lia_falia.name=ファリアの翠玉板
+item.itemEmeraldTablet_lia_stilia.name=スティリアの翠玉板
+item.itemEmeraldTablet_lia_regilia.name=リージリアの翠玉板
+
+item.itemEmeraldTablet_arley.name=アーレイの翠玉板
+item.itemEmeraldTablet_armes.name=アルメスの翠玉板
+
+item.itemYuleIngot.name=ユールインゴット
+item.itemTsafaIngot.name=ツァファインゴット
+
 
 item.itemMagicMatter.name=純魔質 <%1$s>
 

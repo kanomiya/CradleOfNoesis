@@ -3,6 +3,7 @@ package com.kanomiya.mcmod.cradleofnoesis;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
 
 public class CONItems
@@ -18,6 +19,8 @@ public class CONItems
 		.setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "itemTsafaIngot"))
 		.setUnlocalizedName("itemTsafaIngot")
 		.setCreativeTab(CradleOfNoesis.tab);
+
+	public static ItemEmeraldTablet itemEmeraldTablet = new ItemEmeraldTablet();
 
 
 }

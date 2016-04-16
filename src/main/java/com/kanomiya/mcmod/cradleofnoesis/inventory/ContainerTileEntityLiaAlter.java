@@ -10,33 +10,38 @@ import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 
 public class ContainerTileEntityLiaAlter extends Container {
 
-	protected TileEntityLiaAlter tileEntity;
+	protected TileEntityLiaAlter tileAlter;
 	int slotNum = 0;
 
-	public ContainerTileEntityLiaAlter(InventoryPlayer inventoryPlayer, TileEntityLiaAlter te) {
-		tileEntity = te;
+	public ContainerTileEntityLiaAlter(InventoryPlayer inventoryPlayer, TileEntityLiaAlter tileAlter) {
+		this.tileAlter = tileAlter;
 
-		//the Slot constructor takes the IInventory and the slot number in that it binds to
-		//and the x-y coordinates it resides on-screen
-
-		addSlotToContainer(new FixedSlot(tileEntity, slotNum, 80, 25));
+		// Egg
+		addSlotToContainer(new FixedLimitedSlot(tileAlter, slotNum, 121, 43, 1));
 		++slotNum;
 
-		addSlotToContainer(new FixedLimitedSlot(tileEntity, slotNum, 62, 65, 1));
+		// Fuel: Ender pearl
+		addSlotToContainer(new FixedLimitedSlot(tileAlter, slotNum, 29, 62, 1));
 		++slotNum;
-		addSlotToContainer(new FixedLimitedSlot(tileEntity, slotNum, 98, 65, 1));
+		addSlotToContainer(new FixedLimitedSlot(tileAlter, slotNum, 65, 62, 1));
+		++slotNum;
+
+		// Additional 1
+		addSlotToContainer(new FixedLimitedSlot(tileAlter, slotNum, 29, 25, 1));
+		++slotNum;
+		// Additional 2
+		addSlotToContainer(new FixedLimitedSlot(tileAlter, slotNum, 65, 25, 1));
 		++slotNum;
 
 
-		//commonly used vanilla code that adds the player's inventory
 		bindPlayerInventory(inventoryPlayer);
 
-		tileEntity.openInventory(inventoryPlayer.player);
+		tileAlter.openInventory(inventoryPlayer.player);
 	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return tileEntity.isUseableByPlayer(player);
+		return tileAlter.isUseableByPlayer(player);
 	}
 
 
@@ -63,9 +68,9 @@ public class ContainerTileEntityLiaAlter extends Container {
 
 		ItemStack slotStack = slot.getStack();
 
-		if (slotNum < tileEntity.getSizeInventory())
+		if (slotNum < tileAlter.getSizeInventory())
 		{
-			if (! mergeItemStack(slotStack, tileEntity.getSizeInventory(), inventorySlots.size(), true))
+			if (! mergeItemStack(slotStack, tileAlter.getSizeInventory(), inventorySlots.size(), true))
 			{
 				if (slotStack.stackSize == 0) slot.putStack((ItemStack) null);
 				return null;
@@ -73,7 +78,7 @@ public class ContainerTileEntityLiaAlter extends Container {
 		}
 		else
 		{
-			if (! mergeItemStack(slotStack, 0, tileEntity.getSizeInventory(), false))
+			if (! mergeItemStack(slotStack, 0, tileAlter.getSizeInventory(), false))
 			{
 				if (slotStack.stackSize == 0) slot.putStack((ItemStack) null);
 				return null;
@@ -96,7 +101,7 @@ public class ContainerTileEntityLiaAlter extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer p_75134_1_) {
 		super.onContainerClosed(p_75134_1_);
-		tileEntity.closeInventory(p_75134_1_);
+		tileAlter.closeInventory(p_75134_1_);
 	}
 
 	@Override
