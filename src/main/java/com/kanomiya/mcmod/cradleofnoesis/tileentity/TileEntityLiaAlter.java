@@ -11,9 +11,9 @@ import net.minecraft.util.SoundCategory;
 
 import com.google.common.collect.Lists;
 import com.kanomiya.mcmod.cradleofnoesis.CONItems;
+import com.kanomiya.mcmod.cradleofnoesis.api.util.EnderEnergyUtils;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
-import com.kanomiya.mcmod.cradleofnoesis.util.EnderEnergyUtils;
 
 /**
  * @author Kanomiya
@@ -53,7 +53,7 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 
 		if (material != null && brewingTime == 0)
 		{
-			if (material.getItem() == Items.egg) brewingTimeInterval = 500;
+			if (material.getItem() == Items.EGG) brewingTimeInterval = 500;
 			else if (material.getItem() == CONItems.itemIntelligentStone)
 			{
 				int meta = material.getMetadata();
@@ -83,7 +83,7 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 			} else
 			{
 				setInventorySlotContents(SLOT_FUEL1, null);
-				worldObj.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.block_glass_break, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+				worldObj.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 			}
 		}
 
@@ -101,7 +101,7 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 			} else
 			{
 				setInventorySlotContents(SLOT_FUEL2, null);
-				worldObj.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.block_glass_break, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+				worldObj.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 			}
 		}
 
@@ -131,7 +131,7 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 								switch (type)
 								{
 								case LIA_FALIA:
-									if (material.getItem() == Items.egg)
+									if (material.getItem() == Items.EGG)
 										setInventorySlotContents(SLOT_MATERIAL, new ItemStack(CONItems.itemIntelligentStone, 1, ItemIntelligentStone.EnumType.BLACK.ordinal()));
 									break;
 								case LIA_STILIA:
@@ -154,7 +154,7 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 						if (current <= 0)
 						{
 							setInventorySlotContents(SLOT_OFFERING_KNOWLEDGE, null);
-							worldObj.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.block_glass_break, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+							worldObj.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 						}
 
 					} else
@@ -166,7 +166,7 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 					worldObj.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 2.0f, true);
 				}
 
-				worldObj.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.block_lava_extinguish, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+				worldObj.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 				brewingTime = 0;
 			}
 
@@ -282,8 +282,8 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 	*/
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		if (index == 0) return stack.getItem() == Items.egg || stack.getItem() == CONItems.itemIntelligentStone;
-		if (1 <= index && index <= 2) return stack.getItem() == Items.ender_pearl;
+		if (index == 0) return stack.getItem() == Items.EGG || stack.getItem() == CONItems.itemIntelligentStone;
+		if (1 <= index && index <= 2) return stack.getItem() == Items.ENDER_PEARL;
 		if (3 <= index && index <= 4) return stack.getItem() == CONItems.itemEmeraldTablet;
 		return false;
 	}

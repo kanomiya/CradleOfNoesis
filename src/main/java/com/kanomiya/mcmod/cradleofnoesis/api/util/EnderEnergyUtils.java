@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.cradleofnoesis.util;
+package com.kanomiya.mcmod.cradleofnoesis.api.util;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -46,7 +46,7 @@ public class EnderEnergyUtils
 
 	public static void initEnderEnergy(ItemStack stack)
 	{
-		if (stack.getItem() == Items.ender_pearl)
+		if (stack.getItem() == Items.ENDER_PEARL)
 		{
 			setEnderEnergyAmount(stack, 250);
 			setEnderEnergyCapacity(stack, 250);

@@ -28,6 +28,15 @@ item.itemTsafaIngot.name=ツァファインゴット
 
 item.itemMagicMatter.name=純魔質 <%1$s>
 
+item.itemFlyPod.name=フライポッド
+entity.cradleofnoesis.entityFlyPod.name=フライポッド
+entity.cradleofnoesis.entityFlyPod.chat.launch=こちら%1$s。フライポッドシステムに接続
+entity.cradleofnoesis.entityFlyPod.chat.findEnemy=敵を認識。殲滅始めるよ
+entity.cradleofnoesis.entityFlyPod.chat.continueAttack=敵を認識。殲滅続けるよ
+entity.cradleofnoesis.entityFlyPod.chat.dead=あっ
+entity.cradleofnoesis.entityFlyPod.chat.passive_0=こちら%1$1。システム正常
+entity.cradleofnoesis.entityFlyPod.chat.passive_1=ルンルン♪
+
 cradleofnoesis.command.magicstatus.usage=使用法: magicstatus <accept>  <プレイヤー> <量>
 cradleofnoesis.command.magicstatus.accept=MP %2$s を %1$s に付与しました
 

@@ -8,10 +8,15 @@ import java.util.function.Consumer;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.passive.EntityVillager.ITradeList;
+import net.minecraft.entity.passive.EntityVillager.ListItemForEmeralds;
+import net.minecraft.entity.passive.EntityVillager.PriceInfo;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeDecorator;
@@ -22,6 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -29,6 +35,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper.UnableToFindMethodException;
@@ -37,12 +44,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.apache.logging.log4j.Logger;
 
+import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderFlyPod;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.TESRLiaAlter;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
 import com.kanomiya.mcmod.cradleofnoesis.gui.GuiHandler;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
 import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
+import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerCareer;
+import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerProfession;
 
 /**
  * @author Kanomiya
@@ -56,14 +67,15 @@ public class CradleOfNoesis {
 	public static CradleOfNoesis instance;
 
 	public static final CreativeTabs tab = new CreativeTabs(MODID) {
-		@Override @SideOnly(Side.CLIENT)
+		@Override
+		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return Item.getItemFromBlock(Blocks.dirt);
+			return Item.getItemFromBlock(Blocks.DIRT);
 		}
 	};
 
 	public static Logger logger;
-
+	public static SimpleVillagerProfession vprofArchaeologist;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
@@ -81,12 +93,42 @@ public class CradleOfNoesis {
 		GameRegistry.register(CONItems.itemYuleIngot);
 		GameRegistry.register(CONItems.itemTsafaIngot);
 		GameRegistry.register(CONItems.itemEmeraldTablet);
+		GameRegistry.register(CONItems.itemFlyPodSpawner);
+
 
 		GameRegistry.registerTileEntity(TileEntityLiaAlter.class, CradleOfNoesis.MODID + ":tileEntityLiaAlter");
 
 		GameRegistry.addSmelting(CONBlocks.blockYuleOre, new ItemStack(CONItems.itemYuleIngot), 0.7f);
 		GameRegistry.addSmelting(CONBlocks.blockTsafaOre, new ItemStack(CONItems.itemTsafaIngot), 0.7f);
 
+		EntityRegistry.registerModEntity(EntityFlyPod.class, "entityFlyPod", 0, instance, 32, 1, true);
+
+
+		vprofArchaeologist = new SimpleVillagerProfession(
+				new ResourceLocation(CradleOfNoesis.MODID, "archaeologist"),
+				new ResourceLocation(CradleOfNoesis.MODID + ":textures/entity/villager/archaeologist.png"));
+
+		new SimpleVillagerCareer(vprofArchaeologist, "emeraldTablet").init(
+			new ITradeList[][]
+			{
+				{
+					new ListItemForEmeralds(new ItemStack(Items.ENDER_PEARL, 1), new PriceInfo(4, 7)),
+				},
+				{
+					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_FALIA.ordinal()), new PriceInfo(12, 14)),
+
+					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_STILIA.ordinal()), new PriceInfo(12, 14)),
+
+					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_REGILIA.ordinal()), new PriceInfo(12, 14)),
+
+					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.ARLEY.ordinal()), new PriceInfo(16, 22)),
+
+					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.ARMES.ordinal()), new PriceInfo(26, 32)),
+				},
+			}
+		);
+
+		GameRegistry.register(vprofArchaeologist);
 
 
 
@@ -119,6 +161,7 @@ public class CradleOfNoesis {
 
 			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLiaAlter.class, new TESRLiaAlter());
 
+			RenderingRegistry.registerEntityRenderingHandler(EntityFlyPod.class, RenderFlyPod::new);
 		}
 
 		MinecraftForge.ORE_GEN_BUS.register(this);
@@ -128,10 +171,8 @@ public class CradleOfNoesis {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		PacketHandler.init();
-
 	}
 
 	@Mod.EventHandler

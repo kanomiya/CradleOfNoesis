@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
-import com.kanomiya.mcmod.cradleofnoesis.util.EnderEnergyUtils;
+import com.kanomiya.mcmod.cradleofnoesis.api.util.EnderEnergyUtils;
 
 /**
  * @author Kanomiya

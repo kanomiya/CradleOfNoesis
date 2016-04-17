@@ -11,6 +11,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -38,7 +41,7 @@ public class BlockLiaAlter extends BlockContainer {
 
 	public BlockLiaAlter()
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 
 		setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "blockLiaAlter"));
 		setUnlocalizedName("blockLiaAlter");
@@ -92,7 +95,7 @@ public class BlockLiaAlter extends BlockContainer {
 
 			if (rand.nextDouble() < 0.1D)
 			{
-				worldIn.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.block_portal_ambient, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+				worldIn.playSound(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 			}
 
 			switch (enumfacing)
@@ -150,6 +153,34 @@ public class BlockLiaAlter extends BlockContainer {
 	{
 		return state.getValue(FACING).getHorizontalIndex();
 	}
+
+
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	{
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+
+		if (tileentity instanceof IInventory)
+		{
+			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileentity);
+			worldIn.updateComparatorOutputLevel(pos, this);
+		}
+
+		super.breakBlock(worldIn, pos, state);
+	}
+
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state)
+	{
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos)
+	{
+		return Container.calcRedstone(worldIn.getTileEntity(pos));
+	}
+
 
 
 	@Override

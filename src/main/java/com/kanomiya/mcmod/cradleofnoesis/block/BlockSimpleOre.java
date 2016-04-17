@@ -24,7 +24,7 @@ public class BlockSimpleOre extends BlockOre
 
 	public BlockSimpleOre()
 	{
-		this(Material.rock.getMaterialMapColor());
+		this(Material.ROCK.getMaterialMapColor());
 	}
 
 	public BlockSimpleOre(MapColor color)

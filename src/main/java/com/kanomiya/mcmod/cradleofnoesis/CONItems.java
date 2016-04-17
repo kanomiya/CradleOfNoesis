@@ -3,7 +3,9 @@ package com.kanomiya.mcmod.cradleofnoesis;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemEntitySpawner;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
 
 public class CONItems
@@ -21,6 +23,11 @@ public class CONItems
 		.setCreativeTab(CradleOfNoesis.tab);
 
 	public static ItemEmeraldTablet itemEmeraldTablet = new ItemEmeraldTablet();
+
+	public static Item itemFlyPodSpawner = new ItemEntitySpawner<EntityFlyPod>(EntityFlyPod::new)
+		.setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "itemFlyPod"))
+		.setUnlocalizedName("itemFlyPod")
+		.setCreativeTab(CradleOfNoesis.tab);
 
 
 }
