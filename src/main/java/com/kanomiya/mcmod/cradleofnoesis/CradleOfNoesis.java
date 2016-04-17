@@ -11,7 +11,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.passive.EntityVillager.ITradeList;
 import net.minecraft.entity.passive.EntityVillager.ListItemForEmeralds;
 import net.minecraft.entity.passive.EntityVillager.PriceInfo;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -61,7 +60,7 @@ import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerProfession;
  */
 @Mod(modid = CradleOfNoesis.MODID)
 public class CradleOfNoesis {
-	public static final String MODID = "cradleofnoesis";
+	public static final String MODID = "com.kanomiya.mcmod.cradleofnoesis";
 
 	@Mod.Instance(MODID)
 	public static CradleOfNoesis instance;
@@ -70,7 +69,14 @@ public class CradleOfNoesis {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return Item.getItemFromBlock(Blocks.DIRT);
+			return CONItems.itemIntelligentStone;
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public int getIconItemDamage()
+		{
+			return ItemIntelligentStone.EnumType.RED.ordinal();
 		}
 	};
 
@@ -93,7 +99,7 @@ public class CradleOfNoesis {
 		GameRegistry.register(CONItems.itemYuleIngot);
 		GameRegistry.register(CONItems.itemTsafaIngot);
 		GameRegistry.register(CONItems.itemEmeraldTablet);
-		GameRegistry.register(CONItems.itemFlyPodSpawner);
+		GameRegistry.register(CONItems.itemFlyPod);
 
 
 		GameRegistry.registerTileEntity(TileEntityLiaAlter.class, CradleOfNoesis.MODID + ":tileEntityLiaAlter");
@@ -134,17 +140,15 @@ public class CradleOfNoesis {
 
 		if (event.getSide().isClient())
 		{
-			Consumer<Item> simpleRegister = (item) -> ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(CradleOfNoesis.MODID + ":" + item.getRegistryName().getResourcePath()));
+			Consumer<Item> simpleRegister = (item) -> ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			BiConsumer<Item, Enum[]> enumRegister = new BiConsumer<Item, Enum[]>()
 			{
 				@Override
 				public void accept(Item item, Enum[] enumAry)
 				{
-					String baseName = item.getRegistryName().getResourcePath();
-
 					for (int i=0; i<enumAry.length; ++i)
 					{
-						ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(CradleOfNoesis.MODID + ":" + baseName + "_" + enumAry[i].name().toLowerCase()));
+						ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(new ResourceLocation(item.getRegistryName().getResourceDomain(), item.getRegistryName().getResourcePath() + "_" + enumAry[i].name().toLowerCase()), "inventory"));
 					}
 				}
 			};
@@ -158,6 +162,7 @@ public class CradleOfNoesis {
 
 			simpleRegister.accept(CONItems.itemYuleIngot);
 			simpleRegister.accept(CONItems.itemTsafaIngot);
+			simpleRegister.accept(CONItems.itemFlyPod);
 
 			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLiaAlter.class, new TESRLiaAlter());
 

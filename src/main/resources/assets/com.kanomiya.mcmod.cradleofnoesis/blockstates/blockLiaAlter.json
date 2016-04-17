@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=south": { "model": "com.kanomiya.mcmod.cradleofnoesis:blockLiaAlter" },
+		"facing=north": { "model": "com.kanomiya.mcmod.cradleofnoesis:blockLiaAlter", "y": 180 },
+		"facing=east":  { "model": "com.kanomiya.mcmod.cradleofnoesis:blockLiaAlter", "y": 270 },
+		"facing=west":  { "model": "com.kanomiya.mcmod.cradleofnoesis:blockLiaAlter", "y": 90 }
+	}
+}

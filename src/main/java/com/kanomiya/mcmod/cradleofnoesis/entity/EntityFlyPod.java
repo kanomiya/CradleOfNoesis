@@ -7,17 +7,12 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
 import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
-import net.minecraft.entity.ai.EntityAISit;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITargetNonTamed;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityRabbit;
@@ -69,7 +64,7 @@ public class EntityFlyPod extends EntityTameable
 		setSize(1.0f, 1.0f);
 
 		fireInterval = 40;
-		chatInterval = 3000;
+		chatInterval = 1000;
 	}
 
 	@Override
@@ -93,6 +88,39 @@ public class EntityFlyPod extends EntityTameable
 				motionY += 0.1d; // EntityWolf
 			}
 
+			/*
+			int d = 5;
+
+			for (int x=-d; x<=d; ++x)
+			{
+				for (int y=-d; y<=d; ++y)
+				{
+					for (int z=-d; z<=d; ++z)
+					{
+						BlockPos blockPos = new BlockPos(posX +x, posY +y, posZ +z);
+						IBlockState blockState = worldObj.getBlockState(blockPos);
+
+						if (blockState != null)
+						{
+							if (blockState.isFullBlock()
+									|| blockState.getBlock() == Blocks.FIRE
+									|| blockState.getBlock() == Blocks.LAVA
+									|| blockState.getBlock() == Blocks.FLOWING_LAVA)
+							{
+								Vec3d vecTracking = new Vec3d(x, y, z);
+								vecTracking = vecTracking.scale(1d / vecTracking.lengthVector()); // 単位ベクトル
+
+								vecTracking = vecTracking.scale(0.5d);
+
+								motionX -= vecTracking.xCoord;
+								motionZ -= vecTracking.zCoord;
+								break;
+							}
+						}
+					}
+				}
+			}
+			*/
 
 			Entity tracking = getAttackTarget() == null ? owner : getAttackTarget();
 
@@ -122,12 +150,14 @@ public class EntityFlyPod extends EntityTameable
 					motionY += vecArrow.yCoord;
 				}
 
-
 				++chatCount;
 				if (chatInterval < chatCount)
 				{
 					int i = rand.nextInt(1);
-					if (! worldObj.isRemote) owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.passive_" + i, getName())));
+					if (! worldObj.isRemote)
+					{
+						owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.passive_" + i, getName())));
+					}
 
 					chatCount = 0;
 				}
@@ -141,6 +171,8 @@ public class EntityFlyPod extends EntityTameable
 					{
 						if (entity instanceof EntityLivingBase && entity != this && ! entity.isOnSameTeam(this) && canEntityBeSeen(entity))
 						{
+							if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() == owner) continue;
+
 							if (! worldObj.isRemote)
 							{
 								if (getAttackTarget() == null) owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.findEnemy", getName())));
@@ -152,17 +184,15 @@ public class EntityFlyPod extends EntityTameable
 						}
 					}
 
-					if (getAttackTarget() != null && getAttackTarget().isDead) setAttackTarget(null);
 				}
 
 			}
-
 
 			if (getAttackTarget() != null)
 			{
 				tracking = getAttackTarget();
 
-				if (tracking != this && ! tracking.isDead)
+				if (tracking != this && ! tracking.isDead && canEntityBeSeen(tracking) && !(tracking instanceof EntityTameable && ((EntityTameable) tracking).getOwner() == owner))
 				{
 					++fireCount;
 
@@ -180,15 +210,23 @@ public class EntityFlyPod extends EntityTameable
 
 						fireCount = 0;
 					}
+				} else
+				{
+
+					if (! worldObj.isRemote)
+					{
+						owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.enemyNotFound", getName())));
+					}
+					setAttackTarget(null);
 				}
 
 			}
 
 		}
 
+		super.onLivingUpdate();
 		// TODO: enderEnergyの消費
 
-		super.onLivingUpdate();
 
 	}
 
@@ -205,14 +243,14 @@ public class EntityFlyPod extends EntityTameable
 			if (stack.stackSize <= 0) player.setHeldItem(hand, null);
 
 			setOwnerId(player.getUniqueID());
+			setTamed(true);
 			if (! worldObj.isRemote) player.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.launch", getName())));
 
 			return EnumActionResult.SUCCESS;
 
 		} else if (getStoneStack() != null)
 		{
-			if (! worldObj.isRemote) entityDropItem(getStoneStack(), 0.2f);
-			setStoneStack(null);
+			dropStoneStack(true);
 
 			return EnumActionResult.SUCCESS;
 		}
@@ -227,7 +265,7 @@ public class EntityFlyPod extends EntityTameable
 		{
 			if (getOwner() instanceof EntityPlayerMP) getOwner().addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.dead", getName())));
 
-			if (! worldObj.isRemote) entityDropItem(getStoneStack(), 0.2f);
+			dropStoneStack(false);
 		}
 
 		super.onDeath(cause);
@@ -243,6 +281,18 @@ public class EntityFlyPod extends EntityTameable
 		dataManager.set(STONE, stack != null ? Optional.of(stack) : Optional.absent());
 	}
 
+	public void dropStoneStack(boolean removeStack)
+	{
+		if (! worldObj.isRemote) entityDropItem(getStoneStack(), 0.2f);
+
+		if (removeStack)
+		{
+			setOwnerId(null);
+			setStoneStack(null);
+			setTamed(false);
+		}
+	}
+
 	@Override
 	public String getName()
 	{
@@ -254,13 +304,13 @@ public class EntityFlyPod extends EntityTameable
 	@Override
 	protected void initEntityAI()
 	{
-		tasks.addTask(1, new EntityAISwimming(this));
-		tasks.addTask(2, aiSit = new EntityAISit(this));
-		tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, true));
+		// tasks.addTask(1, new EntityAISwimming(this));
+		// tasks.addTask(2, aiSit = new EntityAISit(this));
+		// tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, true));
 		tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
 		// tasks.addTask(8, new EntityAIBeg(this, 8.0F));
-		tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		tasks.addTask(9, new EntityAILookIdle(this));
+		// tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		// tasks.addTask(9, new EntityAILookIdle(this));
 		targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));

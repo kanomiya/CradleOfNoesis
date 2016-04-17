@@ -24,7 +24,7 @@ public class CONItems
 
 	public static ItemEmeraldTablet itemEmeraldTablet = new ItemEmeraldTablet();
 
-	public static Item itemFlyPodSpawner = new ItemEntitySpawner<EntityFlyPod>(EntityFlyPod::new)
+	public static Item itemFlyPod = new ItemEntitySpawner<EntityFlyPod>(EntityFlyPod::new)
 		.setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "itemFlyPod"))
 		.setUnlocalizedName("itemFlyPod")
 		.setCreativeTab(CradleOfNoesis.tab);

@@ -1,8 +1,0 @@
-{
-	"variants": {
-		"facing=south": { "model": "cradleofnoesis:blockLiaAlter" },
-		"facing=north": { "model": "cradleofnoesis:blockLiaAlter", "y": 180 },
-		"facing=east":  { "model": "cradleofnoesis:blockLiaAlter", "y": 270 },
-		"facing=west":  { "model": "cradleofnoesis:blockLiaAlter", "y": 90 }
-	}
-}

@@ -1,6 +1,6 @@
 [
 {
-  "modid": "cradleofnoesis",
+  "modid": "com.kanomiya.mcmod.cradleofnoesis",
   "name": "Cradle Of Noesis",
   "description": "Magic mod",
   "version": "${version}",
