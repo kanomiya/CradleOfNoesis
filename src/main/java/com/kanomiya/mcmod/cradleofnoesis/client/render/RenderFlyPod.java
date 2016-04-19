@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
 
 /**
@@ -14,7 +14,7 @@ import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
  */
 public class RenderFlyPod extends RenderLiving<EntityFlyPod>
 {
-	protected static final ResourceLocation texture = new ResourceLocation(CradleOfNoesis.MODID + ":textures/entity/entityFlyPod.png");
+	protected static final ResourceLocation texture = new ResourceLocation(CradleOfNoesisAPI.MODID, "textures/entity/entityFlyPod.png");
 
 	/**
 	 * @param renderManager

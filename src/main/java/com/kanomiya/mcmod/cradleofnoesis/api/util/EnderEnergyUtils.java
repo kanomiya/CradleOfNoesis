@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import com.kanomiya.mcmod.cradleofnoesis.CONItems;
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
 
@@ -15,9 +16,10 @@ import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
  */
 public class EnderEnergyUtils
 {
+
 	public static NBTTagCompound getEnderEnergyTag(ItemStack stack)
 	{
-		return stack.getSubCompound("enderEnergy", true);
+		return stack.getSubCompound(CradleOfNoesisAPI.ENDER_ENERGY_LOCATION.toString(), true);
 	}
 
 	public static void setEnderEnergyAmount(ItemStack stack, int amount)

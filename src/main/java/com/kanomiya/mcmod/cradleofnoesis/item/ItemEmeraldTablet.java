@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.api.util.EnderEnergyUtils;
 
 /**
@@ -20,7 +21,7 @@ public class ItemEmeraldTablet extends Item
 {
 	public ItemEmeraldTablet()
 	{
-		setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "itemEmeraldTablet"));
+		setRegistryName(new ResourceLocation(CradleOfNoesisAPI.MODID, "itemEmeraldTablet"));
 		setUnlocalizedName("itemEmeraldTablet");
 
 		setCreativeTab(CradleOfNoesis.tab);

@@ -9,14 +9,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
 
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.inventory.ContainerTileEntityLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 
 
 @SideOnly(Side.CLIENT)
 public class GuiLiaAlter extends GuiContainer {
-	private static final ResourceLocation background = new ResourceLocation(CradleOfNoesis.MODID + ":textures/gui/guiLiaAlter.png");
+	private static final ResourceLocation background = new ResourceLocation(CradleOfNoesisAPI.MODID, "textures/gui/guiLiaAlter.png");
 
 	TileEntityLiaAlter tileAlter;
 

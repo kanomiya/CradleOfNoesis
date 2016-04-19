@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.api.util.EnderEnergyUtils;
 
 /**
@@ -25,7 +26,7 @@ public class ItemIntelligentStone extends Item
 {
 	public ItemIntelligentStone()
 	{
-		setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "itemIntelligentStone"));
+		setRegistryName(new ResourceLocation(CradleOfNoesisAPI.MODID, "itemIntelligentStone"));
 		setUnlocalizedName("itemIntelligentStone");
 
 		setCreativeTab(CradleOfNoesis.tab);

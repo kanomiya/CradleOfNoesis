@@ -29,6 +29,7 @@ import net.minecraft.world.World;
 
 import com.kanomiya.mcmod.cradleofnoesis.CONGuis;
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 
 /**
@@ -43,7 +44,7 @@ public class BlockLiaAlter extends BlockContainer {
 	{
 		super(Material.ROCK);
 
-		setRegistryName(new ResourceLocation(CradleOfNoesis.MODID, "blockLiaAlter"));
+		setRegistryName(new ResourceLocation(CradleOfNoesisAPI.MODID, "blockLiaAlter"));
 		setUnlocalizedName("blockLiaAlter");
 		setCreativeTab(CradleOfNoesis.tab);
 	}

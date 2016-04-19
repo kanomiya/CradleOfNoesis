@@ -43,6 +43,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.apache.logging.log4j.Logger;
 
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderFlyPod;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.TESRLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
@@ -58,14 +59,13 @@ import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerProfession;
  * @author Kanomiya
  *
  */
-@Mod(modid = CradleOfNoesis.MODID)
-public class CradleOfNoesis {
-	public static final String MODID = "com.kanomiya.mcmod.cradleofnoesis";
-
-	@Mod.Instance(MODID)
+@Mod(modid = CradleOfNoesisAPI.MODID)
+public class CradleOfNoesis
+{
+	@Mod.Instance(CradleOfNoesisAPI.MODID)
 	public static CradleOfNoesis instance;
 
-	public static final CreativeTabs tab = new CreativeTabs(MODID) {
+	public static final CreativeTabs tab = new CreativeTabs(CradleOfNoesisAPI.MODID) {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
@@ -102,7 +102,7 @@ public class CradleOfNoesis {
 		GameRegistry.register(CONItems.itemFlyPod);
 
 
-		GameRegistry.registerTileEntity(TileEntityLiaAlter.class, CradleOfNoesis.MODID + ":tileEntityLiaAlter");
+		GameRegistry.registerTileEntity(TileEntityLiaAlter.class, CradleOfNoesisAPI.MODID + ":tileEntityLiaAlter");
 
 		GameRegistry.addSmelting(CONBlocks.blockYuleOre, new ItemStack(CONItems.itemYuleIngot), 0.7f);
 		GameRegistry.addSmelting(CONBlocks.blockTsafaOre, new ItemStack(CONItems.itemTsafaIngot), 0.7f);
@@ -111,8 +111,8 @@ public class CradleOfNoesis {
 
 
 		vprofArchaeologist = new SimpleVillagerProfession(
-				new ResourceLocation(CradleOfNoesis.MODID, "archaeologist"),
-				new ResourceLocation(CradleOfNoesis.MODID + ":textures/entity/villager/archaeologist.png"));
+				new ResourceLocation(CradleOfNoesisAPI.MODID, "archaeologist"),
+				new ResourceLocation(CradleOfNoesisAPI.MODID + ":textures/entity/villager/archaeologist.png"));
 
 		new SimpleVillagerCareer(vprofArchaeologist, "emeraldTablet").init(
 			new ITradeList[][]

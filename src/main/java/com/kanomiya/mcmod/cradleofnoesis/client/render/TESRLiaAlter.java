@@ -5,12 +5,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 
 @SideOnly(Side.CLIENT)
 public class TESRLiaAlter extends IExtendedTileEntitySpecialRenderer<TileEntityLiaAlter> {
-	private static final ResourceLocation pearlResource = new ResourceLocation(CradleOfNoesis.MODID + ":textures/blocks/objEnderPearl.png");
+	private static final ResourceLocation pearlResource = new ResourceLocation(CradleOfNoesisAPI.MODID, "textures/blocks/objEnderPearl.png");
 	private ModelEnderPearl pearlmodel = new ModelEnderPearl();
 
 	@Override public void renderTileEntityAt(TileEntityLiaAlter tile, double posX, double posY, double posZ, float rot_rot, int p_180535_9_)
