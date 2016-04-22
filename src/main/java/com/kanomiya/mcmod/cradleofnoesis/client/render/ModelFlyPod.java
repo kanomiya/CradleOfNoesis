@@ -3,7 +3,6 @@ package com.kanomiya.mcmod.cradleofnoesis.client.render;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -68,26 +67,10 @@ public class ModelFlyPod extends ModelBase
 	}
 
 	@Override
-	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime)
-	{
-		if (entitylivingbaseIn instanceof EntityFlyPod)
-		{
-			EntityFlyPod entityFlyPod = (EntityFlyPod) entitylivingbaseIn;
-
-			stone.isHidden = entityFlyPod.getStoneStack() == null;
-		} else stone.isHidden = true;
-
-	}
-
-	@Override
 	public void render(Entity entityIn, float p_78088_2_, float limbSwing, float ageInTicks, float netHeadYaw, float headPitch, float scale)
 	{
-		// super.render(entityIn, p_78088_2_, limbSwing, ageInTicks, netHeadYaw, headPitch, scale);
-		// setRotationAngles(p_78088_2_, limbSwing, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-
 		topBoard.render(scale);
 
-		// TODO: RenderLiving.super.doRender呼べるようになるまで
 		if (entityIn instanceof EntityFlyPod && ((EntityFlyPod) entityIn).getStoneStack() != null)
 		{
 			stone.render(scale);
@@ -119,38 +102,5 @@ public class ModelFlyPod extends ModelBase
 
 	}
 
-
-	@Override
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
-	{
-		// super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-
-/*
-		float f = 0.017453292F;
-		// float fx = headPitch *f;
-		// float fy = netHeadYaw *f;
-
-		float fx = (float) Math.toRadians(entityIn.rotationYaw);
-		float fy = (float) Math.toRadians(entityIn.rotationPitch);
-
-		topBoard.rotateAngleX = fx;
-		topBoard.rotateAngleY = fy;
-		stone.rotateAngleX = fx;
-		stone.rotateAngleY = fy;
-		bottomBoard.rotateAngleX = fx;
-		bottomBoard.rotateAngleY = fy;
-		gun1.rotateAngleX = fx;
-		gun1.rotateAngleY = fy;
-		gun2.rotateAngleX = fx;
-		gun2.rotateAngleY = fy;
-		leg1.rotateAngleX = fx;
-		leg1.rotateAngleY = fy;
-		leg2.rotateAngleX = fx;
-		leg2.rotateAngleY = fy;
-		pillar.rotateAngleX = fx;
-		pillar.rotateAngleY = fy;
-*/
-
-	}
 
 }

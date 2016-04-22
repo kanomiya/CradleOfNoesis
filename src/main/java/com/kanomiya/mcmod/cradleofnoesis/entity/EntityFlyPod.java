@@ -265,20 +265,17 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 
 			return EnumActionResult.SUCCESS;
 
-		} else
+		} else if (getStoneStack() != null || player.isSneaking())
 		{
-			if (getStoneStack() != null || player.isSneaking())
+			if (getStoneStack() != null) dropStoneStack(true);
+
+			if (player.isSneaking())
 			{
-				if (getStoneStack() != null) dropStoneStack(true);
-
-				if (player.isSneaking())
-				{
-					if (! worldObj.isRemote) entityDropItem(new ItemStack(CONItems.itemFlyPod), 0.5f);
-					setDead();
-				}
-
-				return EnumActionResult.SUCCESS;
+				if (! worldObj.isRemote) entityDropItem(new ItemStack(CONItems.itemFlyPod), 0.5f);
+				setDead();
 			}
+
+			return EnumActionResult.SUCCESS;
 		}
 
 		return EnumActionResult.PASS;
