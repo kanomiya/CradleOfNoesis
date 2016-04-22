@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -78,7 +79,7 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 		{
 			if (! worldObj.getCollisionBoxes(this, new AxisAlignedBB(posX, posY -2.5d, posZ, posX, posY, posZ)).isEmpty())
 			{
-				motionY += 0.1d; // EntityWolf
+				motionY = 0.1d; // EntityWolf
 			}
 
 			/*
@@ -115,23 +116,11 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 			}
 			*/
 
-			//setRotation(rotationYaw +1, rotationPitch); // TODO: LOOK TRACKING
 
 			Entity tracking = getAttackTarget() == null ? owner : getAttackTarget();
 
 			if (tracking != null)
 			{
-				Vec3d vecTracking = tracking.getPositionVector().addVector(0, tracking.getEyeHeight() *7, 0);
-				double hdist = getDistance(vecTracking.xCoord, posY, vecTracking.zCoord);
-				double vdist = vecTracking.yCoord -posY;
-
-				double hmargin = tracking == owner ? 4.5d : 16.0d;
-				double vmargin = 0.5d;
-
-				// getLookHelper().setLookPosition(tracking.posX, tracking.posY + tracking.getEyeHeight(), tracking.posZ, getHorizontalFaceSpeed(), getVerticalFaceSpeed());
-				// getLookHelper().setLookPositionWithEntity(tracking, getHorizontalFaceSpeed(), getVerticalFaceSpeed());
-
-
 				double dx = posX -tracking.posX;
 				double dy = posY -tracking.posY;
 				double dz = posZ -tracking.posZ;
@@ -140,7 +129,17 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 				double r = Math.sqrt(dx*dx + dz*dz);
 				rotationPitch = (float) Math.toDegrees(Math.atan2(dy, r));
 
-				Vec3d vecArrow = vecTracking.subtract(getPositionVector()).scale(0.01d);
+
+
+				Vec3d vecTracking = tracking.getPositionVector().addVector(0, tracking.getEyeHeight(), 0);
+				double hdist = getDistance(vecTracking.xCoord, posY, vecTracking.zCoord);
+				double vdist = vecTracking.yCoord -posY;
+
+				double hmargin = tracking == owner ? 4.5d : 16.0d;
+				double vmargin = 0.5d;
+
+				Vec3d vecArrow = vecTracking.subtract(getPositionVector());
+				vecArrow = vecArrow.scale(1 /vecArrow.lengthVector()).scale(getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
 
 				if (hmargin < hdist)
 				{
@@ -148,8 +147,10 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 					motionZ += vecArrow.zCoord;
 				} else
 				{
-					motionX *= 0.005d;
-					motionZ *= 0.005d;
+					// motionX *= 0.005d;
+					// motionZ *= 0.005d;
+					motionX -= vecArrow.xCoord;
+					motionZ -= vecArrow.zCoord;
 				}
 
 				if (vmargin < vdist)
@@ -178,7 +179,7 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 					{
 						if (entity instanceof EntityLivingBase && entity != this && ! entity.isOnSameTeam(this) && canEntityBeSeen(entity))
 						{
-							if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() == owner) continue;
+							if (entity instanceof IEntityOwnable && ((IEntityOwnable) entity).getOwner() == owner) continue;
 
 							if (! worldObj.isRemote)
 							{
@@ -199,7 +200,7 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 			{
 				tracking = getAttackTarget();
 
-				if (tracking != this && ! tracking.isDead && canEntityBeSeen(tracking) && !(tracking instanceof EntityTameable && ((EntityTameable) tracking).getOwner() == owner))
+				if (tracking != this && ! tracking.isDead && canEntityBeSeen(tracking) && !(tracking instanceof IEntityOwnable && ((IEntityOwnable) tracking).getOwner() == owner))
 				{
 					++fireCount;
 
@@ -231,6 +232,16 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 
 		}
 
+		Vec3d motVec = new Vec3d(motionX, motionY, motionZ);
+		if (getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() < motVec.lengthVector())
+		{
+			motVec = motVec.scale(1 /motVec.lengthVector()).scale(getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+		}
+
+		motionX = motVec.xCoord;
+		motionY = motVec.yCoord;
+		motionZ = motVec.zCoord;
+
 		super.onLivingUpdate();
 		// TODO: enderEnergyの消費
 
@@ -254,11 +265,20 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 
 			return EnumActionResult.SUCCESS;
 
-		} else if (getStoneStack() != null)
+		} else
 		{
-			dropStoneStack(true);
+			if (getStoneStack() != null || player.isSneaking())
+			{
+				if (getStoneStack() != null) dropStoneStack(true);
 
-			return EnumActionResult.SUCCESS;
+				if (player.isSneaking())
+				{
+					if (! worldObj.isRemote) entityDropItem(new ItemStack(CONItems.itemFlyPod), 0.5f);
+					setDead();
+				}
+
+				return EnumActionResult.SUCCESS;
+			}
 		}
 
 		return EnumActionResult.PASS;
@@ -348,7 +368,7 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 	{
 		super.writeEntityToNBT(compound);
 
-		if (getOwner() != null) compound.setUniqueId("ownerUUID", getOwnerId());
+		if (getOwnerId() != null) compound.setUniqueId("ownerUUID", getOwnerId());
 		if (getStoneStack() != null) compound.setTag("stoneStack", getStoneStack().serializeNBT());
 	}
 
@@ -362,7 +382,16 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 	}
 
 
+	@Override
+	public Team getTeam()
+	{
+		if (getOwner() != null)
+		{
+			return getOwner().getTeam();
+		}
 
+		return worldObj.getScoreboard().getPlayersTeam(getUniqueID().toString());
+	}
 
 	public void setOwnerId(UUID uuid)
 	{
