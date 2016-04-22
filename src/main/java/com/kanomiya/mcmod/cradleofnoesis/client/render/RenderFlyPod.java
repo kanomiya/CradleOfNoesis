@@ -39,7 +39,7 @@ public class RenderFlyPod extends RenderLiving<EntityFlyPod>
 		float fx = entity.rotationYaw;
 		float fy = entity.rotationPitch;
 		GlStateManager.rotate(fx, 0, 0.5f, 0);
-		GlStateManager.rotate(fy, 0f, 0, 0.5f);
+		GlStateManager.rotate(fy, -0.5f, 0, 0);
 
 		GL11.glTranslated(-0.5d, 0, -0.5d);
 		GlStateManager.scale(0.0625f, 0.0625f, 0.0625f);

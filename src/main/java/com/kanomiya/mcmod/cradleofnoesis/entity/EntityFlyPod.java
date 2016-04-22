@@ -115,7 +115,7 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 			}
 			*/
 
-			setRotation(rotationYaw +1, rotationPitch); // TODO: LOOK TRACKING
+			//setRotation(rotationYaw +1, rotationPitch); // TODO: LOOK TRACKING
 
 			Entity tracking = getAttackTarget() == null ? owner : getAttackTarget();
 
@@ -130,6 +130,15 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 
 				// getLookHelper().setLookPosition(tracking.posX, tracking.posY + tracking.getEyeHeight(), tracking.posZ, getHorizontalFaceSpeed(), getVerticalFaceSpeed());
 				// getLookHelper().setLookPositionWithEntity(tracking, getHorizontalFaceSpeed(), getVerticalFaceSpeed());
+
+
+				double dx = posX -tracking.posX;
+				double dy = posY -tracking.posY;
+				double dz = posZ -tracking.posZ;
+				rotationYaw = (float) Math.toDegrees(Math.atan2(dx, dz));
+
+				double r = Math.sqrt(dx*dx + dz*dz);
+				rotationPitch = (float) Math.toDegrees(Math.atan2(dy, r));
 
 				Vec3d vecArrow = vecTracking.subtract(getPositionVector()).scale(0.01d);
 
