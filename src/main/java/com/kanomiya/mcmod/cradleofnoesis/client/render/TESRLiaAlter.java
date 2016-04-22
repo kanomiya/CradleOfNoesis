@@ -8,6 +8,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 
+/**
+ *
+ * LiaAlterのエンダーパール描画用
+ *
+ * @author Kanomiya
+ *
+ */
 @SideOnly(Side.CLIENT)
 public class TESRLiaAlter extends IExtendedTileEntitySpecialRenderer<TileEntityLiaAlter> {
 	private static final ResourceLocation pearlResource = new ResourceLocation(CradleOfNoesisAPI.MODID, "textures/blocks/objEnderPearl.png");

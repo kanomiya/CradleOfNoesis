@@ -1,22 +1,14 @@
 package com.kanomiya.mcmod.cradleofnoesis.entity;
 
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIFollowOwner;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
-import net.minecraft.entity.ai.EntityAITargetNonTamed;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -38,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
 import com.kanomiya.mcmod.cradleofnoesis.CONItems;
 
 
@@ -46,8 +37,9 @@ import com.kanomiya.mcmod.cradleofnoesis.CONItems;
  * @author Kanomiya
  *
  */
-public class EntityFlyPod extends EntityTameable
+public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 {
+	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityTameable.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 	protected static final DataParameter<Optional<ItemStack>> STONE = EntityDataManager.createKey(EntityTameable.class, DataSerializers.OPTIONAL_ITEM_STACK);
 	protected int fireCount;
 	protected int fireInterval;
@@ -71,6 +63,7 @@ public class EntityFlyPod extends EntityTameable
 	protected void entityInit()
 	{
 		super.entityInit();
+		dataManager.register(OWNER_UNIQUE_ID, Optional.<UUID>absent());
 		dataManager.register(STONE, Optional.<ItemStack>absent());
 	}
 
@@ -79,7 +72,7 @@ public class EntityFlyPod extends EntityTameable
 	{
 		fallDistance = 0f;
 
-		EntityLivingBase owner = getOwner();
+		Entity owner = getOwner();
 
 		if (getStoneStack() != null && getOwner() != null)
 		{
@@ -122,6 +115,8 @@ public class EntityFlyPod extends EntityTameable
 			}
 			*/
 
+			setRotation(rotationYaw +1, rotationPitch); // TODO: LOOK TRACKING
+
 			Entity tracking = getAttackTarget() == null ? owner : getAttackTarget();
 
 			if (tracking != null)
@@ -132,6 +127,9 @@ public class EntityFlyPod extends EntityTameable
 
 				double hmargin = tracking == owner ? 4.5d : 16.0d;
 				double vmargin = 0.5d;
+
+				// getLookHelper().setLookPosition(tracking.posX, tracking.posY + tracking.getEyeHeight(), tracking.posZ, getHorizontalFaceSpeed(), getVerticalFaceSpeed());
+				// getLookHelper().setLookPositionWithEntity(tracking, getHorizontalFaceSpeed(), getVerticalFaceSpeed());
 
 				Vec3d vecArrow = vecTracking.subtract(getPositionVector()).scale(0.01d);
 
@@ -243,7 +241,6 @@ public class EntityFlyPod extends EntityTameable
 			if (stack.stackSize <= 0) player.setHeldItem(hand, null);
 
 			setOwnerId(player.getUniqueID());
-			setTamed(true);
 			if (! worldObj.isRemote) player.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.launch", getName())));
 
 			return EnumActionResult.SUCCESS;
@@ -289,7 +286,6 @@ public class EntityFlyPod extends EntityTameable
 		{
 			setOwnerId(null);
 			setStoneStack(null);
-			setTamed(false);
 		}
 	}
 
@@ -304,6 +300,7 @@ public class EntityFlyPod extends EntityTameable
 	@Override
 	protected void initEntityAI()
 	{
+		/*
 		// tasks.addTask(1, new EntityAISwimming(this));
 		// tasks.addTask(2, aiSit = new EntityAISit(this));
 		// tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, true));
@@ -323,15 +320,7 @@ public class EntityFlyPod extends EntityTameable
 			}
 		}));
 		targetTasks.addTask(5, new EntityAINearestAttackableTarget(this, EntitySkeleton.class, false));
-	}
-
-	/**
-	* @inheritDoc
-	*/
-	@Override
-	public EntityAgeable createChild(EntityAgeable ageable)
-	{
-		return null;
+		*/
 	}
 
 
@@ -350,6 +339,7 @@ public class EntityFlyPod extends EntityTameable
 	{
 		super.writeEntityToNBT(compound);
 
+		if (getOwner() != null) compound.setUniqueId("ownerUUID", getOwnerId());
 		if (getStoneStack() != null) compound.setTag("stoneStack", getStoneStack().serializeNBT());
 	}
 
@@ -358,7 +348,35 @@ public class EntityFlyPod extends EntityTameable
 	{
 		super.readEntityFromNBT(compound);
 
+		if (compound.hasUniqueId("ownerUUID")) setOwnerId(compound.getUniqueId("ownerUUID"));
 		if (compound.hasKey("stoneStack", NBT.TAG_COMPOUND)) setStoneStack(ItemStack.loadItemStackFromNBT(compound.getCompoundTag("stoneStack")));
+	}
+
+
+
+
+	public void setOwnerId(UUID uuid)
+	{
+		dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(uuid));
+	}
+
+	/**
+	* @inheritDoc
+	*/
+	@Override
+	public UUID getOwnerId()
+	{
+		return dataManager.get(OWNER_UNIQUE_ID).orNull();
+	}
+
+	/**
+	* @inheritDoc
+	*/
+	@Override
+	public Entity getOwner()
+	{
+		UUID uuid = getOwnerId();
+		return uuid == null ? null : worldObj.getPlayerEntityByUUID(uuid);
 	}
 
 

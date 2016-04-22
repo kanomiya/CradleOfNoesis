@@ -2,6 +2,7 @@ package com.kanomiya.mcmod.cradleofnoesis.client.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
@@ -85,6 +86,8 @@ public class ModelFlyPod extends ModelBase
 		// super.render(entityIn, p_78088_2_, limbSwing, ageInTicks, netHeadYaw, headPitch, scale);
 		// setRotationAngles(p_78088_2_, limbSwing, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
 
+		GlStateManager.pushMatrix();
+
 		topBoard.render(scale);
 
 		// TODO: RenderLiving.super.doRender呼べるようになるまで
@@ -109,13 +112,15 @@ public class ModelFlyPod extends ModelBase
 			if (0 < i && i < 5)
 			{
 				pillar.setRotationPoint(3F +i*2, 7F, 13F);
-				pillar.render(scale);
+				pillar.renderWithRotation(scale);
 
 				pillar.setRotationPoint(3F +i*2, 7F, 3F);
-				pillar.render(scale);
+				pillar.renderWithRotation(scale);
 
 			}
 		}
+
+		GlStateManager.popMatrix();
 	}
 
 
@@ -124,15 +129,16 @@ public class ModelFlyPod extends ModelBase
 	{
 		// super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 
-		/*
+/*
 		float f = 0.017453292F;
+		// float fx = headPitch *f;
+		// float fy = netHeadYaw *f;
 
-		float fx = headPitch *f;
-		float fy = netHeadYaw *f;
+		float fx = (float) Math.toRadians(entityIn.rotationYaw);
+		float fy = (float) Math.toRadians(entityIn.rotationPitch);
 
 		topBoard.rotateAngleX = fx;
 		topBoard.rotateAngleY = fy;
-
 		stone.rotateAngleX = fx;
 		stone.rotateAngleY = fy;
 		bottomBoard.rotateAngleX = fx;
@@ -145,10 +151,10 @@ public class ModelFlyPod extends ModelBase
 		leg1.rotateAngleY = fy;
 		leg2.rotateAngleX = fx;
 		leg2.rotateAngleY = fy;
-
 		pillar.rotateAngleX = fx;
 		pillar.rotateAngleY = fy;
-		*/
+*/
+
 	}
 
 }
