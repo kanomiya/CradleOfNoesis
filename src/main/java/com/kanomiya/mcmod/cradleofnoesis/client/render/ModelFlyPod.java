@@ -2,7 +2,6 @@ package com.kanomiya.mcmod.cradleofnoesis.client.render;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
@@ -86,8 +85,6 @@ public class ModelFlyPod extends ModelBase
 		// super.render(entityIn, p_78088_2_, limbSwing, ageInTicks, netHeadYaw, headPitch, scale);
 		// setRotationAngles(p_78088_2_, limbSwing, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
 
-		GlStateManager.pushMatrix();
-
 		topBoard.render(scale);
 
 		// TODO: RenderLiving.super.doRender呼べるようになるまで
@@ -112,15 +109,14 @@ public class ModelFlyPod extends ModelBase
 			if (0 < i && i < 5)
 			{
 				pillar.setRotationPoint(3F +i*2, 7F, 13F);
-				pillar.renderWithRotation(scale);
+				pillar.render(scale);
 
 				pillar.setRotationPoint(3F +i*2, 7F, 3F);
-				pillar.renderWithRotation(scale);
+				pillar.render(scale);
 
 			}
 		}
 
-		GlStateManager.popMatrix();
 	}
 
 
