@@ -6,12 +6,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 import com.google.common.base.Optional;
 import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
+import com.kanomiya.mcmod.cradleofnoesis.api.event.SanctuaryPushEntityEvent;
 import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
 
 
@@ -31,7 +34,6 @@ public class EntitySanctuary extends Entity
 		super(worldIn);
 
 		ignoreFrustumCheck = true; // 視界外でも描画するよ
-
 	}
 
 	/**
@@ -44,6 +46,7 @@ public class EntitySanctuary extends Entity
 		this(worldIn);
 
 		setSanctuary(sanctuary);
+		setSize(sanctuary.getRadius(), sanctuary.getRadius());
 	}
 
 
@@ -56,14 +59,38 @@ public class EntitySanctuary extends Entity
 		{
 			sanctuary.onUpdate(worldObj, posX, posY, posZ);
 
-
 			List<Entity> entityList = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expandXyz(sanctuary.getRadius()));
 
 			for (Entity entity: entityList)
 			{
-				if (entity.getDistanceToEntity(this) < sanctuary.getRadius())
+				float dist = entity.getDistanceToEntity(this);
+				if (dist < sanctuary.getRadius())
 				{
 					sanctuary.onCollideWithEntity(worldObj, posX, posY, posZ, entity);
+				}
+
+				if (dist < sanctuary.getRadius() +0.5d)
+				{
+					if (! sanctuary.isAllowedToEnter(entity))
+					{
+						if (! MinecraftForge.EVENT_BUS.post(new SanctuaryPushEntityEvent(sanctuary, entity)))
+						{
+							Vec3d vec = entity.getPositionVector().subtract(getPositionVector());
+							vec = vec.scale(1 /vec.lengthVector()).scale(0.5d);
+							entity.motionX = vec.xCoord;
+							entity.motionY = vec.yCoord;
+							entity.motionZ = vec.zCoord;
+
+							if (entity.noClip)
+							{
+								entity.motionY += 0.1d;
+							}
+
+							entity.attackEntityFrom(DamageSource.inWall, 1.0f);
+
+						}
+
+					}
 				}
 
 			}
@@ -82,7 +109,7 @@ public class EntitySanctuary extends Entity
 	@Override
 	public boolean canBeCollidedWith()
 	{
-		return false;
+		return ! isDead;
 	}
 
 	@Override
@@ -101,17 +128,6 @@ public class EntitySanctuary extends Entity
 		dataManager.set(SANCTUALY, Optional.fromNullable(sanctuary));
 	}
 
-	@Override
-	public AxisAlignedBB getCollisionBox(Entity entityIn)
-	{
-		return null;
-	}
-
-	@Override
-	public AxisAlignedBB getEntityBoundingBox()
-	{
-		return super.getEntityBoundingBox();
-	}
 
 	@Override
 	protected void entityInit()

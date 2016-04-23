@@ -82,6 +82,7 @@ public class CONItems
 			EntitySanctuary entity = new EntitySanctuary(worldIn);
 			ISanctuary sanctuary = new HealSanctuary(5.0f, 500, 0.1f, 5);
 
+			sanctuary.allowToEnter(playerIn);
 			entity.setSanctuary(sanctuary);
 
 			if (itemStackIn.getMetadata() == 1)

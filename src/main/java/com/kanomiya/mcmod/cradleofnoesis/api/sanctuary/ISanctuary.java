@@ -26,4 +26,8 @@ public interface ISanctuary extends INBTSerializable<NBTTagCompound>
 	int getAge();
 	int getMaxAge();
 
+	void allowToEnter(Entity entity);
+	void disallowToEnter(Entity entity);
+	boolean isAllowedToEnter(Entity entity);
+
 }

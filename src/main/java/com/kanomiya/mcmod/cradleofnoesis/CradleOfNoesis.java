@@ -8,9 +8,16 @@ import java.util.function.Consumer;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityHanging;
+import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.entity.INpc;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityVillager.ITradeList;
 import net.minecraft.entity.passive.EntityVillager.ListItemForEmeralds;
 import net.minecraft.entity.passive.EntityVillager.PriceInfo;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -45,6 +52,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Logger;
 
 import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
+import com.kanomiya.mcmod.cradleofnoesis.api.event.SanctuaryPushEntityEvent;
+import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderFlyPod;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.TESRLiaAlter;
@@ -183,6 +192,7 @@ public class CradleOfNoesis
 		}
 
 		MinecraftForge.ORE_GEN_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 
@@ -252,6 +262,30 @@ public class CradleOfNoesis
 
 	}
 
+	@SubscribeEvent
+	public void onSanctuaryPushEntityEvent(SanctuaryPushEntityEvent event)
+	{
+		Entity entity = event.getEntity();
+		ISanctuary sanctuary = event.getSanctuary();
+
+		if (entity instanceof EntityXPOrb // TODO: ゲーム内部で設定したい
+				|| entity instanceof EntityHanging
+				|| entity instanceof INpc)
+		{
+			event.setCanceled(true);
+		} else if (entity instanceof EntityThrowable)
+		{
+			event.setCanceled(sanctuary.isAllowedToEnter(((EntityThrowable) entity).getThrower()));
+		}
+		else if (entity instanceof EntityArrow)
+		{
+			event.setCanceled(sanctuary.isAllowedToEnter(((EntityArrow) entity).shootingEntity));
+		} else if(entity instanceof IEntityOwnable)
+		{
+			event.setCanceled(sanctuary.isAllowedToEnter(((IEntityOwnable) entity).getOwner()));
+		}
+
+	}
 
 
 }
