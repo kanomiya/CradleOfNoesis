@@ -16,6 +16,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityVillager.ITradeList;
 import net.minecraft.entity.passive.EntityVillager.ListItemForEmeralds;
 import net.minecraft.entity.passive.EntityVillager.PriceInfo;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Items;
@@ -61,12 +62,14 @@ import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
 import com.kanomiya.mcmod.cradleofnoesis.gui.GuiHandler;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemBlockSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
 import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
 import com.kanomiya.mcmod.cradleofnoesis.network.datasync.DataSerializerNBT;
 import com.kanomiya.mcmod.cradleofnoesis.sanctuary.HealSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
+import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntitySanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerCareer;
 import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerProfession;
 
@@ -111,6 +114,8 @@ public class CradleOfNoesis
 		GameRegistry.register(new ItemBlock(CONBlocks.blockYuleOre).setRegistryName(CONBlocks.blockYuleOre.getRegistryName()));
 		GameRegistry.register(CONBlocks.blockTsafaOre);
 		GameRegistry.register(new ItemBlock(CONBlocks.blockTsafaOre).setRegistryName(CONBlocks.blockTsafaOre.getRegistryName()));
+		GameRegistry.register(CONBlocks.blockSanctuary);
+		GameRegistry.register(new ItemBlockSanctuary(CONBlocks.blockSanctuary).setRegistryName(CONBlocks.blockSanctuary.getRegistryName()));
 
 		GameRegistry.register(CONItems.itemIntelligentStone);
 		GameRegistry.register(CONItems.itemYuleIngot);
@@ -118,9 +123,11 @@ public class CradleOfNoesis
 		GameRegistry.register(CONItems.itemEmeraldTablet);
 		GameRegistry.register(CONItems.itemFlyPod);
 		GameRegistry.register(CONItems.itemHealSanctuary);
+		GameRegistry.register(CONItems.itemSanctuaryRemover);
 
 
 		GameRegistry.registerTileEntity(TileEntityLiaAlter.class, CradleOfNoesisAPI.MODID + ":tileEntityLiaAlter");
+		GameRegistry.registerTileEntity(TileEntitySanctuary.class, CradleOfNoesisAPI.MODID + ":tileEntitySanctuary");
 
 		GameRegistry.addSmelting(CONBlocks.blockYuleOre, new ItemStack(CONItems.itemYuleIngot), 0.7f);
 		GameRegistry.addSmelting(CONBlocks.blockTsafaOre, new ItemStack(CONItems.itemTsafaIngot), 0.7f);
@@ -276,13 +283,17 @@ public class CradleOfNoesis
 		} else if (entity instanceof EntityThrowable)
 		{
 			event.setCanceled(sanctuary.isAllowedToEnter(((EntityThrowable) entity).getThrower()));
-		}
-		else if (entity instanceof EntityArrow)
+		} else if (entity instanceof EntityArrow)
 		{
 			event.setCanceled(sanctuary.isAllowedToEnter(((EntityArrow) entity).shootingEntity));
-		} else if(entity instanceof IEntityOwnable)
+		} else if (entity instanceof IEntityOwnable)
 		{
 			event.setCanceled(sanctuary.isAllowedToEnter(((IEntityOwnable) entity).getOwner()));
+		} else if (entity instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer) entity;
+
+			if (player.capabilities.isCreativeMode) event.setCanceled(true);
 		}
 
 	}

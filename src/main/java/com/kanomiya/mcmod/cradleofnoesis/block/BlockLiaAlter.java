@@ -36,7 +36,8 @@ import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
  * @author Kanomiya
  *
  */
-public class BlockLiaAlter extends BlockContainer {
+public class BlockLiaAlter extends BlockContainer
+{
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.0d, 0.0d, 0.0d, 1.0d, 0.5d, 1.0d);
 

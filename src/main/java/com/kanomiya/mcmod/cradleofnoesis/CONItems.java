@@ -23,6 +23,7 @@ import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEntitySpawner;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemSanctuaryRemover;
 import com.kanomiya.mcmod.cradleofnoesis.sanctuary.HealSanctuary;
 
 public class CONItems
@@ -111,5 +112,6 @@ public class CONItems
 		.setUnlocalizedName("itemHealSanctuary")
 		.setCreativeTab(CradleOfNoesis.tab);
 
+	public static ItemSanctuaryRemover itemSanctuaryRemover = new ItemSanctuaryRemover();
 
 }

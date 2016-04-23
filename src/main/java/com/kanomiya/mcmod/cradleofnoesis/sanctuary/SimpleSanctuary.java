@@ -29,6 +29,12 @@ public class SimpleSanctuary implements ISanctuary
 		this(0f,0,0);
 	}
 
+	/**
+	 *
+	 * @param radius
+	 * @param maxAge 32767(Short.MAX_VALUE)に設定すると寿命はなくなるよ
+	 * @param color
+	 */
 	public SimpleSanctuary(float radius, int maxAge, int color)
 	{
 		this.radius = radius;
@@ -39,7 +45,7 @@ public class SimpleSanctuary implements ISanctuary
 	@Override
 	public void onUpdate(World worldIn, double posX, double posY, double posZ)
 	{
-		++age;
+		if (getMaxAge() < Short.MAX_VALUE) ++age;
 	}
 
 	/**
