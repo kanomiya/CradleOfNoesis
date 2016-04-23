@@ -7,6 +7,12 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 
 /**
+ *
+ * 聖域 - Sanctuary
+ *
+ * 必ず無引数コンストラクタ作ってね
+ * You MUST create a constructor with no argument
+ *
  * @author Kanomiya
  *
  */
@@ -17,5 +23,7 @@ public interface ISanctuary extends INBTSerializable<NBTTagCompound>
 
 	float getRadius();
 	int getColor();
+	int getAge();
+	int getMaxAge();
 
 }

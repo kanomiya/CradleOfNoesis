@@ -14,9 +14,14 @@ public class HealSanctuary extends SimpleSanctuary
 	protected int interval, timer;
 	protected float healAmount;
 
-	public HealSanctuary(float radius, float healAmount, int interval)
+	public HealSanctuary()
 	{
-		super(radius, 0x9ADE64AA);
+		this(0f,0,0f,0);
+	}
+
+	public HealSanctuary(float radius, int maxAge, float healAmount, int interval)
+	{
+		super(radius, maxAge, 0x9ADE64AA);
 		this.healAmount = healAmount;
 		this.interval = interval;
 	}
@@ -25,6 +30,8 @@ public class HealSanctuary extends SimpleSanctuary
 	@Override
 	public void onUpdate(World worldIn, double posX, double posY, double posZ)
 	{
+		super.onUpdate(worldIn, posX, posY, posZ);
+
 		++timer;
 		if (interval < timer) timer = 0;
 	}
@@ -32,6 +39,7 @@ public class HealSanctuary extends SimpleSanctuary
 	@Override
 	public void onCollideWithEntity(World worldIn, double posX, double posY, double posZ, Entity entity)
 	{
+		super.onCollideWithEntity(worldIn, posX, posY, posZ, entity);
 
 		if (interval < timer)
 		{

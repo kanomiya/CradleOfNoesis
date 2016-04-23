@@ -67,6 +67,9 @@ public class EntitySanctuary extends Entity
 				}
 
 			}
+
+			if (sanctuary.getMaxAge() < sanctuary.getAge()) setDead();
+
 		} else
 		{
 			setDead();
@@ -140,18 +143,8 @@ public class EntitySanctuary extends Entity
 		ISanctuary sanctuary = getSanctuary();
 		if (sanctuary == null)
 		{
-			Class<? extends ISanctuary> clazz = CradleOfNoesisAPI.SANCUTUARY_REGISTRY.get(new ResourceLocation(compound.getString("sunctuaryId")));
-			if (clazz != null)
-			{
-				try
-				{
-					sanctuary = clazz.newInstance();
-					setSanctuary(sanctuary);
-				} catch (InstantiationException | IllegalAccessException e)
-				{
-					e.printStackTrace();
-				}
-			}
+			sanctuary = CradleOfNoesisAPI.createSanctuaryInstance(new ResourceLocation(compound.getString("sanctuaryId")));
+			setSanctuary(sanctuary);
 		}
 
 		if (sanctuary != null)

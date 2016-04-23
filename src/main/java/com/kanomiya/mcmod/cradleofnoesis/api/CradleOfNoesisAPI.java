@@ -67,26 +67,14 @@ public class CradleOfNoesisAPI
 				int idStrLen = buf.readInt();
 				ResourceLocation id = new ResourceLocation(buf.readStringFromBuffer(idStrLen));
 
-				Class<? extends ISanctuary> sClass = SANCUTUARY_REGISTRY.get(id);
+				ISanctuary instance = createSanctuaryInstance(id);;
 
-				if (sClass != null)
+				if (instance != null)
 				{
-					ISanctuary instance;
+					NBTTagCompound nbt = buf.readNBTTagCompoundFromBuffer();
+					instance.deserializeNBT(nbt);
 
-					try
-					{
-						instance = sClass.newInstance();
-						NBTTagCompound nbt = buf.readNBTTagCompoundFromBuffer();
-
-						instance.deserializeNBT(nbt);
-
-						return Optional.of(instance);
-
-					} catch (InstantiationException | IllegalAccessException e)
-					{
-						e.printStackTrace();
-					}
-
+					return Optional.of(instance);
 				}
 
 			}
@@ -106,6 +94,24 @@ public class CradleOfNoesisAPI
 	{
 		DataSerializers.registerSerializer(SANCTUARY_DATASERIALIZER);
 
+	}
+
+
+	public static ISanctuary createSanctuaryInstance(ResourceLocation id)
+{
+		Class<? extends ISanctuary> clazz = SANCUTUARY_REGISTRY.get(id);
+		if (clazz != null)
+		{
+			try
+			{
+				return clazz.newInstance();
+			} catch (InstantiationException | IllegalAccessException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		return null;
 	}
 
 }

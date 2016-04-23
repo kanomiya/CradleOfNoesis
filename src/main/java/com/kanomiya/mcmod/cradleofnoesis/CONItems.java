@@ -80,7 +80,7 @@ public class CONItems
 		public Entity getEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 		{
 			EntitySanctuary entity = new EntitySanctuary(worldIn);
-			ISanctuary sanctuary = new HealSanctuary(5.0f, 0.1f, 5);
+			ISanctuary sanctuary = new HealSanctuary(5.0f, 500, 0.1f, 5);
 
 			entity.setSanctuary(sanctuary);
 
@@ -89,7 +89,7 @@ public class CONItems
 				EntitySpawnerBall<EntitySanctuary> ball = new EntitySpawnerBall<>(worldIn, playerIn);
 				ball.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0f, 1.5f, 1.0f);
 
-				ball.setSpawnEntity(entity); // TODO: sunctuary == null
+				ball.setSpawnEntity(entity);
 
 				return ball;
 			}
