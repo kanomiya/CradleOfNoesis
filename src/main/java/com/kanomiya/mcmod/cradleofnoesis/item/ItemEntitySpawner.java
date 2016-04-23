@@ -1,7 +1,6 @@
 package com.kanomiya.mcmod.cradleofnoesis.item;
 
 import java.util.List;
-import java.util.function.Function;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,13 +22,10 @@ import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
  * @author Kanomiya
  *
  */
-public class ItemEntitySpawner<T extends Entity> extends Item
+public abstract class ItemEntitySpawner extends Item
 {
-	protected Function<World, T> function;
-
-	public ItemEntitySpawner(Function<World, T> function)
+	public ItemEntitySpawner()
 	{
-		this.function = function;
 		setCreativeTab(CradleOfNoesis.tab);
 	}
 
@@ -88,34 +84,44 @@ public class ItemEntitySpawner<T extends Entity> extends Item
 			}
 			else
 			{
-				T entity = function.apply(worldIn);
-				entity.setLocationAndAngles(raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord, playerIn.rotationYaw, entity.rotationPitch);
+				Entity entity = getEntity(itemStackIn, worldIn, playerIn, hand);
 
-				if (!worldIn.getCollisionBoxes(entity, entity.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
+				if (entity != null)
 				{
-					return new ActionResult(EnumActionResult.FAIL, itemStackIn);
-				}
-				else
-				{
-					if (!worldIn.isRemote)
+					entity.setLocationAndAngles(raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord, playerIn.rotationYaw, entity.rotationPitch);
+
+					if (!worldIn.getCollisionBoxes(entity, entity.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
 					{
-						worldIn.spawnEntityInWorld(entity);
-						onEntitySpawn(itemStackIn, worldIn, playerIn, hand, entity);
+						return new ActionResult(EnumActionResult.FAIL, itemStackIn);
+					}
+					else
+					{
+						if (!worldIn.isRemote)
+						{
+							worldIn.spawnEntityInWorld(entity);
+
+							onEntitySpawn(itemStackIn, worldIn, playerIn, hand, entity);
+						}
+
+						if (!playerIn.capabilities.isCreativeMode)
+						{
+							--itemStackIn.stackSize;
+						}
+
+						playerIn.addStat(StatList.getObjectUseStats(this));
+						return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
 					}
 
-					if (!playerIn.capabilities.isCreativeMode)
-					{
-						--itemStackIn.stackSize;
-					}
-
-					playerIn.addStat(StatList.getObjectUseStats(this));
-					return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
 				}
 			}
 		}
+
+		return new ActionResult(EnumActionResult.PASS, itemStackIn);
 	}
 
-	public void onEntitySpawn(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand, T entityIn)
+	public abstract Entity getEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand);
+
+	public void onEntitySpawn(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand, Entity entityIn)
 	{
 
 	}

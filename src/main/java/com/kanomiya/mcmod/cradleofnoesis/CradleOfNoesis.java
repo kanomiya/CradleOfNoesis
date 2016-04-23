@@ -15,6 +15,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -45,12 +46,17 @@ import org.apache.logging.log4j.Logger;
 
 import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderFlyPod;
+import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.TESRLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
 import com.kanomiya.mcmod.cradleofnoesis.gui.GuiHandler;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
 import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
+import com.kanomiya.mcmod.cradleofnoesis.network.datasync.DataSerializerNBT;
+import com.kanomiya.mcmod.cradleofnoesis.sanctuary.HealSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerCareer;
 import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerProfession;
@@ -83,6 +89,8 @@ public class CradleOfNoesis
 	public static Logger logger;
 	public static SimpleVillagerProfession vprofArchaeologist;
 
+	public static final DataSerializerNBT DATASERIALIZER_NBT = new DataSerializerNBT();
+
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
@@ -100,6 +108,7 @@ public class CradleOfNoesis
 		GameRegistry.register(CONItems.itemTsafaIngot);
 		GameRegistry.register(CONItems.itemEmeraldTablet);
 		GameRegistry.register(CONItems.itemFlyPod);
+		GameRegistry.register(CONItems.itemHealSanctuary);
 
 
 		GameRegistry.registerTileEntity(TileEntityLiaAlter.class, CradleOfNoesisAPI.MODID + ":tileEntityLiaAlter");
@@ -107,7 +116,10 @@ public class CradleOfNoesis
 		GameRegistry.addSmelting(CONBlocks.blockYuleOre, new ItemStack(CONItems.itemYuleIngot), 0.7f);
 		GameRegistry.addSmelting(CONBlocks.blockTsafaOre, new ItemStack(CONItems.itemTsafaIngot), 0.7f);
 
-		EntityRegistry.registerModEntity(EntityFlyPod.class, "entityFlyPod", 0, instance, 32, 1, true);
+		int etId = -1; // EntityList
+		EntityRegistry.registerModEntity(EntityFlyPod.class, "entityFlyPod", ++etId, instance, 32, 1, true);
+		EntityRegistry.registerModEntity(EntitySanctuary.class, "entitySanctuary", ++etId, instance, 128, 1, true);
+		EntityRegistry.registerModEntity(EntitySpawnerBall.class, "entitySpawnerBall", ++etId, instance, 32, 1, true);
 
 
 		vprofArchaeologist = new SimpleVillagerProfession(
@@ -167,6 +179,7 @@ public class CradleOfNoesis
 			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLiaAlter.class, new TESRLiaAlter());
 
 			RenderingRegistry.registerEntityRenderingHandler(EntityFlyPod.class, RenderFlyPod::new);
+			RenderingRegistry.registerEntityRenderingHandler(EntitySanctuary.class, RenderSanctuary::new);
 		}
 
 		MinecraftForge.ORE_GEN_BUS.register(this);
@@ -178,6 +191,9 @@ public class CradleOfNoesis
 	{
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		PacketHandler.init();
+
+		DataSerializers.registerSerializer(DATASERIALIZER_NBT);
+		CradleOfNoesisAPI.SANCUTUARY_REGISTRY.put(new ResourceLocation(CradleOfNoesisAPI.MODID, "sanctuaryHeal"), HealSanctuary.class);
 	}
 
 	@Mod.EventHandler

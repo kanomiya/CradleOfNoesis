@@ -43,7 +43,12 @@ public class RenderFlyPod extends RenderLiving<EntityFlyPod>
 
 		GL11.glTranslated(-0.5d, 0, -0.5d);
 		GlStateManager.scale(0.0625f, 0.0625f, 0.0625f);
+		GlStateManager.disableLighting();
+
 		mainModel.render(entity, 0f, 0f, 0f, entity.rotationYawHead, entity.rotationPitch, 1.0f);
+
+		GlStateManager.enableLighting();
+
 		GlStateManager.popMatrix();
 
 		/*

@@ -40,7 +40,7 @@ import com.kanomiya.mcmod.cradleofnoesis.CONItems;
  */
 public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 {
-	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityTameable.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityFlyPod.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 	protected static final DataParameter<Optional<ItemStack>> STONE = EntityDataManager.createKey(EntityTameable.class, DataSerializers.OPTIONAL_ITEM_STACK);
 	protected int fireCount;
 	protected int fireInterval;
