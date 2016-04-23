@@ -1,10 +1,12 @@
 package com.kanomiya.mcmod.cradleofnoesis.entity;
 
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -25,6 +27,8 @@ import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
 public class EntitySanctuary extends Entity
 {
 	protected static final DataParameter<Optional<ISanctuary>> SANCTUALY = EntityDataManager.createKey(EntitySanctuary.class, CradleOfNoesisAPI.SANCTUARY_DATASERIALIZER);
+	protected static final DataParameter<Optional<UUID>> SANCTUALY_UUID = EntityDataManager.createKey(EntitySanctuary.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+
 
 	/**
 	 * @param worldIn
@@ -123,16 +127,22 @@ public class EntitySanctuary extends Entity
 		return dataManager.get(SANCTUALY).orNull();
 	}
 
+	public UUID getSanctuaryUniqueID()
+	{
+		return dataManager.get(SANCTUALY_UUID).orNull();
+	}
+
 	public void setSanctuary(ISanctuary sanctuary)
 	{
 		dataManager.set(SANCTUALY, Optional.fromNullable(sanctuary));
+		if (getSanctuaryUniqueID() == null) dataManager.set(SANCTUALY_UUID, Optional.of(getUniqueID()));
 	}
-
 
 	@Override
 	protected void entityInit()
 	{
 		dataManager.register(SANCTUALY, Optional.<ISanctuary>absent());
+		dataManager.register(SANCTUALY_UUID, Optional.<UUID>absent());
 	}
 
 	@Override
@@ -146,9 +156,9 @@ public class EntitySanctuary extends Entity
 			{
 				compound.setString("sanctuaryId", id.toString());
 				compound.setTag("sanctuary", sanctuary.serializeNBT());
-
 			}
 
+			compound.setUniqueId("sanctuaryUUID", getSanctuaryUniqueID());
 		}
 
 	}
@@ -160,12 +170,13 @@ public class EntitySanctuary extends Entity
 		if (sanctuary == null)
 		{
 			sanctuary = CradleOfNoesisAPI.createSanctuaryInstance(new ResourceLocation(compound.getString("sanctuaryId")));
-			setSanctuary(sanctuary);
+			dataManager.set(SANCTUALY, Optional.fromNullable(sanctuary));
 		}
 
 		if (sanctuary != null)
 		{
 			sanctuary.deserializeNBT(compound.getCompoundTag("sanctuary"));
+			dataManager.set(SANCTUALY_UUID, Optional.of(compound.getUniqueId("sanctuaryUUID")));
 		}
 
 	}

@@ -96,10 +96,11 @@ public class BlockSanctuary extends BlockContainer
 		if (tile instanceof TileEntitySanctuary)
 		{
 			TileEntitySanctuary tileSanctuary = (TileEntitySanctuary) tile;
+			EntitySanctuary entitySanctuary = tileSanctuary.getSanctuaryEntity();
 
-			if (tileSanctuary.getSanctuaryEntity() != null)
+			if (entitySanctuary != null)
 			{
-				tileSanctuary.getSanctuaryEntity().setDead();
+				entitySanctuary.setDead();
 			}
 
 		}
