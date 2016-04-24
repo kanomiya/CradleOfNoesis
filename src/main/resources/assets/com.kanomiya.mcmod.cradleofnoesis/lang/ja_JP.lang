@@ -44,3 +44,14 @@ entity.com.kanomiya.mcmod.cradleofnoesis.entityFlyPod.chat.dead=あっ
 entity.com.kanomiya.mcmod.cradleofnoesis.entityFlyPod.chat.passive_0=こちら%1$s。システム正常
 entity.com.kanomiya.mcmod.cradleofnoesis.entityFlyPod.chat.passive_1=ルンルン♪
 
+vocabulary.sanctuary.type=種類
+vocabulary.sanctuary.radius=半径
+vocabulary.sanctuary.color=色
+vocabulary.sanctuary.maxAge=寿命
+vocabulary.sanctuary.interval=周期
+vocabulary.sanctuary.healAmount=回復量
+vocabulary.sanctuary.decayAmount=崩壊量
+
+sanctuary.decaySanctuary.name=崩壊聖域
+sanctuary.healSanctuary.name=回復聖域
+

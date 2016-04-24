@@ -1,9 +1,11 @@
 package com.kanomiya.mcmod.cradleofnoesis.item;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -35,7 +37,9 @@ public class ItemBlockInstantSanctuary extends ItemBlock
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
 	{
-		for (Class<? extends ISanctuary> clazz: CradleOfNoesisAPI.getRegisteredSanctuaryClassSet())
+
+		Set<Class<? extends ISanctuary>> clazzSet = CradleOfNoesisAPI.getRegisteredSanctuaryClassSet();
+		for (Class<? extends ISanctuary> clazz: clazzSet)
 		{
 			Optional<ISanctuaryInfo> optSanctuaryInfo = CradleOfNoesisAPI.getSanctuaryInfo(clazz);
 
@@ -60,5 +64,19 @@ public class ItemBlockInstantSanctuary extends ItemBlock
 
 	}
 
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack itemStackIn, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
+	{
+		NBTTagCompound nbtSanctuary = itemStackIn.getSubCompound(CradleOfNoesisAPI.DATAID_SANCTUARYSET, false);
+		Optional<ISanctuary> optSanctuary = CradleOfNoesisAPI.deserializeSanctuary(nbtSanctuary);
+
+		if (optSanctuary.isPresent())
+		{
+			ISanctuary sanctuary = optSanctuary.get();
+			sanctuary.addInformation(tooltip, advanced);
+		}
+	}
 
 }

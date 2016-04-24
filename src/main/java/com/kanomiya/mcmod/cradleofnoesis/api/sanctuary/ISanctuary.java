@@ -1,10 +1,14 @@
 package com.kanomiya.mcmod.cradleofnoesis.api.sanctuary;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 /**
@@ -37,13 +41,16 @@ public interface ISanctuary extends INBTSerializable<NBTTagCompound>
 	String getUnlocalizedName();
 	void setUnlocalizedName(String unlocalizedName);
 
+	default String getLocalizedName()
+	{
+		return I18n.translateToLocal("sanctuary." + getUnlocalizedName() + ".name");
+	}
+
+	@SideOnly(Side.CLIENT)
+	default void addInformation(List<String> tooltip, boolean advanced) {  }
+
 	void allowToEnter(Entity entity);
 	void disallowToEnter(Entity entity);
 	boolean isAllowedToEnter(Entity entity);
-
-	default String getLocalizedName()
-	{
-		return I18n.translateToLocal(getUnlocalizedName());
-	}
 
 }

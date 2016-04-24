@@ -69,6 +69,7 @@ import com.kanomiya.mcmod.cradleofnoesis.item.ItemEntitySpawner;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
 import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
 import com.kanomiya.mcmod.cradleofnoesis.network.datasync.DataSerializerNBT;
+import com.kanomiya.mcmod.cradleofnoesis.sanctuary.DecaySanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.sanctuary.HealSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntitySanctuary;
@@ -110,7 +111,7 @@ public class CradleOfNoesis
 	{
 		logger = event.getModLog();
 
-		CradleOfNoesisAPI.registerSanctuary(new ResourceLocation(CradleOfNoesisAPI.MODID, "sanctuaryHeal"), HealSanctuary.class, new ISanctuaryInfo()
+		CradleOfNoesisAPI.registerSanctuary(new ResourceLocation(CradleOfNoesisAPI.MODID, "heal"), HealSanctuary.class, new ISanctuaryInfo()
 		{
 			@Override
 			public ISanctuary createForInstantBlock()
@@ -122,6 +123,21 @@ public class CradleOfNoesis
 			public ISanctuary createForInstantItem()
 			{
 				return new HealSanctuary(5.0f, 500, 0.1f, 5);
+			}
+		});
+
+		CradleOfNoesisAPI.registerSanctuary(new ResourceLocation(CradleOfNoesisAPI.MODID, "decay"), DecaySanctuary.class, new ISanctuaryInfo()
+		{
+			@Override
+			public ISanctuary createForInstantBlock()
+			{
+				return new DecaySanctuary(5.0f, Short.MAX_VALUE, 100, 5);
+			}
+
+			@Override
+			public ISanctuary createForInstantItem()
+			{
+				return new DecaySanctuary(5.0f, 500, 100, 5);
 			}
 		});
 

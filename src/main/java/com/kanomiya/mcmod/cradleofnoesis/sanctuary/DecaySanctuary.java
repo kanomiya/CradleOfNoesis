@@ -2,9 +2,9 @@ package com.kanomiya.mcmod.cradleofnoesis.sanctuary;
 
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,23 +16,23 @@ import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.SimpleSanctuary;
  * @author Kanomiya
  *
  */
-public class HealSanctuary extends SimpleSanctuary
+public class DecaySanctuary extends SimpleSanctuary
 {
 	protected int interval, timer;
-	protected float healAmount;
+	protected int decayAmount;
 
-	public HealSanctuary()
+	public DecaySanctuary()
 	{
-		this(0f,0,0f,0);
+		this(0f,0,0,0);
 	}
 
-	public HealSanctuary(float radius, int maxAge, float healAmount, int interval)
+	public DecaySanctuary(float radius, int maxAge, int decayAmount, int interval)
 	{
-		super(radius, maxAge, 0x9ADE64AA);
-		this.healAmount = healAmount;
+		super(radius, maxAge, 0xA03F8CAA);
+		this.decayAmount = decayAmount;
 		this.interval = interval;
 
-		setUnlocalizedName("healSanctuary");
+		setUnlocalizedName("decaySanctuary");
 	}
 
 
@@ -42,26 +42,28 @@ public class HealSanctuary extends SimpleSanctuary
 		super.onUpdate(worldIn, posX, posY, posZ);
 
 		++timer;
-		if (interval < timer) timer = 0;
-	}
-
-	@Override
-	public void onCollideWithEntity(World worldIn, double posX, double posY, double posZ, Entity entity)
-	{
-		super.onCollideWithEntity(worldIn, posX, posY, posZ, entity);
-
 		if (interval < timer)
 		{
-			if (entity instanceof EntityLivingBase)
-			{
-				EntityLivingBase lvEntity = (EntityLivingBase) entity;
+			Vec3d vecPos = new Vec3d(posX, posY, posZ);
 
-				lvEntity.heal(healAmount);
+			for (int i=0; i<decayAmount; ++i)
+			{
+				Vec3d vecTgt = vecPos.addVector(worldIn.rand.nextGaussian() *radius*2 -radius, worldIn.rand.nextGaussian() *radius*2 -radius, worldIn.rand.nextGaussian() *radius -radius);
+				if (vecPos.subtract(vecTgt).lengthVector() <= radius)
+				{
+					BlockPos blockPos = new BlockPos(vecTgt);
+
+					if (worldIn.getTileEntity(blockPos) == null)
+					{
+						worldIn.destroyBlock(blockPos, false);
+					}
+
+				}
 			}
+
 
 			timer = 0;
 		}
-
 	}
 
 	@Override
@@ -71,17 +73,17 @@ public class HealSanctuary extends SimpleSanctuary
 		super.addInformation(tooltip, advanced);
 
 		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.interval") + ": " + getInterval());
-		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.healAmount") + ": " + getHealAmount());
+		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.decayAmount") + ": " + getDecayAmount());
 	}
 
-	public float getHealAmount()
+	public int getDecayAmount()
 	{
-		return healAmount;
+		return decayAmount;
 	}
 
-	public void setHealAmount(float healAmount)
+	public void setDecayAmount(int decayAmount)
 	{
-		this.healAmount = healAmount;
+		this.decayAmount = decayAmount;
 	}
 
 	/**
@@ -100,7 +102,6 @@ public class HealSanctuary extends SimpleSanctuary
 		this.interval = interval;
 	}
 
-
 	/**
 	* @inheritDoc
 	*/
@@ -111,7 +112,7 @@ public class HealSanctuary extends SimpleSanctuary
 
 		nbt.setInteger("interval", interval);
 		nbt.setInteger("timer", timer);
-		nbt.setFloat("healAmount", healAmount);
+		nbt.setInteger("decayAmount", decayAmount);
 
 		return nbt;
 	}
@@ -126,7 +127,7 @@ public class HealSanctuary extends SimpleSanctuary
 
 		interval = nbt.getInteger("interval");
 		timer = nbt.getInteger("timer");
-		healAmount = nbt.getFloat("healAmount");
+		decayAmount = nbt.getInteger("decayAmount");
 	}
 
 

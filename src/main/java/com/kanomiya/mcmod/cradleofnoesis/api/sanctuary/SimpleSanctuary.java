@@ -6,8 +6,11 @@ import java.util.UUID;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.common.collect.Lists;
 
@@ -138,6 +141,18 @@ public class SimpleSanctuary implements ISanctuary
 	{
 		this.unlocalizedName = unlocalizedName;
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(List<String> tooltip, boolean advanced)
+	{
+		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.type") + ": " + getLocalizedName());
+		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.radius") + ": " + getRadius());
+		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.color") + ": " + getColor());
+		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.maxAge") + ": " + getMaxAge());
+
+	}
+
 
 	/**
 	 * @inheritDoc

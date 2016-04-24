@@ -1,6 +1,7 @@
 package com.kanomiya.mcmod.cradleofnoesis.item;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -45,7 +46,8 @@ public class ItemInstantSanctuary extends ItemEntitySpawner
 		List<ItemStack> subsubItems = Lists.newArrayList();
 		super.getSubItems(itemIn, tab, subsubItems);
 
-		for (Class<? extends ISanctuary> clazz: CradleOfNoesisAPI.getRegisteredSanctuaryClassSet())
+		Set<Class<? extends ISanctuary>> clazzSet = CradleOfNoesisAPI.getRegisteredSanctuaryClassSet();
+		for (Class<? extends ISanctuary> clazz: clazzSet)
 		{
 			Optional<ISanctuaryInfo> optSanctuaryInfo = CradleOfNoesisAPI.getSanctuaryInfo(clazz);
 
@@ -59,12 +61,14 @@ public class ItemInstantSanctuary extends ItemEntitySpawner
 
 					for (ItemStack stack: subsubItems)
 					{
+						ItemStack subStack = stack.copy();
+
 						if (optNbt.isPresent())
 						{
-							stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET, optNbt.get());
+							subStack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET, optNbt.get());
 						}
 
-						subItems.add(stack);
+						subItems.add(subStack);
 					}
 				}
 			}
@@ -92,9 +96,16 @@ public class ItemInstantSanctuary extends ItemEntitySpawner
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
+	public void addInformation(ItemStack itemStackIn, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
 	{
+		NBTTagCompound nbtSanctuary = itemStackIn.getSubCompound(CradleOfNoesisAPI.DATAID_SANCTUARYSET, false);
+		Optional<ISanctuary> optSanctuary = CradleOfNoesisAPI.deserializeSanctuary(nbtSanctuary);
 
+		if (optSanctuary.isPresent())
+		{
+			ISanctuary sanctuary = optSanctuary.get();
+			sanctuary.addInformation(tooltip, advanced);
+		}
 	}
 
 }
