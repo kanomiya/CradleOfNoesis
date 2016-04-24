@@ -196,6 +196,14 @@ public class CradleOfNoesis
 				'Y', CONItems.itemYuleIngot
 			);
 
+		stack = new ItemStack(CONItems.itemInstantSanctuary, 1, 1);
+		stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET,
+				CradleOfNoesisAPI.serializeSanctuary(CradleOfNoesisAPI.getSanctuaryInfo(HealSanctuary.class).get().createForInstantItem()).get());
+		GameRegistry.addRecipe(stack, //TODO: デバッグ用仮レシピ
+				"Y",
+				'Y', CONItems.itemYuleIngot
+			);
+
 		stack = new ItemStack(CONItems.itemInstantSanctuary);
 		stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET,
 				CradleOfNoesisAPI.serializeSanctuary(CradleOfNoesisAPI.getSanctuaryInfo(DecaySanctuary.class).get().createForInstantItem()).get());
@@ -203,6 +211,15 @@ public class CradleOfNoesis
 				"TT",
 				'T', CONItems.itemTsafaIngot
 			);
+
+		stack = new ItemStack(CONItems.itemInstantSanctuary, 1, 1);
+		stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET,
+				CradleOfNoesisAPI.serializeSanctuary(CradleOfNoesisAPI.getSanctuaryInfo(DecaySanctuary.class).get().createForInstantItem()).get());
+		GameRegistry.addRecipe(stack, //TODO: デバッグ用仮レシピ
+				"T",
+				'T', CONItems.itemTsafaIngot
+			);
+
 		stack = new ItemStack(CONBlocks.blockInstantSanctuary);
 		stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET,
 				CradleOfNoesisAPI.serializeSanctuary(CradleOfNoesisAPI.getSanctuaryInfo(HealSanctuary.class).get().createForInstantItem()).get());
@@ -221,13 +238,6 @@ public class CradleOfNoesis
 				'T', CONItems.itemTsafaIngot
 			);
 
-
-		GameRegistry.addRecipe(new ItemStack(CONItems.itemSanctuaryRemover), //TODO: デバッグ用仮レシピ
-				"RRR",
-				" R ",
-				"RRR",
-				'R', CONItems.itemRanimIngot
-			);
 
 
 		int etId = -1; // EntityList
