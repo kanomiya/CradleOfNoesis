@@ -9,7 +9,9 @@ tile.blockLiaAlter.name=リアの祭壇
 
 tile.blockYuleOre.name=ユール鉱石
 tile.blockTsafaOre.name=ツァファ鉱石
-tile.blockSanctuary.name=固定聖域生成ブロック
+tile.blockRanimOre.name=ラニム鉱石
+tile.blockSanctuary.name=聖域生成ブロック
+tile.blockInstantSanctuary.name=インスタント聖域生成ブロック
 
 
 item.itemIntelligentStone_black.name=黒の知性石
@@ -25,8 +27,10 @@ item.itemEmeraldTablet_armes.name=アルメスの翠玉板
 
 item.itemYuleIngot.name=ユールインゴット
 item.itemTsafaIngot.name=ツァファインゴット
-item.itemSanctuary_placer.name=聖域生成アイテム
-item.itemSanctuary_ball.name=聖域生成ボール
+item.itemRanimIngot.name=ラニムインゴット
+item.itemInstantSanctuary_placer_at.name=インスタント聖域設置アイテム
+item.itemInstantSanctuary_placer.name=インスタント聖域生成アイテム
+item.itemInstantSanctuary_ball.name=インスタント聖域生成ボール
 item.itemSanctuaryRemover.name=聖域消去アイテム
 
 item.itemFlyPod_placer.name=フライポッド

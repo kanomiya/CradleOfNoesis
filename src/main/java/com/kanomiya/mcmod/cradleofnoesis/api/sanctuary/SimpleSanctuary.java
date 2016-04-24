@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.cradleofnoesis.sanctuary;
+package com.kanomiya.mcmod.cradleofnoesis.api.sanctuary;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +10,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import com.google.common.collect.Lists;
-import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
 
 /**
  *
@@ -19,6 +18,7 @@ import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
  */
 public class SimpleSanctuary implements ISanctuary
 {
+	protected String unlocalizedName;
 	protected float radius;
 	protected int age, maxAge;
 	protected int color;
@@ -48,6 +48,8 @@ public class SimpleSanctuary implements ISanctuary
 		if (getMaxAge() < Short.MAX_VALUE) ++age;
 	}
 
+
+
 	/**
 	 * @inheritDoc
 	 */
@@ -55,6 +57,14 @@ public class SimpleSanctuary implements ISanctuary
 	public float getRadius()
 	{
 		return radius;
+	}
+	/**
+	* @inheritDoc
+	*/
+	@Override
+	public void setRadius(float radius)
+	{
+		this.radius = radius;
 	}
 
 	/**
@@ -70,6 +80,15 @@ public class SimpleSanctuary implements ISanctuary
 	* @inheritDoc
 	*/
 	@Override
+	public void getColor(int color)
+	{
+		this.color = color;
+	}
+
+	/**
+	* @inheritDoc
+	*/
+	@Override
 	public int getAge()
 	{
 		return age;
@@ -79,9 +98,45 @@ public class SimpleSanctuary implements ISanctuary
 	* @inheritDoc
 	*/
 	@Override
+	public void setAge(int age)
+	{
+		this.age = age;
+	}
+
+	/**
+	* @inheritDoc
+	*/
+	@Override
 	public int getMaxAge()
 	{
 		return maxAge;
+	}
+
+	/**
+	* @inheritDoc
+	*/
+	@Override
+	public void setMaxAge(int maxAge)
+	{
+		this.maxAge = maxAge;
+	}
+
+	/**
+	* @inheritDoc
+	*/
+	@Override
+	public String getUnlocalizedName()
+	{
+		return unlocalizedName == null ? "null" : unlocalizedName;
+	}
+
+	/**
+	* @inheritDoc
+	*/
+	@Override
+	public void setUnlocalizedName(String unlocalizedName)
+	{
+		this.unlocalizedName = unlocalizedName;
 	}
 
 	/**
@@ -169,6 +224,10 @@ public class SimpleSanctuary implements ISanctuary
 	{
 		return entity != null && allowedUUIDList != null && allowedUUIDList.contains(entity.getUniqueID());
 	}
+
+
+
+
 
 
 

@@ -1,5 +1,7 @@
 package com.kanomiya.mcmod.cradleofnoesis.sanctuary;
 
+import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.SimpleSanctuary;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +26,8 @@ public class HealSanctuary extends SimpleSanctuary
 		super(radius, maxAge, 0x9ADE64AA);
 		this.healAmount = healAmount;
 		this.interval = interval;
+
+		setUnlocalizedName("healSanctuary");
 	}
 
 
@@ -83,5 +87,7 @@ public class HealSanctuary extends SimpleSanctuary
 		timer = nbt.getInteger("timer");
 		healAmount = nbt.getFloat("healAmount");
 	}
+
+
 
 }

@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import com.google.common.base.Optional;
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
 import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
@@ -28,15 +28,13 @@ public class BlockSanctuary extends BlockContainer
 	{
 		super(Material.ROCK);
 
-		setRegistryName(new ResourceLocation(CradleOfNoesisAPI.MODID, "blockSanctuary"));
-		setUnlocalizedName("blockSanctuary");
 		setCreativeTab(CradleOfNoesis.tab);
 	}
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
 	{
-		NBTTagCompound nbtSanctuary = stack.getSubCompound(CradleOfNoesisAPI.MODID + ":sanctuary", false);
+		NBTTagCompound nbtSanctuary = stack.getSubCompound(CradleOfNoesisAPI.DATAID_SANCTUARYSET, false);
 
 		if (nbtSanctuary != null)
 		{
@@ -45,20 +43,19 @@ public class BlockSanctuary extends BlockContainer
 			if (tile instanceof TileEntitySanctuary)
 			{
 				TileEntitySanctuary tileSanctuary = (TileEntitySanctuary) tile;
-				ISanctuary sanctuary = CradleOfNoesisAPI.createSanctuaryInstance(new ResourceLocation(nbtSanctuary.getString("sanctuaryId")));
+				Optional<ISanctuary> optSanctuary = CradleOfNoesisAPI.deserializeSanctuary(nbtSanctuary);
 
-				if (sanctuary != null)
+				if (optSanctuary.isPresent())
 				{
-					sanctuary.deserializeNBT(nbtSanctuary.getCompoundTag("sanctuary"));
+					ISanctuary sanctuary = optSanctuary.get();
+					sanctuary.allowToEnter(placer); // TODO: ゲーム内で設定したい
+
+					EntitySanctuary entity = new EntitySanctuary(worldIn, sanctuary);
+					entity.setPosition(pos.getX() +0.5d, pos.getY() +0.5d, pos.getZ() +0.5d);
+					if (! worldIn.isRemote) worldIn.spawnEntityInWorld(entity);
+
+					tileSanctuary.setSanctuaryEntity(entity);
 				}
-
-				sanctuary.allowToEnter(placer); // TODO: ゲーム内で設定したい
-
-				EntitySanctuary entity = new EntitySanctuary(worldIn, sanctuary);
-				entity.setPosition(pos.getX() +0.5d, pos.getY() +0.5d, pos.getZ() +0.5d);
-				if (! worldIn.isRemote) worldIn.spawnEntityInWorld(entity);
-
-				tileSanctuary.setSanctuaryEntity(entity);
 			}
 
 		}

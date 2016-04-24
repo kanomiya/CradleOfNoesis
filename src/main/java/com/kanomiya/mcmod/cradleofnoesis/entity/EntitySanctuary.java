@@ -57,10 +57,12 @@ public class EntitySanctuary extends Entity
 	@Override
 	public void onEntityUpdate()
 	{
-		ISanctuary sanctuary = getSanctuary();
+		Optional<ISanctuary> optSanctuary = getSanctuary();
 
-		if (sanctuary != null)
+		if (optSanctuary.isPresent())
 		{
+			ISanctuary sanctuary = optSanctuary.get();
+
 			sanctuary.onUpdate(worldObj, posX, posY, posZ);
 
 			List<Entity> entityList = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expandXyz(sanctuary.getRadius()));
@@ -122,9 +124,9 @@ public class EntitySanctuary extends Entity
 		return false;
 	}
 
-	public ISanctuary getSanctuary()
+	public Optional<ISanctuary> getSanctuary()
 	{
-		return dataManager.get(SANCTUALY).orNull();
+		return dataManager.get(SANCTUALY);
 	}
 
 	public UUID getSanctuaryUniqueID()
@@ -148,14 +150,14 @@ public class EntitySanctuary extends Entity
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound)
 	{
-		ISanctuary sanctuary = getSanctuary();
-		if (sanctuary != null)
+		Optional<ISanctuary> optSanctuary = getSanctuary();
+		if (optSanctuary.isPresent())
 		{
-			ResourceLocation id = CradleOfNoesisAPI.SANCUTUARY_REGISTRY.inverse().get(sanctuary.getClass());
-			if (id != null)
+			Optional<ResourceLocation> optId = CradleOfNoesisAPI.getSanctuaryId(optSanctuary.get().getClass());
+			if (optId.isPresent())
 			{
-				compound.setString("sanctuaryId", id.toString());
-				compound.setTag("sanctuary", sanctuary.serializeNBT());
+				compound.setString("sanctuaryId", optId.get().toString());
+				compound.setTag("sanctuary", optSanctuary.get().serializeNBT());
 			}
 
 			compound.setUniqueId("sanctuaryUUID", getSanctuaryUniqueID());
@@ -166,16 +168,16 @@ public class EntitySanctuary extends Entity
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound)
 	{
-		ISanctuary sanctuary = getSanctuary();
-		if (sanctuary == null)
+		Optional<ISanctuary> optSanctuary = getSanctuary();
+		if (! optSanctuary.isPresent())
 		{
-			sanctuary = CradleOfNoesisAPI.createSanctuaryInstance(new ResourceLocation(compound.getString("sanctuaryId")));
-			dataManager.set(SANCTUALY, Optional.fromNullable(sanctuary));
+			optSanctuary = CradleOfNoesisAPI.createSanctuaryInstance(new ResourceLocation(compound.getString("sanctuaryId")));
+			dataManager.set(SANCTUALY, optSanctuary);
 		}
 
-		if (sanctuary != null)
+		if (optSanctuary.isPresent())
 		{
-			sanctuary.deserializeNBT(compound.getCompoundTag("sanctuary"));
+			optSanctuary.get().deserializeNBT(compound.getCompoundTag("sanctuary"));
 			dataManager.set(SANCTUALY_UUID, Optional.of(compound.getUniqueId("sanctuaryUUID")));
 		}
 

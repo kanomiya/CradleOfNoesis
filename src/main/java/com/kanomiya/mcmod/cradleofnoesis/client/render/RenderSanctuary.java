@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
+import com.google.common.base.Optional;
 import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
@@ -35,8 +36,10 @@ public class RenderSanctuary extends Render<EntitySanctuary>
 	{
 		bindEntityTexture(entity);
 
-		ISanctuary sanctuary = entity.getSanctuary();
-		if (sanctuary == null) return ;
+		Optional<ISanctuary> optSanctuary = entity.getSanctuary();
+		if (! optSanctuary.isPresent()) return ;
+
+		ISanctuary sanctuary = optSanctuary.get();
 
 		GlStateManager.pushMatrix();
 		GL11.glTranslated(x, y, z);

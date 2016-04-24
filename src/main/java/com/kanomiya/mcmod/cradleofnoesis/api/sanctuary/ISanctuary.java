@@ -2,6 +2,7 @@ package com.kanomiya.mcmod.cradleofnoesis.api.sanctuary;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -22,12 +23,27 @@ public interface ISanctuary extends INBTSerializable<NBTTagCompound>
 	default void onCollideWithEntity(World worldIn, double posX, double posY, double posZ, Entity entity) {  }
 
 	float getRadius();
+	void setRadius(float radius);
+
 	int getColor();
+	void getColor(int color);
+
 	int getAge();
+	void setAge(int age);
+
 	int getMaxAge();
+	void setMaxAge(int maxAge);
+
+	String getUnlocalizedName();
+	void setUnlocalizedName(String unlocalizedName);
 
 	void allowToEnter(Entity entity);
 	void disallowToEnter(Entity entity);
 	boolean isAllowedToEnter(Entity entity);
+
+	default String getLocalizedName()
+	{
+		return I18n.translateToLocal(getUnlocalizedName());
+	}
 
 }

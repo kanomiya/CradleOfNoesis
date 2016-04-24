@@ -1,6 +1,8 @@
 package com.kanomiya.mcmod.cradleofnoesis.api;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -12,7 +14,9 @@ import net.minecraft.util.ResourceLocation;
 import com.google.common.base.Optional;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuaryInfo;
 
 
 /**
@@ -23,10 +27,12 @@ public class CradleOfNoesisAPI
 {
 	public static final String MODID = "com.kanomiya.mcmod.cradleofnoesis";
 
+	public static final String DATAID_SANCTUARYSET = MODID + ":sanctuary";
+
 	public static final ResourceLocation ENDER_ENERGY_LOCATION = new ResourceLocation(MODID, "enderEnergy");
 
-	public static final BiMap<ResourceLocation, Class<? extends ISanctuary>> SANCUTUARY_REGISTRY = HashBiMap.create();
-
+	private static final BiMap<ResourceLocation, Class<? extends ISanctuary>> sanctuaryRegistry = HashBiMap.create();
+	private static final Map<Class<? extends ISanctuary>, ISanctuaryInfo> sanctuaryInfoRegistry = Maps.newHashMap();
 
 	public static final DataSerializer<Optional<ISanctuary>> SANCTUARY_DATASERIALIZER = new DataSerializer<Optional<ISanctuary>>()
 	{
@@ -36,7 +42,7 @@ public class CradleOfNoesisAPI
 
 			if (value.isPresent())
 			{
-				ResourceLocation id = SANCUTUARY_REGISTRY.inverse().get(value.get().getClass());
+				ResourceLocation id = sanctuaryRegistry.inverse().get(value.get().getClass());
 				boolean exists = id != null;
 				buf.writeBoolean(exists);
 
@@ -67,14 +73,14 @@ public class CradleOfNoesisAPI
 				int idStrLen = buf.readInt();
 				ResourceLocation id = new ResourceLocation(buf.readStringFromBuffer(idStrLen));
 
-				ISanctuary instance = createSanctuaryInstance(id);;
+				Optional<ISanctuary> optSanctuary = createSanctuaryInstance(id);;
 
-				if (instance != null)
+				if (optSanctuary.isPresent())
 				{
 					NBTTagCompound nbt = buf.readNBTTagCompoundFromBuffer();
-					instance.deserializeNBT(nbt);
+					optSanctuary.get().deserializeNBT(nbt);
 
-					return Optional.of(instance);
+					return optSanctuary;
 				}
 
 			}
@@ -96,23 +102,106 @@ public class CradleOfNoesisAPI
 
 	}
 
+	public static void registerSanctuary(ResourceLocation id, Class<? extends ISanctuary> clazz, ISanctuaryInfo info)
+	{
+		sanctuaryRegistry.put(id, clazz);
+		sanctuaryInfoRegistry.put(clazz, info);
+	}
 
-	public static ISanctuary createSanctuaryInstance(ResourceLocation id)
+
+
+	public static Set<ResourceLocation> getRegisteredSanctuaryIdSet()
+	{
+		return sanctuaryRegistry.keySet();
+	}
+
+	public static Set<Class<? extends ISanctuary>> getRegisteredSanctuaryClassSet()
+	{
+		return sanctuaryRegistry.values();
+	}
+
+	public static Optional<ISanctuaryInfo> getSanctuaryInfo(Class<? extends ISanctuary> clazz)
+	{
+		if (sanctuaryInfoRegistry.containsKey(clazz))
+		{
+			return Optional.of(sanctuaryInfoRegistry.get(clazz));
+		}
+
+		return Optional.absent();
+	}
+
+	public static Optional<ResourceLocation> getSanctuaryId(Class<? extends ISanctuary> clazz)
+	{
+		if (sanctuaryRegistry.containsValue(clazz))
+		{
+			return Optional.of(sanctuaryRegistry.inverse().get(clazz));
+		}
+
+		return Optional.absent();
+
+	}
+
+	public static Optional<ISanctuary> createSanctuaryInstance(ResourceLocation id)
 {
-		Class<? extends ISanctuary> clazz = SANCUTUARY_REGISTRY.get(id);
+		Class<? extends ISanctuary> clazz = sanctuaryRegistry.get(id);
 		if (clazz != null)
 		{
 			try
 			{
-				return clazz.newInstance();
+				return Optional.of(clazz.newInstance());
 			} catch (InstantiationException | IllegalAccessException e)
 			{
 				e.printStackTrace();
 			}
 		}
 
-		return null;
+		return Optional.absent();
+	}
+
+	/**
+	 *
+	 * Need 'sanctuaryId' and 'sanctuary'
+	 *
+	 * @param nbt
+	 * @return
+	 */
+	public static Optional<ISanctuary> deserializeSanctuary(NBTTagCompound nbt)
+	{
+		Optional<ISanctuary> optSanctuary = CradleOfNoesisAPI.createSanctuaryInstance(new ResourceLocation(nbt.getString("sanctuaryId")));
+
+		if (optSanctuary.isPresent())
+		{
+			optSanctuary.get().deserializeNBT(nbt.getCompoundTag("sanctuary"));
+
+			return optSanctuary;
+		}
+
+		return Optional.absent();
+	}
+
+	/**
+	 *
+	 * Return 'sanctuaryId' and 'sanctuary'
+	 *
+	 * @param sanctuary
+	 * @return
+	 */
+	public static Optional<NBTTagCompound> serializeSanctuary(ISanctuary sanctuary)
+	{
+		ResourceLocation id = CradleOfNoesisAPI.sanctuaryRegistry.inverse().get(sanctuary.getClass());
+		if (id != null)
+		{
+			NBTTagCompound nbt = new NBTTagCompound();
+
+			nbt.setString("sanctuaryId", id.toString());
+			nbt.setTag("sanctuary", sanctuary.serializeNBT());
+
+			return Optional.of(nbt);
+		}
+
+		return Optional.absent();
 	}
 
 
+	private CradleOfNoesisAPI() {  }
 }

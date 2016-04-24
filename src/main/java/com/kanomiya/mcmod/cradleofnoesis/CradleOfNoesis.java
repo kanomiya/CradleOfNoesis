@@ -55,6 +55,7 @@ import org.apache.logging.log4j.Logger;
 import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.api.event.SanctuaryPushEntityEvent;
 import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuaryInfo;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderFlyPod;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.client.render.TESRLiaAlter;
@@ -62,7 +63,7 @@ import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
 import com.kanomiya.mcmod.cradleofnoesis.gui.GuiHandler;
-import com.kanomiya.mcmod.cradleofnoesis.item.ItemBlockSanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemBlockInstantSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEntitySpawner;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
@@ -109,21 +110,41 @@ public class CradleOfNoesis
 	{
 		logger = event.getModLog();
 
+		CradleOfNoesisAPI.registerSanctuary(new ResourceLocation(CradleOfNoesisAPI.MODID, "sanctuaryHeal"), HealSanctuary.class, new ISanctuaryInfo()
+		{
+			@Override
+			public ISanctuary createForInstantBlock()
+			{
+				return new HealSanctuary(5.0f, Short.MAX_VALUE, 0.1f, 5);
+			}
+
+			@Override
+			public ISanctuary createForInstantItem()
+			{
+				return new HealSanctuary(5.0f, 500, 0.1f, 5);
+			}
+		});
+
 		GameRegistry.register(CONBlocks.blockLiaAlter);
 		GameRegistry.register(new ItemBlock(CONBlocks.blockLiaAlter).setRegistryName(CONBlocks.blockLiaAlter.getRegistryName()));
 		GameRegistry.register(CONBlocks.blockYuleOre);
 		GameRegistry.register(new ItemBlock(CONBlocks.blockYuleOre).setRegistryName(CONBlocks.blockYuleOre.getRegistryName()));
 		GameRegistry.register(CONBlocks.blockTsafaOre);
 		GameRegistry.register(new ItemBlock(CONBlocks.blockTsafaOre).setRegistryName(CONBlocks.blockTsafaOre.getRegistryName()));
+		GameRegistry.register(CONBlocks.blockRanimOre);
+		GameRegistry.register(new ItemBlock(CONBlocks.blockRanimOre).setRegistryName(CONBlocks.blockRanimOre.getRegistryName()));
 		GameRegistry.register(CONBlocks.blockSanctuary);
-		GameRegistry.register(new ItemBlockSanctuary(CONBlocks.blockSanctuary).setRegistryName(CONBlocks.blockSanctuary.getRegistryName()));
+		GameRegistry.register(new ItemBlock(CONBlocks.blockSanctuary).setRegistryName(CONBlocks.blockSanctuary.getRegistryName()));
+		GameRegistry.register(CONBlocks.blockInstantSanctuary);
+		GameRegistry.register(new ItemBlockInstantSanctuary(CONBlocks.blockInstantSanctuary).setRegistryName(CONBlocks.blockInstantSanctuary.getRegistryName()));
 
 		GameRegistry.register(CONItems.itemIntelligentStone);
 		GameRegistry.register(CONItems.itemYuleIngot);
 		GameRegistry.register(CONItems.itemTsafaIngot);
+		GameRegistry.register(CONItems.itemRanimIngot);
 		GameRegistry.register(CONItems.itemEmeraldTablet);
 		GameRegistry.register(CONItems.itemFlyPod);
-		GameRegistry.register(CONItems.itemSanctuary);
+		GameRegistry.register(CONItems.itemInstantSanctuary);
 		GameRegistry.register(CONItems.itemSanctuaryRemover);
 
 
@@ -132,6 +153,7 @@ public class CradleOfNoesis
 
 		GameRegistry.addSmelting(CONBlocks.blockYuleOre, new ItemStack(CONItems.itemYuleIngot), 0.7f);
 		GameRegistry.addSmelting(CONBlocks.blockTsafaOre, new ItemStack(CONItems.itemTsafaIngot), 0.7f);
+		GameRegistry.addSmelting(CONBlocks.blockRanimOre, new ItemStack(CONItems.itemRanimIngot), 0.7f);
 
 		int etId = -1; // EntityList
 		EntityRegistry.registerModEntity(EntityFlyPod.class, "entityFlyPod", ++etId, instance, 32, 1, true);
@@ -207,15 +229,18 @@ public class CradleOfNoesis
 			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockLiaAlter));
 			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockYuleOre));
 			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockTsafaOre));
+			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockRanimOre));
 			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockSanctuary));
+			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockInstantSanctuary));
 
 			enumRegister.accept(CONItems.itemIntelligentStone, ItemIntelligentStone.EnumType.values());
 			enumRegister.accept(CONItems.itemEmeraldTablet, ItemEmeraldTablet.EnumType.values());
 
 			simpleRegister.accept(CONItems.itemYuleIngot);
 			simpleRegister.accept(CONItems.itemTsafaIngot);
+			simpleRegister.accept(CONItems.itemRanimIngot);
 			metaRegister.accept(CONItems.itemFlyPod, ItemEntitySpawner.EnumType.values().length);
-			metaRegister.accept(CONItems.itemSanctuary, ItemEntitySpawner.EnumType.values().length);
+			metaRegister.accept(CONItems.itemInstantSanctuary, ItemEntitySpawner.EnumType.values().length);
 			simpleRegister.accept(CONItems.itemSanctuaryRemover);
 
 			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLiaAlter.class, new TESRLiaAlter());
@@ -236,7 +261,7 @@ public class CradleOfNoesis
 		PacketHandler.init();
 
 		DataSerializers.registerSerializer(DATASERIALIZER_NBT);
-		CradleOfNoesisAPI.SANCUTUARY_REGISTRY.put(new ResourceLocation(CradleOfNoesisAPI.MODID, "sanctuaryHeal"), HealSanctuary.class);
+
 	}
 
 	@Mod.EventHandler
@@ -259,6 +284,7 @@ public class CradleOfNoesis
 	{
 		WorldGenerator genYule = new WorldGenMinable(CONBlocks.blockYuleOre.getDefaultState(), 6);
 		WorldGenerator genTsafa = new WorldGenMinable(CONBlocks.blockTsafaOre.getDefaultState(), 6);
+		WorldGenerator genRanim = new WorldGenMinable(CONBlocks.blockRanimOre.getDefaultState(), 6);
 		BlockPos pos = event.getPos();
 		BiomeDecorator biomeDecorator = event.getWorld().getBiomeGenForCoords(pos).theBiomeDecorator;
 
@@ -287,6 +313,9 @@ public class CradleOfNoesis
 				if(TerrainGen.generateOre(event.getWorld(), event.getRand(), genTsafa, pos, OreGenEvent.GenerateMinable.EventType.CUSTOM))
 					genStandardOre1.invoke(biomeDecorator, event.getWorld(), event.getRand(), 20, genTsafa, 0, 96);
 
+				if(TerrainGen.generateOre(event.getWorld(), event.getRand(), genRanim, pos, OreGenEvent.GenerateMinable.EventType.CUSTOM))
+					genStandardOre1.invoke(biomeDecorator, event.getWorld(), event.getRand(), 20, genTsafa, 0, 96);
+
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
 			{
 				e.printStackTrace();
@@ -296,7 +325,7 @@ public class CradleOfNoesis
 	}
 
 	@SubscribeEvent
-	public void onSanctuaryPushEntityEvent(SanctuaryPushEntityEvent event)
+	public void onSanctuaryPushEntity(SanctuaryPushEntityEvent event)
 	{
 		Entity entity = event.getEntity();
 		ISanctuary sanctuary = event.getSanctuary();

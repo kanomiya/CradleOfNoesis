@@ -8,25 +8,24 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.google.common.base.Optional;
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
 import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
-import com.kanomiya.mcmod.cradleofnoesis.sanctuary.HealSanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuaryInfo;
 
 /**
  * @author Kanomiya
  *
  */
-public class ItemBlockSanctuary extends ItemBlock
+public class ItemBlockInstantSanctuary extends ItemBlock
 {
-	public ItemBlockSanctuary(Block block)
+	public ItemBlockInstantSanctuary(Block block)
 	{
 		super(block);
-		setUnlocalizedName("itemBlockSanctuary");
 
 		setCreativeTab(CradleOfNoesis.tab);
 		setHasSubtypes(true);
@@ -36,23 +35,27 @@ public class ItemBlockSanctuary extends ItemBlock
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
 	{
+		for (Class<? extends ISanctuary> clazz: CradleOfNoesisAPI.getRegisteredSanctuaryClassSet())
 		{
-			ISanctuary sanctuary = new HealSanctuary(5.0f, Short.MAX_VALUE, 0.1f, 5);
-			ItemStack stack = new ItemStack(itemIn);
-			NBTTagCompound compound = new NBTTagCompound();
+			Optional<ISanctuaryInfo> optSanctuaryInfo = CradleOfNoesisAPI.getSanctuaryInfo(clazz);
 
-			ResourceLocation id = CradleOfNoesisAPI.SANCUTUARY_REGISTRY.inverse().get(sanctuary.getClass());
-			if (id != null)
+			if (optSanctuaryInfo.isPresent())
 			{
-				compound.setString("sanctuaryId", id.toString());
-				compound.setTag("sanctuary", sanctuary.serializeNBT());
+				ISanctuary sanctuary = optSanctuaryInfo.get().createForInstantBlock();
 
+				if (sanctuary != null)
+				{
+					ItemStack stack = new ItemStack(itemIn);
+					Optional<NBTTagCompound> optNbt = CradleOfNoesisAPI.serializeSanctuary(sanctuary);
+
+					if (optNbt.isPresent())
+					{
+						stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET, optNbt.get());
+					}
+
+					subItems.add(stack);
+				}
 			}
-
-
-			stack.setTagInfo(CradleOfNoesisAPI.MODID + ":sanctuary", compound);
-
-			subItems.add(stack);
 		}
 
 	}

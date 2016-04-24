@@ -29,6 +29,7 @@ import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
  */
 public abstract class ItemEntitySpawner extends Item
 {
+
 	public ItemEntitySpawner()
 	{
 		setCreativeTab(CradleOfNoesis.tab);
@@ -44,6 +45,7 @@ public abstract class ItemEntitySpawner extends Item
 
 			switch (type)
 			{
+			case PLACER_AT: return placeEntityAt(itemStackIn, worldIn, playerIn, hand);
 			case PLACER: return placeEntity(itemStackIn, worldIn, playerIn, hand);
 			case BALL: return throwEntity(itemStackIn, worldIn, playerIn, hand);
 			}
@@ -53,7 +55,7 @@ public abstract class ItemEntitySpawner extends Item
 		return new ActionResult(EnumActionResult.PASS, itemStackIn);
 	}
 
-	public ActionResult<ItemStack> placeEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ActionResult<ItemStack> placeEntityAt(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
 		float f = 1.0F;
 		float f1 = playerIn.prevRotationPitch + (playerIn.rotationPitch - playerIn.prevRotationPitch) * f;
@@ -142,6 +144,20 @@ public abstract class ItemEntitySpawner extends Item
 		return new ActionResult(EnumActionResult.PASS, itemStackIn);
 	}
 
+	public ActionResult<ItemStack> placeEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	{
+		Entity entity = getEntity(itemStackIn, worldIn, playerIn, hand);
+
+		if (entity != null)
+		{
+			entity.setPosition(playerIn.posX, playerIn.posY, playerIn.posZ);
+			if (! worldIn.isRemote) worldIn.spawnEntityInWorld(entity);
+			return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+		}
+
+		return new ActionResult(EnumActionResult.PASS, itemStackIn);
+	}
+
 	public ActionResult<ItemStack> throwEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
 		Entity entity = getEntity(itemStackIn, worldIn, playerIn, hand);
@@ -188,6 +204,7 @@ public abstract class ItemEntitySpawner extends Item
 
 	public static enum EnumType
 	{
+		PLACER_AT,
 		PLACER,
 		BALL,
 		;

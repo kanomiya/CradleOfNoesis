@@ -12,8 +12,8 @@ import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
 import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEntitySpawner;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemInstantSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
-import com.kanomiya.mcmod.cradleofnoesis.item.ItemSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemSanctuaryRemover;
 
 public class CONItems
@@ -30,6 +30,11 @@ public class CONItems
 		.setUnlocalizedName("itemTsafaIngot")
 		.setCreativeTab(CradleOfNoesis.tab);
 
+	public static Item itemRanimIngot = new Item()
+		.setRegistryName(new ResourceLocation(CradleOfNoesisAPI.MODID, "itemRanimIngot"))
+		.setUnlocalizedName("itemRanimIngot")
+		.setCreativeTab(CradleOfNoesis.tab);
+
 	public static ItemEmeraldTablet itemEmeraldTablet = new ItemEmeraldTablet();
 
 	public static Item itemFlyPod = new ItemEntitySpawner()
@@ -44,7 +49,7 @@ public class CONItems
 		.setUnlocalizedName("itemFlyPod")
 		.setCreativeTab(CradleOfNoesis.tab);
 
-	public static Item itemSanctuary = new ItemSanctuary();
+	public static Item itemInstantSanctuary = new ItemInstantSanctuary();
 
 	public static ItemSanctuaryRemover itemSanctuaryRemover = new ItemSanctuaryRemover();
 
