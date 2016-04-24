@@ -57,7 +57,7 @@ public class ItemIntelligentStone extends Item
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
 	{
-		EnumType[] values = EnumType.values();
+		ItemIntelligentStone.EnumType[] values = ItemIntelligentStone.EnumType.values();
 		return super.getUnlocalizedName(stack) + (stack.getMetadata() < values.length ? "_" + values[stack.getMetadata()].name().toLowerCase() : "");
 	}
 
@@ -65,7 +65,7 @@ public class ItemIntelligentStone extends Item
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
 	{
-		EnumType[] values = EnumType.values();
+		ItemIntelligentStone.EnumType[] values = ItemIntelligentStone.EnumType.values();
 
 		for (int i=0; i<values.length; ++i)
 		{

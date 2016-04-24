@@ -2,6 +2,7 @@ package com.kanomiya.mcmod.cradleofnoesis.item;
 
 import java.util.List;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -15,8 +16,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
 
 /**
  * @author Kanomiya
@@ -31,6 +36,24 @@ public abstract class ItemEntitySpawner extends Item
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	{
+		ItemEntitySpawner.EnumType[] values = ItemEntitySpawner.EnumType.values();
+		if (itemStackIn.getMetadata() < values.length)
+		{
+			ItemEntitySpawner.EnumType type = values[itemStackIn.getMetadata()];
+
+			switch (type)
+			{
+			case PLACER: return placeEntity(itemStackIn, worldIn, playerIn, hand);
+			case BALL: return throwEntity(itemStackIn, worldIn, playerIn, hand);
+			}
+
+		}
+
+		return new ActionResult(EnumActionResult.PASS, itemStackIn);
+	}
+
+	public ActionResult<ItemStack> placeEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
 		float f = 1.0F;
 		float f1 = playerIn.prevRotationPitch + (playerIn.rotationPitch - playerIn.prevRotationPitch) * f;
@@ -119,10 +142,55 @@ public abstract class ItemEntitySpawner extends Item
 		return new ActionResult(EnumActionResult.PASS, itemStackIn);
 	}
 
+	public ActionResult<ItemStack> throwEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	{
+		Entity entity = getEntity(itemStackIn, worldIn, playerIn, hand);
+
+		if (entity != null)
+		{
+			EntitySpawnerBall<EntitySanctuary> ball = new EntitySpawnerBall<>(worldIn, playerIn);
+			ball.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0f, 1.5f, 1.0f);
+
+			ball.setSpawnEntity(entity);
+
+			if (! worldIn.isRemote) worldIn.spawnEntityInWorld(ball);
+			return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+		}
+
+		return new ActionResult(EnumActionResult.PASS, itemStackIn);
+	}
+
 	public abstract Entity getEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand);
 
 	public void onEntitySpawn(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand, Entity entityIn)
 	{
+
+	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack)
+	{
+		ItemEntitySpawner.EnumType[] values = ItemEntitySpawner.EnumType.values();
+		return super.getUnlocalizedName(stack) + (stack.getMetadata() < values.length ? "_" + values[stack.getMetadata()].name().toLowerCase() : "");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
+	{
+		ItemEntitySpawner.EnumType[] values = ItemEntitySpawner.EnumType.values();
+
+		for (int i=0; i<values.length; ++i)
+		{
+			subItems.add(new ItemStack(itemIn, 1, i));
+		}
+	}
+
+	public static enum EnumType
+	{
+		PLACER,
+		BALL,
+		;
 
 	}
 

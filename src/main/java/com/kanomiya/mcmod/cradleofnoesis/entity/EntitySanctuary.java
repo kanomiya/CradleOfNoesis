@@ -135,7 +135,7 @@ public class EntitySanctuary extends Entity
 	public void setSanctuary(ISanctuary sanctuary)
 	{
 		dataManager.set(SANCTUALY, Optional.fromNullable(sanctuary));
-		if (getSanctuaryUniqueID() == null) dataManager.set(SANCTUALY_UUID, Optional.of(getUniqueID()));
+		if (getSanctuaryUniqueID() == null) dataManager.set(SANCTUALY_UUID, Optional.of(getUniqueID())); // 初回登録時のUUIDを記録
 	}
 
 	@Override

@@ -9,6 +9,7 @@ tile.blockLiaAlter.name=リアの祭壇
 
 tile.blockYuleOre.name=ユール鉱石
 tile.blockTsafaOre.name=ツァファ鉱石
+tile.blockSanctuary.name=固定聖域生成ブロック
 
 
 item.itemIntelligentStone_black.name=黒の知性石
@@ -24,8 +25,12 @@ item.itemEmeraldTablet_armes.name=アルメスの翠玉板
 
 item.itemYuleIngot.name=ユールインゴット
 item.itemTsafaIngot.name=ツァファインゴット
+item.itemSanctuary_placer.name=聖域生成アイテム
+item.itemSanctuary_ball.name=聖域生成ボール
+item.itemSanctuaryRemover.name=聖域消去アイテム
 
-item.itemFlyPod.name=フライポッド
+item.itemFlyPod_placer.name=フライポッド
+item.itemFlyPod_ball.name=フライポッドボール
 entity.com.kanomiya.mcmod.cradleofnoesis.entityFlyPod.name=フライポッド
 entity.com.kanomiya.mcmod.cradleofnoesis.entityFlyPod.chat.launch=こちら%1$s。フライポッドシステムに接続
 entity.com.kanomiya.mcmod.cradleofnoesis.entityFlyPod.chat.findEnemy=敵を認識。殲滅始めるよ

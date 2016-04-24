@@ -64,6 +64,7 @@ import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
 import com.kanomiya.mcmod.cradleofnoesis.gui.GuiHandler;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemBlockSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemEntitySpawner;
 import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
 import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
 import com.kanomiya.mcmod.cradleofnoesis.network.datasync.DataSerializerNBT;
@@ -122,7 +123,7 @@ public class CradleOfNoesis
 		GameRegistry.register(CONItems.itemTsafaIngot);
 		GameRegistry.register(CONItems.itemEmeraldTablet);
 		GameRegistry.register(CONItems.itemFlyPod);
-		GameRegistry.register(CONItems.itemHealSanctuary);
+		GameRegistry.register(CONItems.itemSanctuary);
 		GameRegistry.register(CONItems.itemSanctuaryRemover);
 
 
@@ -169,6 +170,28 @@ public class CradleOfNoesis
 		if (event.getSide().isClient())
 		{
 			Consumer<Item> simpleRegister = (item) -> ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+			BiConsumer<Item, Integer> metaRegister = new BiConsumer<Item, Integer>()
+			{
+				@Override
+				public void accept(Item item, Integer maxMeta)
+				{
+					for (int i=0; i<=maxMeta; ++i)
+					{
+						ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(new ResourceLocation(item.getRegistryName().getResourceDomain(), item.getRegistryName().getResourcePath()), "inventory"));
+					}
+				}
+			};
+			BiConsumer<Item, String[]> arrayRegister = new BiConsumer<Item, String[]>()
+			{
+				@Override
+				public void accept(Item item, String[] stringAry)
+				{
+					for (int i=0; i<stringAry.length; ++i)
+					{
+						ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(new ResourceLocation(item.getRegistryName().getResourceDomain(), item.getRegistryName().getResourcePath() + (stringAry[i].equals("") ? "" : "_" + stringAry[i].toLowerCase())), "inventory"));
+					}
+				}
+			};
 			BiConsumer<Item, Enum[]> enumRegister = new BiConsumer<Item, Enum[]>()
 			{
 				@Override
@@ -184,13 +207,16 @@ public class CradleOfNoesis
 			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockLiaAlter));
 			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockYuleOre));
 			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockTsafaOre));
+			simpleRegister.accept(Item.getItemFromBlock(CONBlocks.blockSanctuary));
 
 			enumRegister.accept(CONItems.itemIntelligentStone, ItemIntelligentStone.EnumType.values());
 			enumRegister.accept(CONItems.itemEmeraldTablet, ItemEmeraldTablet.EnumType.values());
 
 			simpleRegister.accept(CONItems.itemYuleIngot);
 			simpleRegister.accept(CONItems.itemTsafaIngot);
-			simpleRegister.accept(CONItems.itemFlyPod);
+			metaRegister.accept(CONItems.itemFlyPod, ItemEntitySpawner.EnumType.values().length);
+			metaRegister.accept(CONItems.itemSanctuary, ItemEntitySpawner.EnumType.values().length);
+			simpleRegister.accept(CONItems.itemSanctuaryRemover);
 
 			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLiaAlter.class, new TESRLiaAlter());
 
