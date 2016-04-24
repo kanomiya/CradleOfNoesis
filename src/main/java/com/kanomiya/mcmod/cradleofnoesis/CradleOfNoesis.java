@@ -171,6 +171,65 @@ public class CradleOfNoesis
 		GameRegistry.addSmelting(CONBlocks.blockTsafaOre, new ItemStack(CONItems.itemTsafaIngot), 0.7f);
 		GameRegistry.addSmelting(CONBlocks.blockRanimOre, new ItemStack(CONItems.itemRanimIngot), 0.7f);
 
+
+		GameRegistry.addRecipe(new ItemStack(CONBlocks.blockLiaAlter), //TODO: デバッグ用仮レシピ
+				"TTT",
+				"TMT",
+				"TTT",
+				'T', CONItems.itemTsafaIngot,
+				'M', Items.ENDER_EYE
+			);
+
+		GameRegistry.addRecipe(new ItemStack(CONItems.itemSanctuaryRemover), //TODO: デバッグ用仮レシピ
+				"RRR",
+				" R ",
+				"RRR",
+				'R', CONItems.itemRanimIngot
+			);
+
+		ItemStack stack;
+		stack = new ItemStack(CONItems.itemInstantSanctuary);
+		stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET,
+				CradleOfNoesisAPI.serializeSanctuary(CradleOfNoesisAPI.getSanctuaryInfo(HealSanctuary.class).get().createForInstantItem()).get());
+		GameRegistry.addRecipe(stack, //TODO: デバッグ用仮レシピ
+				"YY",
+				'Y', CONItems.itemYuleIngot
+			);
+
+		stack = new ItemStack(CONItems.itemInstantSanctuary);
+		stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET,
+				CradleOfNoesisAPI.serializeSanctuary(CradleOfNoesisAPI.getSanctuaryInfo(DecaySanctuary.class).get().createForInstantItem()).get());
+		GameRegistry.addRecipe(stack, //TODO: デバッグ用仮レシピ
+				"TT",
+				'T', CONItems.itemTsafaIngot
+			);
+		stack = new ItemStack(CONBlocks.blockInstantSanctuary);
+		stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET,
+				CradleOfNoesisAPI.serializeSanctuary(CradleOfNoesisAPI.getSanctuaryInfo(HealSanctuary.class).get().createForInstantItem()).get());
+		GameRegistry.addRecipe(stack, //TODO: デバッグ用仮レシピ
+				"YY",
+				"YY",
+				'Y', CONItems.itemYuleIngot
+			);
+
+		stack = new ItemStack(CONBlocks.blockInstantSanctuary);
+		stack.setTagInfo(CradleOfNoesisAPI.DATAID_SANCTUARYSET,
+				CradleOfNoesisAPI.serializeSanctuary(CradleOfNoesisAPI.getSanctuaryInfo(DecaySanctuary.class).get().createForInstantItem()).get());
+		GameRegistry.addRecipe(stack, //TODO: デバッグ用仮レシピ
+				"TT",
+				"TT",
+				'T', CONItems.itemTsafaIngot
+			);
+
+
+		GameRegistry.addRecipe(new ItemStack(CONItems.itemSanctuaryRemover), //TODO: デバッグ用仮レシピ
+				"RRR",
+				" R ",
+				"RRR",
+				'R', CONItems.itemRanimIngot
+			);
+
+
 		int etId = -1; // EntityList
 		EntityRegistry.registerModEntity(EntityFlyPod.class, "entityFlyPod", ++etId, instance, 32, 1, true);
 		EntityRegistry.registerModEntity(EntitySanctuary.class, "entitySanctuary", ++etId, instance, 128, 1, true);

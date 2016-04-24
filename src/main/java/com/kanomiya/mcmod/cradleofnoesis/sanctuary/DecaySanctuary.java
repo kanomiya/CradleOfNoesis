@@ -53,7 +53,7 @@ public class DecaySanctuary extends SimpleSanctuary
 				{
 					BlockPos blockPos = new BlockPos(vecTgt);
 
-					if (worldIn.getTileEntity(blockPos) == null)
+					if (worldIn.getTileEntity(blockPos) == null) // インスタントブロックを壊さないように...仕方ないね
 					{
 						worldIn.destroyBlock(blockPos, false);
 					}
