@@ -68,6 +68,7 @@ public class ItemEmeraldTablet extends Item
 		ARMES,
 		;
 
+		// TODO: 復元された/劣化したエメラルドタブレット
 	}
 
 
