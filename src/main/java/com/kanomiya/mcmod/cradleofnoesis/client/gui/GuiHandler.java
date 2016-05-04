@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.cradleofnoesis.gui;
+package com.kanomiya.mcmod.cradleofnoesis.client.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import com.kanomiya.mcmod.cradleofnoesis.CONGuis;
-import com.kanomiya.mcmod.cradleofnoesis.inventory.ContainerTileEntityLiaAlter;
+import com.kanomiya.mcmod.cradleofnoesis.container.inventory.ContainerTileEntityLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 
 public class GuiHandler implements IGuiHandler {

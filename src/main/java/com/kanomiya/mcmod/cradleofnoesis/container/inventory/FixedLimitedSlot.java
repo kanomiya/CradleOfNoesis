@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.cradleofnoesis.inventory;
+package com.kanomiya.mcmod.cradleofnoesis.container.inventory;
 
 import net.minecraft.inventory.IInventory;
 

@@ -1,4 +1,4 @@
-package com.kanomiya.mcmod.cradleofnoesis.gui;
+package com.kanomiya.mcmod.cradleofnoesis.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
-import com.kanomiya.mcmod.cradleofnoesis.inventory.ContainerTileEntityLiaAlter;
+import com.kanomiya.mcmod.cradleofnoesis.container.inventory.ContainerTileEntityLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 
 
