@@ -87,10 +87,7 @@ public class EntitySanctuary extends Entity
 							entity.motionY = vec.yCoord;
 							entity.motionZ = vec.zCoord;
 
-							if (entity.noClip)
-							{
-								entity.motionY += 0.1d;
-							}
+							if (entity.noClip) entity.motionY = 0.1d;
 
 							entity.attackEntityFrom(DamageSource.inWall, 1.0f);
 
