@@ -399,7 +399,7 @@ public class CradleOfNoesis
 					genStandardOre1.invoke(biomeDecorator, event.getWorld(), event.getRand(), 20, genTsafa, 0, 96);
 
 				if(TerrainGen.generateOre(event.getWorld(), event.getRand(), genRanim, pos, OreGenEvent.GenerateMinable.EventType.CUSTOM))
-					genStandardOre1.invoke(biomeDecorator, event.getWorld(), event.getRand(), 20, genTsafa, 0, 96);
+					genStandardOre1.invoke(biomeDecorator, event.getWorld(), event.getRand(), 20, genRanim, 0, 96);
 
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
 			{
