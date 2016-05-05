@@ -50,7 +50,6 @@ public class EntitySanctuary extends Entity
 		this(worldIn);
 
 		setSanctuary(sanctuary);
-		setSize(sanctuary.getRadius(), sanctuary.getRadius());
 	}
 
 

@@ -49,23 +49,32 @@ public class RenderSanctuary extends Render<EntitySanctuary>
 		GlStateManager.rotate(fx, 0, 0.5f, 0);
 		GlStateManager.rotate(fy, -0.5f, 0, 0);
 
+		sphere.setDrawStyle(GLU.GLU_FILL);
+		sphere.setNormals(GLU.GLU_SMOOTH);
 
-		sphere.setDrawStyle(GLU.GLU_LINE);
 		int color = sanctuary.getColor();
 		int r = color >> 24 & 0xFF;
 		int g = color >> 16 & 0xFF;
 		int b = color >> 8 & 0xFF;
 		int a = color & 0xFF;
 
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+
 		GlStateManager.enableBlend();
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
+		GlStateManager.enableAlpha();
 		GlStateManager.disableLighting();
+		GL11.glDepthMask(false);
 
 		GL11.glColor4f(r/255f, g/255f, b/255f, a/255f);
 
+		sphere.setOrientation(GLU.GLU_OUTSIDE);
 		sphere.draw(sanctuary.getRadius(), 20, 20);
+		sphere.setOrientation(GLU.GLU_INSIDE);
+		sphere.draw(sanctuary.getRadius(), 20, 20); // TODO: Entityが描画順かなにかでAlpha適用されないことがある
 
+		GL11.glDepthMask(true);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GlStateManager.resetColor();
 		GlStateManager.disableBlend();
 		GlStateManager.enableLighting();
