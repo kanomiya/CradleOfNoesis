@@ -28,7 +28,7 @@ public class DecaySanctuary extends SimpleSanctuary
 
 	public DecaySanctuary(float radius, int maxAge, int decayAmount, int interval)
 	{
-		super(radius, maxAge, 0xA03F8CAA);
+		super(radius, maxAge, 0xAAA03F8C);
 		this.decayAmount = decayAmount;
 		this.interval = interval;
 

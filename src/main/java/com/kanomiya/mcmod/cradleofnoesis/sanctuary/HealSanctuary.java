@@ -28,7 +28,7 @@ public class HealSanctuary extends SimpleSanctuary
 
 	public HealSanctuary(float radius, int maxAge, float healAmount, int interval)
 	{
-		super(radius, maxAge, 0x9ADE64AA);
+		super(radius, maxAge, 0xAA9ADE64);
 		this.healAmount = healAmount;
 		this.interval = interval;
 

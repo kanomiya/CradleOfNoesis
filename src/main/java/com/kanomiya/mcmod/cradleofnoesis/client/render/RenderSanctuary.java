@@ -53,10 +53,10 @@ public class RenderSanctuary extends Render<EntitySanctuary>
 		sphere.setNormals(GLU.GLU_SMOOTH);
 
 		int color = sanctuary.getColor();
-		int r = color >> 24 & 0xFF;
-		int g = color >> 16 & 0xFF;
-		int b = color >> 8 & 0xFF;
-		int a = color & 0xFF;
+		int a = color >> 24 & 0xFF;
+		int r = color >> 16 & 0xFF;
+		int g = color >> 8 & 0xFF;
+		int b = color & 0xFF;
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 
