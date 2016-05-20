@@ -303,9 +303,10 @@ public class TileEntityLiaAlter extends ITileEntityWithInventory implements ITic
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt = super.writeToNBT(nbt);
 
+		return nbt;
 	}
 
 

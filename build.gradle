@@ -9,7 +9,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
 	}
 }
 
@@ -21,17 +21,17 @@ plugins {
 	id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "0.1.0-alpha+002"
+version = "0.1.0-alpha+1.2"
 group= "com.kanomiya.mcmod.cradleofnoesis" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "cradleofnoesis"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-	version = "1.9-12.16.1.1887"
+	version = "1.9.4-12.17.0.1909-1.9.4"
 	runDir = "run"
 
-	mappings = "snapshot_20160416"
+	mappings = "snapshot_20160518"
 
 	tasks.withType(JavaCompile) {
 		options.encoding = 'UTF-8'

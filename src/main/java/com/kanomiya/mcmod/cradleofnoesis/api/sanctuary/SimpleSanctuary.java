@@ -3,10 +3,10 @@ package com.kanomiya.mcmod.cradleofnoesis.api.sanctuary;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.relauncher.Side;
@@ -146,10 +146,10 @@ public class SimpleSanctuary implements ISanctuary
 	@SideOnly(Side.CLIENT)
 	public void addInformation(List<String> tooltip, boolean advanced)
 	{
-		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.type") + ": " + getLocalizedName());
-		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.radius") + ": " + getRadius());
-		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.color") + ": " + getColor());
-		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.maxAge") + ": " + getMaxAge());
+		tooltip.add(I18n.format("vocabulary.sanctuary.type") + ": " + getLocalizedName());
+		tooltip.add(I18n.format("vocabulary.sanctuary.radius") + ": " + getRadius());
+		tooltip.add(I18n.format("vocabulary.sanctuary.color") + ": " + getColor());
+		tooltip.add(I18n.format("vocabulary.sanctuary.maxAge") + ": " + getMaxAge());
 
 	}
 

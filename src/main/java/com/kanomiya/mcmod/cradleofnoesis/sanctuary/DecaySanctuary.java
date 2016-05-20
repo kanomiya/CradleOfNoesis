@@ -2,10 +2,10 @@ package com.kanomiya.mcmod.cradleofnoesis.sanctuary;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -72,8 +72,8 @@ public class DecaySanctuary extends SimpleSanctuary
 	{
 		super.addInformation(tooltip, advanced);
 
-		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.interval") + ": " + getInterval());
-		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.decayAmount") + ": " + getDecayAmount());
+		tooltip.add(I18n.format("vocabulary.sanctuary.interval") + ": " + getInterval());
+		tooltip.add(I18n.format("vocabulary.sanctuary.decayAmount") + ": " + getDecayAmount());
 	}
 
 	public int getDecayAmount()

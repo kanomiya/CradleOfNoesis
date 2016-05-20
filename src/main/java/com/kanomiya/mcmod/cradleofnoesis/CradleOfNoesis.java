@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.passive.EntityVillager.ITradeList;
 import net.minecraft.entity.passive.EntityVillager.ListItemForEmeralds;
 import net.minecraft.entity.passive.EntityVillager.PriceInfo;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,6 +44,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerCareer;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper.UnableToFindMethodException;
 import net.minecraftforge.fml.relauncher.Side;
@@ -73,8 +74,6 @@ import com.kanomiya.mcmod.cradleofnoesis.sanctuary.DecaySanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.sanctuary.HealSanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntitySanctuary;
-import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerCareer;
-import com.kanomiya.mcmod.cradleofnoesis.villager.SimpleVillagerProfession;
 
 /**
  * @author Kanomiya
@@ -102,7 +101,7 @@ public class CradleOfNoesis
 	};
 
 	public static Logger logger;
-	public static SimpleVillagerProfession vprofArchaeologist;
+	public static VillagerProfession vprofArchaeologist;
 
 	public static final DataSerializerNBT DATASERIALIZER_NBT = new DataSerializerNBT();
 
@@ -246,29 +245,21 @@ public class CradleOfNoesis
 		EntityRegistry.registerModEntity(EntitySpawnerBall.class, "entitySpawnerBall", ++etId, instance, 32, 1, true);
 
 
-		vprofArchaeologist = new SimpleVillagerProfession(
-				new ResourceLocation(CradleOfNoesisAPI.MODID, "archaeologist"),
-				new ResourceLocation(CradleOfNoesisAPI.MODID + ":textures/entity/villager/archaeologist.png"));
+		vprofArchaeologist = new VillagerProfession(
+				new ResourceLocation(CradleOfNoesisAPI.MODID, "archaeologist").toString(),
+				new ResourceLocation(CradleOfNoesisAPI.MODID + ":textures/entity/villager/archaeologist.png").toString());
 
-		new SimpleVillagerCareer(vprofArchaeologist, "emeraldTablet").init(
-			new ITradeList[][]
-			{
-				{
-					new ListItemForEmeralds(new ItemStack(Items.ENDER_PEARL, 1), new PriceInfo(4, 7)),
-				},
-				{
-					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_FALIA.ordinal()), new PriceInfo(12, 14)),
+		new VillagerCareer(vprofArchaeologist, "emeraldTablet")
+		.addTrade(0,
+				new ListItemForEmeralds(new ItemStack(Items.ENDER_PEARL, 1), new PriceInfo(4, 7)))
 
-					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_STILIA.ordinal()), new PriceInfo(12, 14)),
-
-					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_REGILIA.ordinal()), new PriceInfo(12, 14)),
-
-					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.ARLEY.ordinal()), new PriceInfo(16, 22)),
-
-					new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.ARMES.ordinal()), new PriceInfo(26, 32)),
-				},
-			}
-		);
+				.addTrade(1,
+						new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_FALIA.ordinal()), new PriceInfo(12, 14)),
+						new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_STILIA.ordinal()), new PriceInfo(12, 14)),
+						new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_REGILIA.ordinal()), new PriceInfo(12, 14)),
+						new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.ARLEY.ordinal()), new PriceInfo(16, 22)),
+						new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.ARMES.ordinal()), new PriceInfo(26, 32))
+						);
 
 		GameRegistry.register(vprofArchaeologist);
 

@@ -2,9 +2,9 @@ package com.kanomiya.mcmod.cradleofnoesis.api.sanctuary;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,7 +43,7 @@ public interface ISanctuary extends INBTSerializable<NBTTagCompound>
 
 	default String getLocalizedName()
 	{
-		return I18n.translateToLocal("sanctuary." + getUnlocalizedName() + ".name");
+		return I18n.format("sanctuary." + getUnlocalizedName() + ".name");
 	}
 
 	@SideOnly(Side.CLIENT)

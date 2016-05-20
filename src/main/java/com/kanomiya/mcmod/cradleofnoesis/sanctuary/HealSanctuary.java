@@ -2,10 +2,10 @@ package com.kanomiya.mcmod.cradleofnoesis.sanctuary;
 
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -70,8 +70,8 @@ public class HealSanctuary extends SimpleSanctuary
 	{
 		super.addInformation(tooltip, advanced);
 
-		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.interval") + ": " + getInterval());
-		tooltip.add(I18n.translateToLocal("vocabulary.sanctuary.healAmount") + ": " + getHealAmount());
+		tooltip.add(I18n.format("vocabulary.sanctuary.interval") + ": " + getInterval());
+		tooltip.add(I18n.format("vocabulary.sanctuary.healAmount") + ": " + getHealAmount());
 	}
 
 	public float getHealAmount()

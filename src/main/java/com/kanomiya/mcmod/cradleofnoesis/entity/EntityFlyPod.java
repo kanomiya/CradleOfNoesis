@@ -3,6 +3,7 @@ package com.kanomiya.mcmod.cradleofnoesis.entity;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -26,7 +27,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 
@@ -164,7 +164,7 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 					int i = rand.nextInt(1);
 					if (! worldObj.isRemote)
 					{
-						owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.passive_" + i, getName())));
+						owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.format("entity." + EntityList.getEntityString(this) + ".chat.passive_" + i, getName())));
 					}
 
 					chatCount = 0;
@@ -183,8 +183,8 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 
 							if (! worldObj.isRemote)
 							{
-								if (getAttackTarget() == null) owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.findEnemy", getName())));
-								else owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.continueAttack", getName())));
+								if (getAttackTarget() == null) owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.format("entity." + EntityList.getEntityString(this) + ".chat.findEnemy", getName())));
+								else owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.format("entity." + EntityList.getEntityString(this) + ".chat.continueAttack", getName())));
 							}
 
 							setAttackTarget((EntityLivingBase) entity);
@@ -223,7 +223,7 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 
 					if (! worldObj.isRemote)
 					{
-						owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.enemyNotFound", getName())));
+						owner.addChatMessage(new TextComponentString(getName() + ": " + I18n.format("entity." + EntityList.getEntityString(this) + ".chat.enemyNotFound", getName())));
 					}
 					setAttackTarget(null);
 				}
@@ -261,7 +261,7 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 			if (stack.stackSize <= 0) player.setHeldItem(hand, null);
 
 			setOwnerId(player.getUniqueID());
-			if (! worldObj.isRemote) player.addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.launch", getName())));
+			if (! worldObj.isRemote) player.addChatMessage(new TextComponentString(getName() + ": " + I18n.format("entity." + EntityList.getEntityString(this) + ".chat.launch", getName())));
 
 			return EnumActionResult.SUCCESS;
 
@@ -286,7 +286,7 @@ public class EntityFlyPod extends EntityLiving implements IEntityOwnable
 	{
 		if (getStoneStack() != null)
 		{
-			if (getOwner() instanceof EntityPlayerMP) getOwner().addChatMessage(new TextComponentString(getName() + ": " + I18n.translateToLocalFormatted("entity." + EntityList.getEntityString(this) + ".chat.dead", getName())));
+			if (getOwner() instanceof EntityPlayerMP) getOwner().addChatMessage(new TextComponentString(getName() + ": " + I18n.format("entity." + EntityList.getEntityString(this) + ".chat.dead", getName())));
 
 			dropStoneStack(false);
 		}

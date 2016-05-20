@@ -54,14 +54,15 @@ public class TileEntitySanctuary extends TileEntity
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt = super.writeToNBT(nbt);
 
 		if (sanctuaryUUID != null)
 		{
 			nbt.setUniqueId("sanctuaryUUID", sanctuaryUUID);
 		}
 
+		return nbt;
 	}
 
 

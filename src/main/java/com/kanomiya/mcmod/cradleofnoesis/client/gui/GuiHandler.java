@@ -10,13 +10,16 @@ import com.kanomiya.mcmod.cradleofnoesis.CONGuis;
 import com.kanomiya.mcmod.cradleofnoesis.container.inventory.ContainerTileEntityLiaAlter;
 import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
 
-public class GuiHandler implements IGuiHandler {
+public class GuiHandler implements IGuiHandler
+{
 
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		if (id == CONGuis.GUIID_LIAALTER) {
+		if (id == CONGuis.GUIID_LIAALTER)
+		{
 			TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
-			if (tileEntity instanceof TileEntityLiaAlter) {
+			if (tileEntity instanceof TileEntityLiaAlter)
+			{
 				return new ContainerTileEntityLiaAlter(player.inventory, (TileEntityLiaAlter) tileEntity);
 			}
 		}
@@ -25,12 +28,13 @@ public class GuiHandler implements IGuiHandler {
 		return null;
 	}
 
-	// returns an instance of the gui thingamabob
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		if (id == CONGuis.GUIID_LIAALTER) {
+		if (id == CONGuis.GUIID_LIAALTER)
+		{
 			TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
-			if (tileEntity instanceof TileEntityLiaAlter) {
+			if (tileEntity instanceof TileEntityLiaAlter)
+			{
 				return new GuiLiaAlter(player.inventory, (TileEntityLiaAlter) tileEntity);
 			}
 		}

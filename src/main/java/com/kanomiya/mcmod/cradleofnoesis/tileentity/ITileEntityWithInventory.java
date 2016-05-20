@@ -6,7 +6,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
@@ -44,8 +43,8 @@ public abstract class ITileEntityWithInventory extends TileEntity implements IIn
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 
 		NBTTagCompound tagItems = tag.getCompoundTag("items");
 		int i=0;
@@ -61,6 +60,7 @@ public abstract class ITileEntityWithInventory extends TileEntity implements IIn
 
 		tag.setTag("items", tagItems);
 
+		return tag;
 	}
 
 
@@ -190,9 +190,9 @@ public abstract class ITileEntityWithInventory extends TileEntity implements IIn
 	// --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 	// --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 
-	@Override public Packet getDescriptionPacket() {
-		NBTTagCompound nbtTagCompound = new NBTTagCompound();
-		writeToNBT(nbtTagCompound);
+	@Override public SPacketUpdateTileEntity getUpdatePacket()
+	{	NBTTagCompound nbtTagCompound = new NBTTagCompound();
+		nbtTagCompound = writeToNBT(nbtTagCompound);
 		return new SPacketUpdateTileEntity(pos, 1, nbtTagCompound);
 	}
 
