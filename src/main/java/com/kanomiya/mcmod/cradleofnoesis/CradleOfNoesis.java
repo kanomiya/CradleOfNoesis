@@ -252,10 +252,10 @@ public class CradleOfNoesis
 				new ResourceLocation(CradleOfNoesisAPI.MODID + ":textures/entity/villager/archaeologist.png").toString());
 
 		new VillagerCareer(vprofArchaeologist, "emeraldTablet")
-		.addTrade(0,
+		.addTrade(1,
 				new ListItemForEmeralds(new ItemStack(Items.ENDER_PEARL, 1), new PriceInfo(4, 7)))
 
-				.addTrade(1,
+				.addTrade(2,
 						new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_FALIA.ordinal()), new PriceInfo(12, 14)),
 						new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_STILIA.ordinal()), new PriceInfo(12, 14)),
 						new ListItemForEmeralds(new ItemStack(CONItems.itemEmeraldTablet, 1, ItemEmeraldTablet.EnumType.LIA_REGILIA.ordinal()), new PriceInfo(12, 14)),
