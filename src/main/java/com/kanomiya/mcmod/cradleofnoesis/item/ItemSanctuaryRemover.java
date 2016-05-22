@@ -2,6 +2,10 @@ package com.kanomiya.mcmod.cradleofnoesis.item;
 
 import java.util.List;
 
+import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -11,10 +15,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
-import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
-import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
 
 /**
  * @author Kanomiya
@@ -40,7 +40,7 @@ public class ItemSanctuaryRemover extends Item
 			entity.setDead();
 		}
 
-		return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
 }

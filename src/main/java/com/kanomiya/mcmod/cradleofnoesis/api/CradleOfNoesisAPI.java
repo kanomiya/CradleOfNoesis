@@ -4,19 +4,21 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializer;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.ResourceLocation;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
 import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuaryInfo;
+import com.kanomiya.mcmod.cradleofnoesis.magic.IMagicNodeShape;
+import com.kanomiya.mcmod.cradleofnoesis.magic.IMagicNodeShapeRender;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializer;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.ResourceLocation;
 
 
 /**
@@ -91,10 +93,14 @@ public class CradleOfNoesisAPI
 		@Override
 		public DataParameter<Optional<ISanctuary>> createKey(int id)
 		{
-			return new DataParameter(id, this);
+			return new DataParameter<Optional<ISanctuary>>(id, this);
 		}
 
 	};
+
+
+	public static final Map<Class<IMagicNodeShape>, IMagicNodeShapeRender> magicNodeShapeRenderRegistry = Maps.newHashMap();
+
 
 	static
 	{

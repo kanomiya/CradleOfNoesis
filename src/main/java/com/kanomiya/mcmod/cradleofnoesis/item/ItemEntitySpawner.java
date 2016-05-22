@@ -2,6 +2,10 @@ package com.kanomiya.mcmod.cradleofnoesis.item;
 
 import java.util.List;
 
+import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,10 +22,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
-import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
-import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
 
 /**
  * @author Kanomiya
@@ -52,7 +52,7 @@ public abstract class ItemEntitySpawner extends Item
 
 		}
 
-		return new ActionResult(EnumActionResult.PASS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 	}
 
 	public ActionResult<ItemStack> placeEntityAt(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
@@ -76,7 +76,7 @@ public abstract class ItemEntitySpawner extends Item
 
 		if (raytraceresult == null)
 		{
-			return new ActionResult(EnumActionResult.PASS, itemStackIn);
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 		}
 		else
 		{
@@ -101,11 +101,11 @@ public abstract class ItemEntitySpawner extends Item
 
 			if (flag)
 			{
-				return new ActionResult(EnumActionResult.PASS, itemStackIn);
+				return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 			}
 			else if (raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK)
 			{
-				return new ActionResult(EnumActionResult.PASS, itemStackIn);
+				return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 			}
 			else
 			{
@@ -117,7 +117,7 @@ public abstract class ItemEntitySpawner extends Item
 
 					if (!worldIn.getCollisionBoxes(entity, entity.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
 					{
-						return new ActionResult(EnumActionResult.FAIL, itemStackIn);
+						return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
 					}
 					else
 					{
@@ -134,14 +134,14 @@ public abstract class ItemEntitySpawner extends Item
 						}
 
 						playerIn.addStat(StatList.getObjectUseStats(this));
-						return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 					}
 
 				}
 			}
 		}
 
-		return new ActionResult(EnumActionResult.PASS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 	}
 
 	public ActionResult<ItemStack> placeEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
@@ -152,10 +152,10 @@ public abstract class ItemEntitySpawner extends Item
 		{
 			entity.setPosition(playerIn.posX, playerIn.posY, playerIn.posZ);
 			if (! worldIn.isRemote) worldIn.spawnEntityInWorld(entity);
-			return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 		}
 
-		return new ActionResult(EnumActionResult.PASS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 	}
 
 	public ActionResult<ItemStack> throwEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
@@ -170,10 +170,10 @@ public abstract class ItemEntitySpawner extends Item
 			ball.setSpawnEntity(entity);
 
 			if (! worldIn.isRemote) worldIn.spawnEntityInWorld(ball);
-			return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 		}
 
-		return new ActionResult(EnumActionResult.PASS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 	}
 
 	public abstract Entity getEntity(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand);

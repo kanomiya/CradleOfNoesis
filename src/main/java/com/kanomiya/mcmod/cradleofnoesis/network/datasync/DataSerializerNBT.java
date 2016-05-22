@@ -37,7 +37,7 @@ public class DataSerializerNBT implements DataSerializer<NBTTagCompound>
 	@Override
 	public DataParameter<NBTTagCompound> createKey(int id)
 	{
-		return new DataParameter(id, this);
+		return new DataParameter<NBTTagCompound>(id, this);
 	}
 
 }

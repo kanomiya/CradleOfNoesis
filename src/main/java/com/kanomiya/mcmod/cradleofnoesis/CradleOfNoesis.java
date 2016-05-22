@@ -6,6 +6,32 @@ import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.apache.logging.log4j.Logger;
+
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
+import com.kanomiya.mcmod.cradleofnoesis.api.event.SanctuaryPushEntityEvent;
+import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuaryInfo;
+import com.kanomiya.mcmod.cradleofnoesis.client.gui.GuiHandler;
+import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderFlyPod;
+import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderSanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.client.render.TESRLiaAlter;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemBlockInstantSanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemEntitySpawner;
+import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
+import com.kanomiya.mcmod.cradleofnoesis.magic.hook.MagicWorldTickEventHandler;
+import com.kanomiya.mcmod.cradleofnoesis.magic.hook.client.render.MagicRenderTickEventHandler;
+import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
+import com.kanomiya.mcmod.cradleofnoesis.network.datasync.DataSerializerNBT;
+import com.kanomiya.mcmod.cradleofnoesis.sanctuary.DecaySanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.sanctuary.HealSanctuary;
+import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
+import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntitySanctuary;
+
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -50,30 +76,6 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper.UnableToFindMethodException;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.apache.logging.log4j.Logger;
-
-import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
-import com.kanomiya.mcmod.cradleofnoesis.api.event.SanctuaryPushEntityEvent;
-import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
-import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuaryInfo;
-import com.kanomiya.mcmod.cradleofnoesis.client.gui.GuiHandler;
-import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderFlyPod;
-import com.kanomiya.mcmod.cradleofnoesis.client.render.RenderSanctuary;
-import com.kanomiya.mcmod.cradleofnoesis.client.render.TESRLiaAlter;
-import com.kanomiya.mcmod.cradleofnoesis.entity.EntityFlyPod;
-import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySanctuary;
-import com.kanomiya.mcmod.cradleofnoesis.entity.EntitySpawnerBall;
-import com.kanomiya.mcmod.cradleofnoesis.item.ItemBlockInstantSanctuary;
-import com.kanomiya.mcmod.cradleofnoesis.item.ItemEmeraldTablet;
-import com.kanomiya.mcmod.cradleofnoesis.item.ItemEntitySpawner;
-import com.kanomiya.mcmod.cradleofnoesis.item.ItemIntelligentStone;
-import com.kanomiya.mcmod.cradleofnoesis.network.PacketHandler;
-import com.kanomiya.mcmod.cradleofnoesis.network.datasync.DataSerializerNBT;
-import com.kanomiya.mcmod.cradleofnoesis.sanctuary.DecaySanctuary;
-import com.kanomiya.mcmod.cradleofnoesis.sanctuary.HealSanctuary;
-import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntityLiaAlter;
-import com.kanomiya.mcmod.cradleofnoesis.tileentity.TileEntitySanctuary;
 
 /**
  * @author Kanomiya
@@ -323,10 +325,13 @@ public class CradleOfNoesis
 
 			RenderingRegistry.registerEntityRenderingHandler(EntityFlyPod.class, RenderFlyPod::new);
 			RenderingRegistry.registerEntityRenderingHandler(EntitySanctuary.class, RenderSanctuary::new);
+
+			MinecraftForge.EVENT_BUS.register(MagicRenderTickEventHandler.INSTANCE);
 		}
 
 		MinecraftForge.ORE_GEN_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(MagicWorldTickEventHandler.INSTANCE);
 	}
 
 

@@ -21,7 +21,7 @@ plugins {
 	id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "0.1.0-alpha+1.2"
+version = "ALPHA-0.2.0-SNAPSHOT"
 group= "com.kanomiya.mcmod.cradleofnoesis" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "cradleofnoesis"
 sourceCompatibility = 1.8

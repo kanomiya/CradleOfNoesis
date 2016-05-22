@@ -2,6 +2,10 @@ package com.kanomiya.mcmod.cradleofnoesis.item;
 
 import java.util.List;
 
+import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
+import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
+import com.kanomiya.mcmod.cradleofnoesis.api.util.EnderEnergyUtils;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -13,10 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.kanomiya.mcmod.cradleofnoesis.CradleOfNoesis;
-import com.kanomiya.mcmod.cradleofnoesis.api.CradleOfNoesisAPI;
-import com.kanomiya.mcmod.cradleofnoesis.api.util.EnderEnergyUtils;
 
 /**
  * @author Kanomiya
@@ -38,7 +38,7 @@ public class ItemIntelligentStone extends Item
 	{
 
 
-		return new ActionResult(EnumActionResult.PASS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 	}
 
 	@Override
