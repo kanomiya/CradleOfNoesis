@@ -26,8 +26,8 @@ import com.kanomiya.mcmod.cradleofnoesis.api.sanctuary.ISanctuary;
  */
 public class EntitySanctuary extends Entity
 {
-	protected static final DataParameter<Optional<ISanctuary>> SANCTUALY = EntityDataManager.createKey(EntitySanctuary.class, CradleOfNoesisAPI.SANCTUARY_DATASERIALIZER);
-	protected static final DataParameter<Optional<UUID>> SANCTUALY_UUID = EntityDataManager.createKey(EntitySanctuary.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	protected static final DataParameter<Optional<ISanctuary>> SANCTUARY = EntityDataManager.createKey(EntitySanctuary.class, CradleOfNoesisAPI.SANCTUARY_DATASERIALIZER);
+	protected static final DataParameter<Optional<UUID>> SANCTUARY_UUID = EntityDataManager.createKey(EntitySanctuary.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 
 	/**
@@ -122,25 +122,25 @@ public class EntitySanctuary extends Entity
 
 	public Optional<ISanctuary> getSanctuary()
 	{
-		return dataManager.get(SANCTUALY);
+		return dataManager.get(SANCTUARY);
 	}
 
 	public UUID getSanctuaryUniqueID()
 	{
-		return dataManager.get(SANCTUALY_UUID).orNull();
+		return dataManager.get(SANCTUARY_UUID).orNull();
 	}
 
 	public void setSanctuary(ISanctuary sanctuary)
 	{
-		dataManager.set(SANCTUALY, Optional.fromNullable(sanctuary));
-		if (getSanctuaryUniqueID() == null) dataManager.set(SANCTUALY_UUID, Optional.of(getUniqueID())); // 初回登録時のUUIDを記録
+		dataManager.set(SANCTUARY, Optional.fromNullable(sanctuary));
+		if (getSanctuaryUniqueID() == null) dataManager.set(SANCTUARY_UUID, Optional.of(getUniqueID())); // 初回登録時のUUIDを記録
 	}
 
 	@Override
 	protected void entityInit()
 	{
-		dataManager.register(SANCTUALY, Optional.<ISanctuary>absent());
-		dataManager.register(SANCTUALY_UUID, Optional.<UUID>absent());
+		dataManager.register(SANCTUARY, Optional.<ISanctuary>absent());
+		dataManager.register(SANCTUARY_UUID, Optional.<UUID>absent());
 	}
 
 	@Override
@@ -168,13 +168,13 @@ public class EntitySanctuary extends Entity
 		if (! optSanctuary.isPresent())
 		{
 			optSanctuary = CradleOfNoesisAPI.createSanctuaryInstance(new ResourceLocation(compound.getString("sanctuaryId")));
-			dataManager.set(SANCTUALY, optSanctuary);
+			dataManager.set(SANCTUARY, optSanctuary);
 		}
 
 		if (optSanctuary.isPresent())
 		{
 			optSanctuary.get().deserializeNBT(compound.getCompoundTag("sanctuary"));
-			dataManager.set(SANCTUALY_UUID, Optional.of(compound.getUniqueId("sanctuaryUUID")));
+			dataManager.set(SANCTUARY_UUID, Optional.of(compound.getUniqueId("sanctuaryUUID")));
 		}
 
 	}
